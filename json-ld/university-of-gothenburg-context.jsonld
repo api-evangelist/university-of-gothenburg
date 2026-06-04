@@ -1,0 +1,70 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "gu": "https://www.gu.se/en#",
+    "@vocab": "https://www.gu.se/en#",
+    "name": "schema:name",
+    "alternateName": "schema:alternateName",
+    "description": "schema:description",
+    "url": "schema:url",
+    "logo": "schema:logo",
+    "foundingDate": "schema:foundingDate",
+    "address": "schema:address",
+    "sameAs": "schema:sameAs",
+    "University": "schema:CollegeOrUniversity",
+    "Organization": "schema:CollegeOrUniversity",
+
+    "repository": {
+      "@id": "gu:repository",
+      "@type": "@id"
+    },
+    "Repository": "schema:DataCatalog",
+    "oaiBaseUrl": {
+      "@id": "gu:oaiBaseUrl",
+      "@type": "@id"
+    },
+    "repositoryName": "schema:name",
+    "adminEmail": "schema:email",
+    "earliestDatestamp": "schema:dateCreated",
+    "metadataFormat": "gu:metadataFormat",
+
+    "Dataset": "schema:Dataset",
+    "DataCatalog": "schema:DataCatalog",
+    "distribution": "schema:distribution",
+    "DataDownload": "schema:DataDownload",
+    "encodingFormat": "schema:encodingFormat",
+    "contentUrl": {
+      "@id": "schema:contentUrl",
+      "@type": "@id"
+    },
+    "variable": "schema:variableMeasured",
+    "category": "schema:category",
+    "source": "schema:isBasedOn"
+  },
+  "@type": "University",
+  "name": "University of Gothenburg",
+  "alternateName": "Göteborgs universitet",
+  "url": "https://www.gu.se/en",
+  "foundingDate": "1891",
+  "sameAs": [
+    "https://www.linkedin.com/school/university-of-gothenburg/",
+    "https://github.com/bcfgothenburg",
+    "https://en.wikipedia.org/wiki/University_of_Gothenburg"
+  ],
+  "repository": {
+    "@type": "Repository",
+    "repositoryName": "GUPEA",
+    "name": "Gothenburg University Publications Electronic Archive",
+    "url": "https://gupea.ub.gu.se/",
+    "oaiBaseUrl": "https://gupea.ub.gu.se/server/oai/request",
+    "adminEmail": "gup@ub.gu.se",
+    "earliestDatestamp": "1906-05-30T00:00:00Z",
+    "metadataFormat": "oai_dc"
+  },
+  "DataCatalog": {
+    "@type": "DataCatalog",
+    "name": "Quality of Government (QoG) Open Data",
+    "url": "https://www.gu.se/en/quality-government/qog-data/data-downloads"
+  }
+}
