@@ -1,0 +1,38 @@
+---
+name: University of Gothenburg
+description: University of Gothenburg public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      No central documented developer portal or public REST API program was
+      found for the University of Gothenburg. Confirmed live machine-accessible
+      surfaces are the GUPEA institutional repository OAI-PMH 2.0 endpoint
+      (verified responding with repository name "GUPEA") and the Quality of
+      Government open-data downloads plus Data Finder tool (file-based, no
+      keyed API). Affiliated technical activity is distributed across
+      departmental GitHub organizations (e.g. bcfgothenburg) rather than a
+      single official org. No endpoints or sign-up flows were fabricated; only
+      URLs probed live are reported below.
+    endpoints:
+      - url: https://gupea.ub.gu.se/server/oai/request?verb=Identify
+        status: 200
+        note: Live OAI-PMH 2.0 endpoint, repository "GUPEA", admin gup@ub.gu.se.
+      - url: https://www.gu.se/en/quality-government/qog-data/data-downloads
+        status: 200
+        note: QoG open-data downloads (CSV/SPSS/Stata); no keyed REST API.
+      - url: https://datafinder.qog.gu.se/
+        status: 200
+        note: QoG Data Finder interactive dataset/variable browser.
+      - url: https://www.gu.se/en
+        status: 200
+        note: Official university website (English).
+      - url: https://github.com/bcfgothenburg
+        status: 200
+        note: Bioinformatics and Data Centre GitHub org, affiliated; departmental.
+      - url: https://www.linkedin.com/school/university-of-gothenburg/
+        status: 200
+        note: Official LinkedIn school page.

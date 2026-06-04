@@ -1,0 +1,83 @@
+---
+aid: university-of-gothenburg
+name: University of Gothenburg
+description: >-
+  The University of Gothenburg (Göteborgs universitet) is a public research
+  university in Sweden, founded in 1891, with roughly 37,000 students and 6,000
+  employees, and ranked #194 in the QS World University Rankings 2025. Its
+  public, machine-accessible footprint is research- and library-centric rather
+  than a unified developer program: the Gothenburg University Library operates
+  the GUPEA institutional repository (DSpace) which exposes a standards-based
+  OAI-PMH metadata interface, and the Quality of Government (QoG) Institute
+  publishes open-access datasets via downloads and a Data Finder tool. The
+  university does not appear to operate a central, documented developer portal
+  with public REST API keys; affiliated technical work is distributed across
+  departmental GitHub organizations.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Sweden
+  - Research
+  - Open Data
+  - Library
+  - OAI-PMH
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: university-of-gothenburg:gupea-oai-pmh
+    name: GUPEA Repository OAI-PMH Interface
+    description: >-
+      GUPEA (Gothenburg University Publications Electronic Archive) is the
+      university's DSpace-based institutional repository. It exposes an
+      OAI-PMH 2.0 metadata harvesting endpoint (repository name "GUPEA",
+      admin email gup@ub.gu.se, earliest datestamp 1906) for programmatic
+      harvesting of publication and thesis metadata in standard formats such
+      as oai_dc.
+    humanURL: https://gupea.ub.gu.se/
+    baseURL: https://gupea.ub.gu.se/server/oai/request
+    tags: [ Library, Repository, OAI-PMH, Metadata, DSpace, Research, Open Access ]
+    properties:
+      - type: Documentation
+        url: https://gupea.ub.gu.se/
+  - aid: university-of-gothenburg:qog-data
+    name: Quality of Government (QoG) Open Data
+    description: >-
+      The Quality of Government Institute at the University of Gothenburg
+      publishes open-access governance datasets (Standard, Basic, OECD, and
+      original datasets) available as direct file downloads in CSV, SPSS, and
+      Stata formats, plus an interactive Data Finder tool for browsing
+      categories, sources, datasets, and variables. No formal REST API with
+      sign-up keys is documented; access is via downloadable files and the
+      web-based Data Finder.
+    humanURL: https://www.gu.se/en/quality-government/qog-data/data-downloads
+    tags: [ Open Data, Research, Datasets, Governance, Downloads ]
+    properties:
+      - type: Documentation
+        url: https://www.gu.se/en/quality-government/qog-data
+      - type: Documentation
+        url: https://datafinder.qog.gu.se/
+common:
+  - type: Website
+    url: https://www.gu.se/en
+  - type: GitHub
+    url: https://github.com/bcfgothenburg
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/university-of-gothenburg/
+  - type: Plans
+    url: plans/university-of-gothenburg-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/university-of-gothenburg-rate-limits.yml
+  - type: FinOps
+    url: finops/university-of-gothenburg-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
