@@ -64,6 +64,8 @@ apis:
       - type: Documentation
         url: https://datafinder.qog.gu.se/
 common:
+  - type: DomainSecurity
+    url: security/university-of-gothenburg-domain-security.yml
   - type: Website
     url: https://www.gu.se/en
   - type: GitHub
