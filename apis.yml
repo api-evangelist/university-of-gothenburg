@@ -41,7 +41,7 @@ tags:
   - OAI-PMH
 created: '2026-06-03'
 modified: '2026-06-03'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
   - aid: university-of-gothenburg:gupea-oai-pmh
     name: GUPEA Repository OAI-PMH Interface
