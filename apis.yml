@@ -1,84 +1,353 @@
 ---
 aid: university-of-gothenburg
 name: University of Gothenburg
+x-type: university
+x-category: Public Research University
 description: >-
-  The University of Gothenburg (Göteborgs universitet) is a public research
-  university in Sweden, founded in 1891, with roughly 37,000 students and 6,000
-  employees, and ranked #194 in the QS World University Rankings 2025. Its
-  public, machine-accessible footprint is research- and library-centric rather
-  than a unified developer program: the Gothenburg University Library operates
-  the GUPEA institutional repository (DSpace) which exposes a standards-based
-  OAI-PMH metadata interface, and the Quality of Government (QoG) Institute
-  publishes open-access datasets via downloads and a Data Finder tool. The
-  university does not appear to operate a central, documented developer portal
-  with public REST API keys; affiliated technical work is distributed across
-  departmental GitHub organizations.
+  The University of Gothenburg (Göteborgs universitet) is a public research university in Sweden,
+  founded in 1891, with roughly 37,000 students and 6,000 employees. Its programmable footprint is
+  larger and more genuinely its own than the June 2026 profile of this repository recorded, and it
+  is concentrated in one place: Språkbanken Text, the Swedish Language Bank's text division at the
+  Department of Swedish, Multilingualism, Language Technology. Språkbanken publishes SIX OpenAPI
+  documents from a single documentation index at ws.spraakbanken.gu.se/docs — Korp (corpus
+  concordance search over 1,133 corpora), Karp v7 and Karp search v1 (lexical resources), Mink
+  (upload, annotate and publish your own corpus), Sparv (the annotation pipeline as a job service)
+  and the Språkbanken Text Metadata API (a 1,499-resource catalogue with BibTeX export). All six
+  run on University of Gothenburg hosts, carry sb-info@svenska.gu.se as contact, and answered
+  anonymous requests with HTTP 200 on 2026-09-01. The Gothenburg University Library separately
+  operates GUPEA on DSpace 8.3, exposing both an OAI-PMH 2.0 harvesting endpoint (fourteen metadata
+  formats, including the Swedish national uppsok thesis profile) and a HAL+JSON REST API on
+  gupea.ub.gu.se. The University also runs its own Shibboleth SAML 2.0 identity provider, published
+  as machine-readable metadata through SWAMID and eduGAIN.
+
+
+  What is thin here is PRODUCT, not surface. There is no central developer portal, no API
+  programme, no changelog, no status page, no rate-limit signal, no support channel and no
+  documented credential-issuance route for any of the write surfaces. Five of the six contracts
+  declare a security scheme and not one explains how to obtain a credential; two of them publish
+  relative servers[] and no contact at all. This is a research unit's engineering that happens to
+  be excellent, published without any of the institutional scaffolding that would make it findable.
+  Everything else that looks like a University of Gothenburg API is a relationship rather than a
+  contract — DOI registration with DataCite through the Swedish National Data Service and with
+  Crossref directly, a Microsoft Entra tenancy on medarbetarportalen.gu.se — and those are recorded
+  here with x-operator and no vendor contract stored.
 type: Index
 deliveryModel:
   model: saas
-  open_source: false
-  commercial: true
-  callable_host: false
+  open_source: true
+  commercial: false
+  callable_host: true
   label: Hosted service · you call their endpoint
-  confidence: medium
+  confidence: high
   source:
-  - pricing
-  generated: '2026-08-28'
-  method: derived
+  - openapi
+  - probed
+  generated: '2026-09-01'
+  method: probed
+  notes: >-
+    Revised from open_source:false / commercial:true / callable_host:false. Six OpenAPI documents
+    were found and all six declare callable hosts under gu.se; four of them declare an MIT licence
+    and their implementations are published in the spraakbanken GitHub organisation. Nothing in
+    this footprint is sold.
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: none
   trial: false
   try_now: false
-  public: false
+  public: true
   label: Free
-  confidence: medium
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
-position: Consumer
-access: 3rd-Party
+    - probed
+  generated: '2026-09-01'
+  method: probed
+  notes: >-
+    Revised from public:false / onboarding:unknown. Every read surface in this profile answered an
+    anonymous request with HTTP 200 on 2026-09-01 — Korp /info, Metadata /, Karp /resources/,
+    Karp-search /config, Sparv /ping, Mink /info, the GUPEA DSpace REST root and GUPEA OAI-PMH.
+    There is no sign-up, no key and no plan. The surfaces are open; they are simply not advertised.
+position: Provider
+access: Public
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/university-of-gothenburg.png
 url: https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/refs/heads/main/apis.yml
 tags:
-  - Education
-  - Higher Education
   - University
+  - Higher Education
+  - Education
   - Sweden
   - Research
+  - Research Data
+  - Research Repository
   - Open Data
   - Library
   - OAI-PMH
+  - Identity Federation
+  - Language Technology
+  - Natural Language Processing
+  - Corpus Linguistics
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 specificationVersion: '0.23'
 apis:
-  - aid: university-of-gothenburg:gupea-oai-pmh
-    name: GUPEA Repository OAI-PMH Interface
+  - aid: university-of-gothenburg:korp-api
+    name: Korp API v8 — Corpus Concordance Search
+    x-operator: institution
     description: >-
-      GUPEA (Gothenburg University Publications Electronic Archive) is the
-      university's DSpace-based institutional repository. It exposes an
-      OAI-PMH 2.0 metadata harvesting endpoint (repository name "GUPEA",
-      admin email gup@ub.gu.se, earliest datestamp 1906) for programmatic
-      harvesting of publication and thesis metadata in standard formats such
-      as oai_dc.
-    humanURL: https://gupea.ub.gu.se/
-    baseURL: https://gupea.ub.gu.se/server/oai/request
-    tags: [ Library, Repository, OAI-PMH, Metadata, DSpace, Research, Open Access ]
+      Språkbanken Text's corpus search engine, and the largest publicly callable surface the
+      University of Gothenburg operates. Fourteen operations over 1,133 corpora — concordance
+      query, sampling, frequency counts, time-series counts, log-likelihood comparison, word
+      picture (syntactic relations) and attribute-value discovery — using the CQP query language
+      on top of IMS Open Corpus Workbench. Institution-operated: the single declared server is
+      https://ws.spraakbanken.gu.se/ws/korp/v8 and info.contact is sb-info@svenska.gu.se. Verified
+      live 2026-09-01: anonymous GET /info returned HTTP 200, 25,974 bytes, listing 1,133 corpora
+      and reporting backend version 8.2.5 against a contract that declares 8.1.0.
+    baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
+    humanURL: https://ws.spraakbanken.gu.se/docs/korp
+    tags: [ Corpus Linguistics, Search, Language Technology, Natural Language Processing, Swedish ]
     properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-korp-api-openapi.yml
       - type: Documentation
-        url: https://gupea.ub.gu.se/
+        url: https://ws.spraakbanken.gu.se/docs/korp
+      - type: Examples
+        url: examples/university-of-gothenburg-korp-info-example.json
+      - type: JSONSchema
+        url: json-schema/university-of-gothenburg-korp-info.json
+  - aid: university-of-gothenburg:sbx-metadata-api
+    name: Språkbanken Text Metadata API v3
+    x-operator: institution
+    description: >-
+      The catalogue over everything Språkbanken Text publishes — corpora, lexicons, models,
+      analyses, utilities and collections — with BibTeX citation export, a published JSON schema
+      endpoint and its own OpenAPI served by the service itself. Institution-operated: declared
+      servers are ws.spraakbanken.gu.se production and dev, info.contact is sb-info@svenska.gu.se.
+      Verified live 2026-09-01: anonymous GET / returned HTTP 200 with 2,531,491 bytes of
+      catalogue JSON, and GET /list-ids returned 1,499 resource ids. Every resource record carries
+      a DataCite DOI under prefix 10.23695.
+    baseURL: https://ws.spraakbanken.gu.se/ws/metadata/v3
+    humanURL: https://ws.spraakbanken.gu.se/docs/metadata
+    tags: [ Metadata, Catalog, Research Data, Language Technology, DOI ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-metadata-api-openapi.yml
+      - type: Documentation
+        url: https://ws.spraakbanken.gu.se/docs/metadata
+      - type: Examples
+        url: examples/university-of-gothenburg-metadata-list-ids-example.json
+      - type: JSONSchema
+        url: json-schema/university-of-gothenburg-sbx-resource.json
+  - aid: university-of-gothenburg:mink-api
+    name: Mink API v3 — Bring Your Own Corpus
+    x-operator: institution
+    description: >-
+      Mink lets a researcher upload their own text, run it through the Sparv annotation pipeline
+      and publish it into Korp. Sixty-three paths, the largest contract in this profile and the
+      only one with a real authorisation model — an OAuth2 bearer scheme plus an API-key header,
+      whose accounts are federated logins riding on the same SWAMID/eduGAIN infrastructure the
+      University operates its own IdP inside of. Institution-operated: servers
+      ws.spraakbanken.gu.se production and dev, contact sb-info@svenska.gu.se, MIT licence.
+      Verified live 2026-09-01: anonymous GET /info returned HTTP 200 with the job status-code
+      catalogue.
+    baseURL: https://ws.spraakbanken.gu.se/ws/mink/v3
+    humanURL: https://ws.spraakbanken.gu.se/docs/mink
+    tags: [ Language Technology, Corpus Linguistics, Research Data, Annotation, Upload ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-mink-api-openapi.yml
+      - type: Documentation
+        url: https://ws.spraakbanken.gu.se/docs/mink
+      - type: Examples
+        url: examples/university-of-gothenburg-mink-info-example.json
+      - type: Authentication
+        url: authentication/university-of-gothenburg-authentication.yml
+  - aid: university-of-gothenburg:sparv-api
+    name: Sparv API v3 — Text Annotation Pipeline
+    x-operator: institution
+    description: >-
+      Sparv is Språkbanken Text's annotation pipeline exposed as a job-submission web service:
+      upload a corpus, generate a makefile, run the pipeline, poll status, download the annotated
+      result. Institution-operated: declared servers are ws.spraakbanken.gu.se/ws/sparv/v3
+      (production) and /ws/sparvlabb/v3 (lab), contact sb-info@svenska.gu.se, MIT licence.
+      Verified live 2026-09-01: anonymous GET /ping returned HTTP 200
+      {"message": "PONG", "time": 0.0041}. v2 is still answering on the same host with no
+      published deprecation date.
+    baseURL: https://ws.spraakbanken.gu.se/ws/sparv/v3
+    humanURL: https://ws.spraakbanken.gu.se/docs/sparv
+    tags: [ Language Technology, Natural Language Processing, Annotation, Pipeline, Batch ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-sparv-api-openapi.yml
+      - type: Documentation
+        url: https://ws.spraakbanken.gu.se/docs/sparv
+      - type: Examples
+        url: examples/university-of-gothenburg-sparv-ping-example.json
+  - aid: university-of-gothenburg:karp-api
+    name: Karp API v7 — Lexical Resource Editing
+    x-operator: institution
+    description: >-
+      The editing and query surface over Språkbanken Text's lexical resources — entry CRUD, entry
+      history and diff, resource permissions, field statistics, and inflection-table generation for
+      the SAOL and SO dictionaries. Institution-operated: the OpenAPI document is served directly
+      from spraakbanken4.it.gu.se, a University of Gothenburg host, and anonymous GET /resources/
+      returned HTTP 200 with 1,042,817 bytes on 2026-09-01. HOSTLESS AS PUBLISHED — the upstream
+      servers[] entry is the relative value `/karp/v7` and there is no info.contact, so nothing in
+      the document itself names its operator; it was attributed by the host it is served from and
+      re-based in openapi/, with the relative original preserved in openapi/_original/.
+    baseURL: https://spraakbanken4.it.gu.se/karp/v7
+    humanURL: https://ws.spraakbanken.gu.se/docs/karp
+    tags: [ Lexicography, Language Technology, Swedish, Dictionary, Editing ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-karp-api-openapi.yml
+      - type: Documentation
+        url: https://ws.spraakbanken.gu.se/docs/karp
+  - aid: university-of-gothenburg:karp-search-api
+    name: Karp Search API v1 — Karps sökgränssnitt
+    x-operator: institution
+    description: >-
+      The read-only search surface over the same lexical resources — three operations: config,
+      search and count, across 31 lexical resources. Institution-operated, served from
+      spraakbanken4.it.gu.se. Verified live 2026-09-01: anonymous GET /config returned HTTP 200
+      with 47,203 bytes. HOSTLESS AS PUBLISHED, same as Karp v7: relative servers[] `/karps/v1`,
+      no info.contact; re-based in openapi/ onto the host it is served from.
+    baseURL: https://spraakbanken4.it.gu.se/karps/v1
+    humanURL: https://ws.spraakbanken.gu.se/docs/karp-s
+    tags: [ Lexicography, Search, Language Technology, Swedish, Dictionary ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-karp-search-api-openapi.yml
+      - type: Documentation
+        url: https://ws.spraakbanken.gu.se/docs/karp-s
+      - type: Examples
+        url: examples/university-of-gothenburg-karp-search-config-example.json
+  - aid: university-of-gothenburg:gupea-oai-pmh
+    name: GUPEA Repository OAI-PMH 2.0 Interface
+    x-operator: institution
+    description: >-
+      GUPEA (Gothenburg University Publications Electronic Archive) is the Gothenburg University
+      Library's institutional repository, running DSpace 8.3. Its OAI-PMH 2.0 endpoint is
+      institution-operated: the host is gupea.ub.gu.se, the Identify response names the repository
+      GUPEA with repository identifier gupea.ub.gu.se, admin contact gup@ub.gu.se and an earliest
+      datestamp of 1906-05-30. Verified live 2026-09-01: verb=Identify returned HTTP 200 text/xml
+      and verb=ListMetadataFormats returned fourteen formats, among them `uppsok` — the Swedish
+      national student-thesis harvesting profile — and `rioxx` v3.0. No OpenAPI is published for
+      this endpoint; the one in this repository is DERIVED from those probes.
+    baseURL: https://gupea.ub.gu.se/server/oai/request
+    humanURL: https://gupea.ub.gu.se/
+    tags: [ Library, Research Repository, OAI-PMH, Metadata, DSpace, Open Access ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-gothenburg-gupea-oai-pmh-openapi.yml
+      - type: Examples
+        url: examples/university-of-gothenburg-gupea-oai-identify-example.xml
+      - type: Vocabulary
+        url: vocabulary/university-of-gothenburg-oai-metadata-formats-vocabulary.yml
+  - aid: university-of-gothenburg:gupea-dspace-rest
+    name: GUPEA DSpace 8 REST API
+    x-operator: institution
+    description: >-
+      The HAL+JSON REST API of the same repository, on the same University host. Verified live
+      2026-09-01: anonymous GET https://gupea.ub.gu.se/server/api returned HTTP 200
+      application/hal+json, 8,531 bytes, with "dspaceName": "GUPEA" and
+      "dspaceVersion": "DSpace 8.3-SNAPSHOT". DEPLOYMENT RECORDED, CONTRACT NOT STORED: DSpace is
+      open-source software whose REST contract belongs to the DSpace project and is shared by every
+      DSpace installation in this cohort. The University operates the deployment, the host and the
+      content; it did not write the interface, so no generic DSpace specification is saved under
+      this slug.
+    baseURL: https://gupea.ub.gu.se/server/api
+    humanURL: https://gupea.ub.gu.se/
+    tags: [ Library, Research Repository, DSpace, HAL, Open Access ]
+    properties:
+      - type: Examples
+        url: examples/university-of-gothenburg-gupea-dspace-rest-root-example.json
+  - aid: university-of-gothenburg:shibboleth-idp
+    name: Shibboleth Identity Provider — SAML 2.0 Metadata
+    x-operator: federation
+    description: >-
+      The University's own Shibboleth identity provider, entityID
+      https://idp3.it.gu.se/idp/shibboleth, which resolved directly to HTTP 200 on 2026-09-01 and
+      is also published as signed metadata through the SWAMID MDQ service at mds.swamid.se
+      (HTTP 200 application/samlmetadata+xml, 13,045 bytes). The metadata carries an
+      md:IDPSSODescriptor, shibmd:Scope gu.se, OrganizationName "University of Gothenburg", and SSO
+      bindings at /idp/profile/SAML2/POST/SSO and /idp/profile/SAML2/Redirect/SSO. SWAMID
+      participates in eduGAIN. Identity federation is institution-operated by definition, and it is
+      load-bearing rather than incidental here: Mink's accounts are federated logins.
+    baseURL: https://idp3.it.gu.se/idp/shibboleth
+    humanURL: https://www.swamid.se/
+    tags: [ Identity Federation, SAML, Shibboleth, SWAMID, eduGAIN, Authentication ]
+    properties:
+      - type: Examples
+        url: examples/university-of-gothenburg-idp-saml-metadata-example.xml
+      - type: Authentication
+        url: authentication/university-of-gothenburg-authentication.yml
+      - type: Documentation
+        url: https://mds.swamid.se/entities/https%3A%2F%2Fidp3.it.gu.se%2Fidp%2Fshibboleth
+  - aid: university-of-gothenburg:adfs-idp
+    name: Microsoft AD FS Identity Provider (SWAMID entity)
+    x-operator: federation
+    description: >-
+      A second University of Gothenburg entity registered in the SWAMID aggregate, entityID
+      http://idp.auth.gu.se/adfs/services/trust, DisplayName "University of Gothenburg (ADFS)" /
+      "Göteborgs Universitet (ADFS)". Observed in the SWAMID IdP aggregate at
+      https://mds.swamid.se/md/swamid-idp.xml (HTTP 200 text/xml, 627,363 bytes) on 2026-09-01.
+      The registration and the entity are the University's; the AD FS product is Microsoft's, so
+      the relationship is recorded and no contract is stored.
+    baseURL: http://idp.auth.gu.se/adfs/services/trust
+    humanURL: https://www.swamid.se/
+    tags: [ Identity Federation, SAML, AD FS, SWAMID, Authentication ]
+    properties:
+      - type: Authentication
+        url: authentication/university-of-gothenburg-authentication.yml
+  - aid: university-of-gothenburg:datacite-registration
+    name: DataCite DOI Registration (client SND.SPRKB, via the Swedish National Data Service)
+    x-operator: registry
+    description: >-
+      REGISTRY MEMBERSHIP, recorded as a fact about the institution, with no registry contract
+      stored. The University's Språkbanken Text unit is a live DataCite repository registrant:
+      https://api.datacite.org/clients/snd.sprkb returned HTTP 200 on 2026-09-01 with name
+      "Språkbanken Text", symbol SND.SPRKB, clientType repository, url https://spraakbanken.gu.se/,
+      DOI prefix 10.23695, active since 2017-03-13, under DataCite provider `iuvp` — the Swedish
+      National Data Service (SND) consortium, whose host institution is the University of
+      Gothenburg. Worth recording how this was found: a name search on DataCite for "gothenburg"
+      returns zero results in both /providers and /clients, so this membership is invisible to any
+      audit that searches by institution name. It was reached by resolving a DOI the University
+      actually minted (10.23695/y43g-bx28).
+    humanURL: https://api.datacite.org/clients/snd.sprkb
+    tags: [ DOI, DataCite, Registry, Research Data, SND ]
+    properties:
+      - type: Registry
+        url: https://api.datacite.org/clients/snd.sprkb
+      - type: Conformance
+        url: conformance/university-of-gothenburg-conformance.yml
+  - aid: university-of-gothenburg:crossref-membership
+    name: Crossref Membership (members 36737 and 51378)
+    x-operator: registry
+    description: >-
+      REGISTRY MEMBERSHIP, recorded as a fact about the institution. Two Crossref member records
+      carry the primary name "University of Gothenburg", both returning HTTP 200 on 2026-09-01:
+      member 36737 with DOI prefixes 10.58323, 10.58235 and 10.57126 and 520 DOIs (alternate names
+      include "University of Gothenburg, Department of historical studies" and
+      "Förvaltningshögskolan, Göteborgs Universitet"), and member 51378 with prefix 10.70733 and
+      351 DOIs. Two separate memberships for one institution is itself the finding — the DOI
+      programme is departmental, not central. No Crossref contract is stored under this slug.
+    humanURL: https://www.crossref.org/
+    tags: [ DOI, Crossref, Registry, Scholarly Publishing ]
+    properties:
+      - type: Registry
+        url: https://api.crossref.org/members/36737
+      - type: Registry
+        url: https://api.crossref.org/members/51378
   - aid: university-of-gothenburg:qog-data
     name: Quality of Government (QoG) Open Data
+    x-operator: institution
     description: >-
-      The Quality of Government Institute at the University of Gothenburg
-      publishes open-access governance datasets (Standard, Basic, OECD, and
-      original datasets) available as direct file downloads in CSV, SPSS, and
-      Stata formats, plus an interactive Data Finder tool for browsing
-      categories, sources, datasets, and variables. No formal REST API with
-      sign-up keys is documented; access is via downloadable files and the
-      web-based Data Finder.
+      The Quality of Government Institute at the University of Gothenburg publishes open-access
+      governance datasets (Standard, Basic, OECD, EU Regional and original datasets) as direct file
+      downloads in CSV, SPSS and Stata, plus an interactive Data Finder at datafinder.qog.gu.se for
+      browsing categories, sources, datasets and variables. Institution-operated — both surfaces
+      are on gu.se hosts — but NOT an API: re-probed 2026-09-01, the downloads page and the Data
+      Finder both returned HTTP 200 HTML, and no REST endpoint, no OpenAPI, no sign-up and no keyed
+      access were found. Recorded honestly as a data surface without a contract.
     humanURL: https://www.gu.se/en/quality-government/qog-data/data-downloads
     tags: [ Open Data, Research, Datasets, Governance, Downloads ]
     properties:
@@ -86,15 +355,87 @@ apis:
         url: https://www.gu.se/en/quality-government/qog-data
       - type: Documentation
         url: https://datafinder.qog.gu.se/
+  - aid: university-of-gothenburg:microsoft-365-tenancy
+    name: Microsoft 365 / Entra ID Tenancy (medarbetarportalen.gu.se)
+    x-operator: tenant
+    description: >-
+      TENANT RELATIONSHIP, recorded with no contract stored. The staff portal at
+      medarbetarportalen.gu.se redirects to login.microsoftonline.com with Entra tenant id
+      0798ed31-f5b0-4935-863c-73ee2505806e and resource gunet.sharepoint.com (observed 2026-09-01).
+      A Microsoft tenancy on a University hostname: the accounts and the content are the
+      University's, the platform and its API contract are Microsoft's.
+    humanURL: https://medarbetarportalen.gu.se/
+    tags: [ Tenant, Microsoft 365, Entra ID, SharePoint, Authentication ]
+    properties:
+      - type: Authentication
+        url: authentication/university-of-gothenburg-authentication.yml
 common:
-  - type: DomainSecurity
-    url: security/university-of-gothenburg-domain-security.yml
   - type: Website
     url: https://www.gu.se/en
+  - type: APIReference
+    url: https://ws.spraakbanken.gu.se/docs/
+  - type: Documentation
+    url: https://spraakbanken.gu.se/en/resources
+  - type: ResearchRepository
+    url: https://gupea.ub.gu.se/
+  - type: IdentityFederation
+    url: https://idp3.it.gu.se/idp/shibboleth
+  - type: OpenData
+    url: https://www.gu.se/en/quality-government/qog-data/data-downloads
+  - type: CourseCatalog
+    url: https://www.gu.se/en/study-in-gothenburg/programs-and-courses
+  - type: GitHub
+    url: https://github.com/spraakbanken
   - type: GitHub
     url: https://github.com/bcfgothenburg
   - type: LinkedIn
     url: https://www.linkedin.com/school/university-of-gothenburg/
+  - type: PrivacyPolicy
+    url: https://www.gu.se/en/about-the-website/processing-personal-data
+  - type: TermsOfService
+    url: https://www.gu.se/en/about-the-university-of-gothenburg/organisation/policy-rules-and-plans
+  - type: Support
+    url: https://www.gu.se/en/contact
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-korp-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-metadata-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-mink-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-sparv-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-karp-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-karp-search-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/university-of-gothenburg-gupea-oai-pmh-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-gothenburg-sbx-resource.json
+  - type: JSONSchema
+    url: json-schema/university-of-gothenburg-korp-info.json
+  - type: Examples
+    url: examples/README.md
+  - type: Authentication
+    url: authentication/university-of-gothenburg-authentication.yml
+  - type: Scopes
+    url: scopes/university-of-gothenburg-scopes.yml
+  - type: Errors
+    url: errors/university-of-gothenburg-errors.yml
+  - type: Conformance
+    url: conformance/university-of-gothenburg-conformance.yml
+  - type: Vocabulary
+    url: vocabulary/university-of-gothenburg-oai-metadata-formats-vocabulary.yml
+  - type: Rules
+    url: rules/university-of-gothenburg-rules.yml
+  - type: Lifecycle
+    url: lifecycle/university-of-gothenburg-lifecycle.yml
+  - type: JSONLD
+    url: json-ld/university-of-gothenburg-organization.jsonld
+  - type: JSONLD
+    url: json-ld/university-of-gothenburg-context.jsonld
+  - type: DomainSecurity
+    url: security/university-of-gothenburg-domain-security.yml
   - type: Plans
     url: plans/university-of-gothenburg-plans-pricing.yml
   - type: RateLimits
@@ -103,6 +444,105 @@ common:
     url: finops/university-of-gothenburg-finops.yml
   - type: Review
     url: review.yml
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Real probes ran and found real institution-operated surfaces — considerably more than the
+    June 2026 profile of this repository recorded. Eight surfaces are the University's own and
+    were verified anonymously at HTTP 200 on 2026-09-01: six Språkbanken Text APIs, each with a
+    PUBLISHED OpenAPI document (Korp, Metadata, Mink, Sparv, Karp v7, Karp search v1), plus the
+    GUPEA DSpace 8.3 REST API and the GUPEA OAI-PMH 2.0 endpoint. A ninth, the University's own
+    Shibboleth SAML 2.0 identity provider, resolves to public metadata both directly and through
+    SWAMID/eduGAIN.
+
+
+    Two host-independent classes were found and repaired rather than deleted. Karp v7 and Karp
+    search v1 are HOSTLESS as published — relative servers[] and no info.contact — so nothing in
+    either document names its operator; both were attributed by the gu.se host serving them and
+    re-based in openapi/, with the relative originals preserved unchanged in openapi/_original/.
+    The DataCite membership is invisible to name search (both /providers?query=gothenburg and
+    /clients?query=gothenburg return zero) and was found only by resolving a DOI the University
+    minted.
+
+
+    What is thin is DOCUMENTATION AND PRODUCT, not surface. There is no central developer portal —
+    api.gu.se and data.gu.se do not resolve — no changelog, no status page, no rate-limit signal,
+    no support channel for any API, and no documented credential-issuance route for any of the five
+    declared security schemes. No AI policy or AI-tooling pointer was found on any English- or
+    Swedish-language gu.se URL probed in this run, so none is claimed. No public course-catalog or
+    timetable API exists: kursplaner.gu.se returns 404 and the programme catalogue is HTML only.
+    One Språkbanken service, Strix, is registered at the edge but returned HTTP 503.
+
+
+    One probe limitation to declare. www.gu.se serves nginx HTTP 403 for unknown paths, including
+    /.well-known/security.txt and /llms.txt. That is a blanket edge deny, NOT evidence that those
+    files were considered and withheld, and neither absence is scored here.
+  evidence:
+    - url: https://ws.spraakbanken.gu.se/docs/
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/korp/v8/info
+      status: 200
+    - url: https://raw.githubusercontent.com/spraakbanken/korp-backend/master/docs/api.yaml
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3/openapi.json
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3/
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3/openapi.json
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3/info
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/sparv/v3/ping
+      status: 200
+    - url: https://spraakbanken4.it.gu.se/karp/v7/openapi.json
+      status: 200
+    - url: https://spraakbanken4.it.gu.se/karp/v7/resources/
+      status: 200
+    - url: https://spraakbanken4.it.gu.se/karps/v1/openapi.json
+      status: 200
+    - url: https://spraakbanken4.it.gu.se/karps/v1/config
+      status: 200
+    - url: https://ws.spraakbanken.gu.se/ws/strix/
+      status: 503
+    - url: https://gupea.ub.gu.se/server/oai/request?verb=Identify
+      status: 200
+    - url: https://gupea.ub.gu.se/server/oai/request?verb=ListMetadataFormats
+      status: 200
+    - url: https://gupea.ub.gu.se/server/api
+      status: 200
+    - url: https://idp3.it.gu.se/idp/shibboleth
+      status: 200
+    - url: https://mds.swamid.se/entities/https%3A%2F%2Fidp3.it.gu.se%2Fidp%2Fshibboleth
+      status: 200
+    - url: https://mds.swamid.se/md/swamid-idp.xml
+      status: 200
+    - url: https://api.datacite.org/clients/snd.sprkb
+      status: 200
+    - url: https://api.datacite.org/clients?query=gothenburg
+      status: 200
+    - url: https://api.crossref.org/members?query=gothenburg
+      status: 200
+    - url: https://api.ror.org/v2/organizations?query=%22University%20of%20Gothenburg%22
+      status: 200
+    - url: https://datafinder.qog.gu.se/
+      status: 200
+    - url: https://www.gu.se/en/quality-government/qog-data/data-downloads
+      status: 200
+    - url: https://www.gu.se/en/about-the-website/processing-personal-data
+      status: 200
+    - url: https://medarbetarportalen.gu.se/
+      status: 200
+    - url: https://kursplaner.gu.se/
+      status: 404
+    - url: https://www.gu.se/.well-known/security.txt
+      status: 403
+    - url: https://www.gu.se/llms.txt
+      status: 403
+    - url: https://api.gu.se/
+      status: 0
+    - url: https://data.gu.se/
+      status: 0
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
