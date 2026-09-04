@@ -66,7 +66,7 @@ accessModel:
     anonymous request with HTTP 200 on 2026-09-01 — Korp /info, Metadata /, Karp /resources/,
     Karp-search /config, Sparv /ping, Mink /info, the GUPEA DSpace REST root and GUPEA OAI-PMH.
     There is no sign-up, no key and no plan. The surfaces are open; they are simply not advertised.
-position: Provider
+position: Producing
 access: Public
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/university-of-gothenburg.png
 url: https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/refs/heads/main/apis.yml
