@@ -224,6 +224,12 @@ apis:
     the accounts and the content are the University''s, the platform and its API contract are Microsoft''s.'
   humanURL: https://medarbetarportalen.gu.se/
   tags:
+  - Tenants
+  - Microsoft-365
+  - Entra ID
+  - SharePoint
+  - Authentication
+  tags_raw:
   - Tenant
   - Microsoft 365
   - Entra ID
@@ -376,6 +382,8 @@ apis:
   humanURL: https://ws.spraakbanken.gu.se/docs/korp
   baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
   tags:
+  - Cache Management
+  tags_raw:
   - Cache management
   properties:
   - type: OpenAPI
@@ -670,6 +678,8 @@ apis:
   humanURL: https://ws.spraakbanken.gu.se/docs/korp
   baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -711,7 +721,8 @@ apis:
   description: The General API from University of Gothenburg — 2 operation(s) for general.
   humanURL: https://ws.spraakbanken.gu.se/docs/korp
   baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
-  tags:
+  tags: []
+  tags_raw:
   - General
   properties:
   - type: OpenAPI
@@ -1047,7 +1058,8 @@ apis:
   description: The Misc API from University of Gothenburg — 4 operation(s) for misc.
   humanURL: https://ws.spraakbanken.gu.se/docs/korp
   baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
-  tags:
+  tags: []
+  tags_raw:
   - Misc
   properties:
   - type: OpenAPI
