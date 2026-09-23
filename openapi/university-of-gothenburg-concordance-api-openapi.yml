@@ -1,0 +1,336 @@
+openapi: 3.2.0
+info:
+  title: Korp Concordance API
+  version: 8.1.0
+  description: '# Introduction
+
+
+    Korp is a tool for searching in text corpora, developed at Språkbanken.'
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/korp/v8/static/raven_black.png
+    altText: Logo
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/korp/v8
+security:
+- basicAuth: []
+tags:
+- name: Concordance
+paths:
+  /query:
+    get:
+      summary: Concordance
+      description: 'Do a concordance search in one or more corpora.
+
+
+        ### Examples
+
+
+        Query the corpus SUC3 and show the first 10 sentences matching the CQP query `"och" [] [pos="NN"]`, including part of speech and base form in the result:
+
+        [`/query?corpus=SUC3&start=0&end=9&default_context=1+sentence&cqp="och"+[]+[pos="NN"]&show=msd,lemma`](https://ws.spraakbanken.gu.se/ws/korp/v8/query?corpus=SUC3&start=0&end=9&default_context=1+sentence&cqp=%22och%22+%5B%5D+%5Bpos=%22NN%22%5D&show=msd,lemma&indent=4)
+
+
+        Query the parallel corpus SALTNLD-SV and show part of speech + the linked Dutch sentence:
+
+        [`/query?corpus=SALTNLD-SV&start=0&end=9&context=1+link&cqp="och"+[]+[pos="NN"]&show=saltnld-nl`](https://ws.spraakbanken.gu.se/ws/korp/v8/query?corpus=SALTNLD-SV&start=0&end=9&default_context=1+link&cqp=%22och%22+%5B%5D+%5Bpos=%22NN%22%5D&show=saltnld-nl&indent=4)'
+      tags:
+      - Concordance
+      parameters:
+      - $ref: '#/components/parameters/Corpus'
+      - $ref: '#/components/parameters/CQP'
+      - $ref: '#/components/parameters/Start'
+      - $ref: '#/components/parameters/End'
+      - name: default_context
+        description: Context to show, e.g. ‘1 sentence’.
+        in: query
+        schema:
+          type: string
+          default: 10 words
+          example: 1 sentence
+      - name: context
+        description: Context to show for specific corpora, overriding the default. Specified using the format 'corpus:context'.
+        in: query
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+          example:
+          - ROMI:1 sentence
+          - SUC3:10 words
+      - $ref: '#/components/parameters/Show'
+      - $ref: '#/components/parameters/ShowStruct'
+      - $ref: '#/components/parameters/DefaultWithin'
+      - $ref: '#/components/parameters/Within'
+      - name: in_order
+        description: By default the order of the tokens in your query matters, and will only match tokens in that particular order. By setting this parameter to 'false' the order of the tokens will no longer matter, and every occurrence of each matched token will be highlighted. Requires **default_within** or **within**.
+        in: query
+        schema:
+          type: boolean
+          default: true
+      - name: sort
+        description: 'Sort the results *within each corpus*. The available options are:
+
+          * `keyword` - Sort by match
+
+          * `left` - Sort by left context
+
+          * `right` - Sort by right context
+
+          * `random` - Random order
+
+          * `any positional attribute` - Sort by given attribute
+
+
+          By default no sorting is performed.
+
+          '
+        in: query
+        schema:
+          type: string
+      - name: random_seed
+        description: Numerical value for reproducible random order, used together with `sort=random` but not required.
+        in: query
+        schema:
+          type: integer
+          example: 984326587
+      - name: cut
+        description: Limit total number of hits per corpus to this number. The default is no limit.
+        in: query
+        schema:
+          type: integer
+          example: 25
+      - $ref: '#/components/parameters/CQPn'
+      - $ref: '#/components/parameters/ExpandPrequeries'
+      - $ref: '#/components/parameters/Incremental'
+      - name: query_data
+        description: The result from a query contains a `query_data` hash. Subsequent requests for further hits from the same query can be sped up by submitting the same hash back to Korp using this parameter.
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hits:
+                    type: integer
+                    description: Total number of hits.
+                    example: 1422
+                  corpus_hits:
+                    description: Hits per corpus.
+                    type: object
+                    additionalProperties:
+                      type: integer
+                    example:
+                      ROMI: 1135
+                      SUC3: 287
+                  corpus_order:
+                    description: Results are returned grouped by corpus. This lists the order of the corpora.
+                    type: array
+                    additionalProperties:
+                      type: string
+                    example:
+                    - ROMI
+                    - SUC3
+                  kwic:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        match:
+                          description: Specifies the position of the match in the context. If `in_order` is set to `false`, `match` will consist of a list of match objects, one per highlighted word.
+                          oneOf:
+                          - $ref: '#/components/schemas/Match'
+                          - type: array
+                            items:
+                              $ref: '#/components/schemas/Match'
+                        structs:
+                          type: object
+                          description: Structural attributes.
+                          additionalProperties:
+                            type: string
+                          example:
+                            text_author: Söderberg, Hjalmar
+                            text_title: Doktor Glas
+                        tokens:
+                          description: List of tokens with associated annotations.
+                          type: array
+                          items:
+                            type: object
+                            additionalProperties:
+                              type: string
+                            required:
+                            - word
+                            example:
+                              word: cat
+                              pos: NN
+                        aligned:
+                          description: Hits from aligned corpora if available, otherwise omitted.
+                          type: object
+                          additionalProperties:
+                            type: array
+                            items:
+                              type: object
+                            description: List of tokens.
+                  query_data:
+                    description: Hashed information about the distribution of the hits. Submit the same query data using the `query_data` parameter when requesting further hits from the same query, to get significantly faster results when querying multiple corpora.
+                    type: string
+                    example: eJwdxsERgCAMBMCWwnEY0Ap8OM7YAUlI_yXouK-tUV0NBKw0j8wNQ4tQJ9kXxupZWqX5RLJ0CafICvONYRE4nvs6d3T--QZ9AbXiFqk=
+                  time:
+                    $ref: '#/components/schemas/Time'
+      operationId: getQuery
+      x-operation-id-source: derived
+  /query_sample:
+    get:
+      summary: Sample Concordance
+      description: 'Same as regular concordance, but does a sequential search in the selected corpora in random order until at least one hit is found, then aborts. The result will be randomly sorted. Use this to get one or more random sample sentences.
+
+
+        Takes the same parameters as `/query`, but `sort` will always be set to `random`. Response format is the same.'
+      tags:
+      - Concordance
+      responses:
+        '200':
+          description: OK
+      operationId: getQuerySample
+      x-operation-id-source: derived
+components:
+  parameters:
+    DefaultWithin:
+      name: default_within
+      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
+      in: query
+      schema:
+        type: string
+        example: sentence
+    Show:
+      name: show
+      description: Positional attributes to show. 'word' will always be included.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - pos
+        - baseform
+        default:
+        - word
+    Incremental:
+      name: incremental
+      description: Return results incrementally when set to 'true' and more than one corpus is specified.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
+    Start:
+      name: start
+      description: First result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 0
+        example: 0
+    ExpandPrequeries:
+      name: expand_prequeries
+      description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
+      in: query
+      schema:
+        type: boolean
+        default: true
+    End:
+      name: end
+      description: Last result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 9
+        example: 9
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    Within:
+      name: within
+      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI:paragraph
+        - SUC3:text
+    CQPn:
+      name: cqp#
+      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
+      in: query
+      schema:
+        type: string
+        example: '[pos="NN"]'
+    CQP:
+      name: cqp
+      description: CQP query.
+      in: query
+      schema:
+        type: string
+      required: true
+      example: '[word="flower"]'
+  schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+    Match:
+      type: object
+      properties:
+        start:
+          type: integer
+          description: Start position of the match within the context.
+          example: 5
+        end:
+          type: integer
+          description: End position of the match within the context.
+          example: 6
+        position:
+          type: integer
+          description: Global corpus position of the match.
+          example: 73648
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

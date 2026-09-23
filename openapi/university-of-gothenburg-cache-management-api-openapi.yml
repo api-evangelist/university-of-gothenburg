@@ -1,0 +1,190 @@
+openapi: 3.2.0
+info:
+  title: Språkbanken Text Metadata Cache management API
+  description: 'This API provides a quick way to retrieve a list of resources (corpora, lexicons, models, analyses, and utilities)
+
+    available at Språkbanken Text.'
+  contact:
+    name: Språkbanken Text
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 3.3.1
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+  description: Development server
+tags:
+- name: Cache Management
+  description: Endpoints for managing the metadata cache
+paths:
+  /renew-cache:
+    get:
+      tags:
+      - Cache Management
+      summary: Renew Cache Get
+      description: 'Trigger cache renewal as a background job (GET).
+
+
+        Resources specified in the "resource-paths" query parameter will be reprocessed. If no resources are specified, all
+
+        resources are reprocessed.'
+      operationId: renew_cache_get_renew_cache_get
+      parameters:
+      - name: resource-paths
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Comma-separated list of specific resources to reprocess (<resource_type/resource_id>).
+          title: Resource-Paths
+        description: Comma-separated list of specific resources to reprocess (<resource_type/resource_id>).
+        example: corpus/attasidor,lexicon/saldo
+      - name: debug
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, log debug info while parsing YAML files.
+          default: false
+          title: Debug
+        description: If true, log debug info while parsing YAML files.
+      - name: offline
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, skip getting file info for downloadables.
+          default: false
+          title: Offline
+        description: If true, skip getting file info for downloadables.
+      - name: purge-license-cache
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, re-download the license information before parsing YAML files.
+          default: false
+          title: Purge-License-Cache
+        description: If true, re-download the license information before parsing YAML files.
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenewCacheResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Cache Management
+      summary: Renew Cache Post
+      description: 'Trigger cache renewal as a background job (POST).
+
+
+        The resources to be reprocessed are determined based on the changed files in the webhook payload.'
+      operationId: renew_cache_post_renew_cache_post
+      parameters:
+      - name: debug
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, log debug info while parsing YAML files.
+          default: false
+          title: Debug
+        description: If true, log debug info while parsing YAML files.
+      - name: offline
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, skip getting file info for downloadables.
+          default: false
+          title: Offline
+        description: If true, skip getting file info for downloadables.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - type: object
+                additionalProperties: true
+              - type: 'null'
+              description: Payload from GitHub webhook.
+              title: Payload
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenewCacheResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RenewCacheResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the cache renewal task
+          examples:
+          - c09e5583-dd05-4949-9734-e02b60fad42a
+        message:
+          type: string
+          title: Message
+          description: Message indicating the status of the cache renewal request
+          examples:
+          - Cache renewal triggered in background.
+      type: object
+      required:
+      - task_id
+      - message
+      title: RenewCacheResponse
+      description: Response model for cache renewal requests.

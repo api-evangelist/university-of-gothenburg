@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xrd="http://docs.oasis-open.org/ns/xri/xrd-1.0" xmlns:pyff="http://pyff.io/NS" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ser="http://eidas.europa.eu/metadata/servicelist" xmlns:eidas="http://eidas.europa.eu/saml-extensions" xmlns:ti="https://seamlessaccess.org/NS/trustinfo" xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" xmlns:samla="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" xmlns:req-attr="urn:oasis:names:tc:SAML:protcol:ext:req-attr" entityID="https://idp3.it.gu.se/idp/shibboleth" ID="_20260901T013241Z" validUntil="2026-09-15T01:32:41Z" cacheDuration="PT5H">
+  <ds:Signature><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#_20260901T013241Z"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#WithComments"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>rxTBG9zk4pjo6OtXO2egtu3rJNGpaESruRsY/m1dtdY=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>fLwN0GCry0p69ykyKSCISefn5rqhq+AhI6JaSbQ8oVBry6o1LzSL02/oYF0i96DiGr0VvYWXabgFqrPnGy3TcKtVl6zbqnx35/NzFtsG/o5/7pQPyPlyohOM6vBLd+UUiHAA1/xpqSLgjQcnR4zqUOFv3zbjkiUOgXyysBC24S+nDiIHgl6v2emxPJ4/kCCUKUaZt0G3AdV0QMLQvVGA8y8XdYymM0L3d5l9nTnRzRzlSjTCtAkfXrnpOGNb5e5EpjFvzUdl+iqJtUSf/wXHDohrkWI46w1BkbO8bWjlv5aXZReVscBtaIhni2FS9J45IScCNLMS1YtpoqRzRh6tiN3BHUznP5gwJswF+NDC4ZwpwiheJlQPxkLplRNvpVIN0iltqwzLO9zRDiJLqNQmpn10dw5NnNuu+E2qf/HpTMv5/iRzAh5lS8733tMkJrENMpdjLlLxJ+WBwVH7ykkz5mjD59f4WNBXJV9QYl4Lv6My8HElhvaSqowDz067mnTTQHwWvRDSHm7FONLf90zhVaRpFoK2qLKkwCVVIxEiS2jXFraFUK8CgRPxDgbcTjvVqH0ODvYgSgsObLE97SuBCGe4Z21K+BbbhjOGo72E8S2b3Kcq79NbTiMsBV20t/KBm1X9RZZE5hnN0qvPMPjzleOJV7IvIMA/tDjXuinjb6M=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><md:Extensions>
+    <mdrpi:RegistrationInfo registrationAuthority="http://www.swamid.se/" registrationInstant="2016-06-17T14:08:40Z">
+      <mdrpi:RegistrationPolicy xml:lang="en">http://swamid.se/policy/mdrps</mdrpi:RegistrationPolicy>
+    </mdrpi:RegistrationInfo>
+    <mdattr:EntityAttributes>
+      <saml:Attribute Name="urn:oasis:names:tc:SAML:attribute:assurance-certification" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>http://www.swamid.se/policy/assurance/al1</saml:AttributeValue>
+        <saml:AttributeValue>http://www.swamid.se/policy/assurance/al2</saml:AttributeValue>
+        <saml:AttributeValue>https://refeds.org/sirtfi</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="http://macedir.org/entity-category-support">
+        <saml:AttributeValue>https://refeds.org/category/anonymous</saml:AttributeValue>
+        <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+        <saml:AttributeValue>http://www.geant.net/uri/dataprotection-code-of-conduct/v1</saml:AttributeValue>
+        <saml:AttributeValue>https://refeds.org/category/code-of-conduct/v2</saml:AttributeValue>
+        <saml:AttributeValue>https://myacademicid.org/entity-categories/esi</saml:AttributeValue>
+        <saml:AttributeValue>https://refeds.org/category/pseudonymous</saml:AttributeValue>
+        <saml:AttributeValue>https://refeds.org/category/personalized</saml:AttributeValue>
+      </saml:Attribute>
+    </mdattr:EntityAttributes>
+  </md:Extensions>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" errorURL="https://sp.it.gu.se/error/?errorurl_code=ERRORURL_CODE&amp;errorurl_ts=ERRORURL_TS&amp;errorurl_rp=ERRORURL_RP&amp;errorurl_tid=ERRORURL_TID&amp;errorurl_ctx=ERRORURL_CTX&amp;entityid=https://idp3.it.gu.se/idp/shibboleth">
+    <md:Extensions>
+      <shibmd:Scope regexp="false">gu.se</shibmd:Scope>
+      <mdui:UIInfo>
+        <mdui:DisplayName xml:lang="sv">Göteborgs Universitet</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="en">University of Gothenburg</mdui:DisplayName>
+        <mdui:Description xml:lang="sv">Identity Provider för anställda och studenter vid Göteborgs universitet.</mdui:Description>
+        <mdui:Description xml:lang="en">The University of Gothenburg Identity Provider is used by employees and students at the university.</mdui:Description>
+        <mdui:Logo xml:lang="sv" height="40" width="277">https://idp3.it.gu.se/idp/images/1374690_lo_gu_left.png</mdui:Logo>
+        <mdui:Logo xml:lang="en" height="40" width="277">https://idp3.it.gu.se/idp/images/1374690_lo_gu_left.png</mdui:Logo>
+        <mdui:InformationURL xml:lang="sv">https://idp3.it.gu.se/idp/servicedefinition.jsp</mdui:InformationURL>
+        <mdui:InformationURL xml:lang="en">https://idp3.it.gu.se/idp/servicedefinition.jsp</mdui:InformationURL>
+        <mdui:PrivacyStatementURL xml:lang="sv">https://www.gu.se/om-webbplatsen/behandling-av-personuppgifter</mdui:PrivacyStatementURL>
+        <mdui:PrivacyStatementURL xml:lang="en">https://www.gu.se/en/about-the-website/processing-personal-data</mdui:PrivacyStatementURL>
+      </mdui:UIInfo>
+      <mdui:DiscoHints>
+        <mdui:DomainHint>gu.se</mdui:DomainHint>
+        <mdui:IPHint>130.241.0.0/18</mdui:IPHint>
+        <mdui:IPHint>2001:6b0:d::/48</mdui:IPHint>
+        <mdui:GeolocationHint>geo:57.6981,11.9716</mdui:GeolocationHint>
+      </mdui:DiscoHints>
+    </md:Extensions>
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>MIIDHzCCAgegAwIBAgIUBk9rqsAITZHji4oNlQkTn8tKeYIwDQYJKoZIhvcNAQEL
+BQAwGDEWMBQGA1UEAwwNaWRwMy5pdC5ndS5zZTAeFw0xNjA2MTUwODMyMzVaFw0z
+NjA2MTUwODMyMzVaMBgxFjAUBgNVBAMMDWlkcDMuaXQuZ3Uuc2UwggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDeHYglrDVaR8MZ5xbJY3F67/8BAVQeKkFo
+fX5wjnpYhDqliWtbkEtXxe1KMTWrGYX6iGHYY/OSL+OlIQa4HS5ddDGgOFrL9CJq
+K+10ksjhYGCqc7sFxrpNWkhqBAC1ZDU/IFBkpUYPvqUybWK0HNi8+vOGEbjDLGjB
+EbnRbyCOzSie2imkJ2hXdkXWtYaFQUgh2zJN3sGjbh0XyoCc3r3Kp/vEYI1oeWeq
+L8VLWCTyd0UbnvwHobOJacNCQwoGDRr0xoVDBATQ5LEmPjqd1Bhfsm2h25qoPlLy
+Fpsgo1P/r3Dx7K4i8s59jlbMwgrlSHBSZ/ARsczZaE68ulYmFpRJAgMBAAGjYTBf
+MB0GA1UdDgQWBBQKO3oNLb6llqHEj77Btda7DskwfTA+BgNVHREENzA1gg1pZHAz
+Lml0Lmd1LnNlhiRodHRwczovL2lkcDMuaXQuZ3Uuc2UvaWRwL3NoaWJib2xldGgw
+DQYJKoZIhvcNAQELBQADggEBAEZsh2pLePXmGHMsuCAiVmEtGnZdXKZFwFz8ZQx3
+6MlsiPAIa1YJYP6w8W9IfDRl6OA5lZj9RMBgYkjMAsceMg+OXgFVxU3Pa/sEB4Hn
+97QnOCTXOJTpZEGu8bljxYShhi8QNJwd5TnYa8iHtHxyv2r1wArCJlEcToX3qoY+
+BtpSJ1lK8n4Ij3Pr0b+8f11FoNHmH0x/EWL5DGWRsgKFZYvqK4ZB51UNwhIO1nDR
+gpxgwMi4sgXwJh/SVhZUu5cm7ZIwW73BO5EfQ4O40gDOECF8+KgfyJpnXBtDShrh
+oIVPmjhtjo5JX9haWnr6ff/1870FFrYliFq35HAVN1pmrhk=</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:KeyDescriptor use="encryption">
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>MIIDIDCCAgigAwIBAgIVAM+/+9aCFZpXtTFRmp0xShPwTGplMA0GCSqGSIb3DQEB
+CwUAMBgxFjAUBgNVBAMMDWlkcDMuaXQuZ3Uuc2UwHhcNMTYwNjE1MDgzMjM2WhcN
+MzYwNjE1MDgzMjM2WjAYMRYwFAYDVQQDDA1pZHAzLml0Lmd1LnNlMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlHeHwSYiDlrT9fVCz57EFr0hHNR/dSB1
+9GzruYV43k9S+9YDcpGr52OdREf5JehQPHJ4/804arJbZKhMHq1bILK3iSWrzbmm
+teWUp9roLroioS9N2PRsIoU0/oxslxgS/nwxa9VWB5X04w7Jw2STuneMAK6yJLuK
+b75YHBAuvQub7plrLQ3HckYXNK/cr3BVxBHsVLN3pm1uLxfnoi4vjz40EcFYhwXg
+DrodSchSPRSNDzBh90Gkuyo7XmSk5SLjYz3iIj67Nb2DoZnEd3mmMVyhOEfesl8K
+qD618iO9tx2uOy/egr8sMW+yF5Wzx3cZtW7VRMlFvLDXkp1zMHlE9QIDAQABo2Ew
+XzAdBgNVHQ4EFgQUACHdgdZSJ/6L++v0I+LMcu6s2UQwPgYDVR0RBDcwNYINaWRw
+My5pdC5ndS5zZYYkaHR0cHM6Ly9pZHAzLml0Lmd1LnNlL2lkcC9zaGliYm9sZXRo
+MA0GCSqGSIb3DQEBCwUAA4IBAQAO7p786KdN2fnxXrR4aawZ/WIWQo52SVRx2pav
+0U13e0h/ZXJNo7x0ZXr1wif2RrGI0n10oW8n93pUUmJZ07srggiTOHVbeBI0JjDE
+QoVlEjThh43zDN9nILz7qbN79XuhOEh/U7/nesokb7oYkty1JfyLpMY/aZsBf2XM
+XhVNSeI3xTN09qpS+e5O/I513/Ca8hEZCzymiDem1qvf5qz+CgDe3wKWVAS599nj
+wJ3oumaClu6wAVkixxcmL+Z+JxnQ28v+vf22yCNQp4j3X6cOKdRylAC5NlobQYZ8
+mbmfzT51FSO1LI3Xw2lAtTgYi5oMWqxMao2yJl8MZKP4OY3Y</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://idp3.it.gu.se:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
+    <md:NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</md:NameIDFormat>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp3.it.gu.se/idp/profile/SAML2/POST/SSO"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp3.it.gu.se/idp/profile/SAML2/Redirect/SSO"/>
+  </md:IDPSSODescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">University of Gothenburg</md:OrganizationName>
+    <md:OrganizationName xml:lang="sv">Göteborgs Universitet</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">University of Gothenburg</md:OrganizationDisplayName>
+    <md:OrganizationDisplayName xml:lang="sv">Göteborgs Universitet</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">https://www.gu.se/en</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="sv">https://www.gu.se/</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="administrative">
+    <md:Company>University of Gothenburg</md:Company>
+    <md:SurName>Lena Ström</md:SurName>
+    <md:EmailAddress>mailto:lena.strom@gu.se</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="technical">
+    <md:Company>University of Gothenburg</md:Company>
+    <md:SurName>Tobias Galéus</md:SurName>
+    <md:EmailAddress>mailto:tobias.galeus@gu.se</md:EmailAddress>
+  </md:ContactPerson>
+  <md:ContactPerson contactType="support">
+    <md:Company>University of Gothenburg</md:Company>
+    <md:SurName>GU-Support</md:SurName>
+    <md:EmailAddress>mailto:support@gu.se</md:EmailAddress>
+    <md:TelephoneNumber>+46317862020</md:TelephoneNumber>
+  </md:ContactPerson>
+  <md:ContactPerson xmlns:remd="http://refeds.org/metadata" contactType="other" remd:contactType="http://refeds.org/metadata/contactType/security">
+    <md:GivenName>IRT GU</md:GivenName>
+    <md:EmailAddress>mailto:irt@gu.se</md:EmailAddress>
+  </md:ContactPerson>
+</md:EntityDescriptor>

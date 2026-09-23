@@ -1,0 +1,1545 @@
+{
+  "resources": [
+    {
+      "resourceId": "ao",
+      "fields": [
+        {
+          "name": "upos",
+          "primary": true
+        },
+        {
+          "name": "baseform",
+          "primary": true
+        },
+        {
+          "name": "nativePartOfSpeech",
+          "primary": true
+        },
+        {
+          "name": "rank",
+          "primary": true
+        },
+        {
+          "name": "lemgrams",
+          "primary": true
+        }
+      ],
+      "label": {
+        "swe": "Akademisk ordlista",
+        "eng": "Academic wordlist"
+      },
+      "description": {
+        "swe": "En ordlista för att stödja andraspråksinlärare på mer avancerad nivå och modersmålsstudenter som är ovana vid det akademiska språket.",
+        "eng": "A glossary to support second-language learners at a more advanced level and native-speaking students who are not accustomed to academic language."
+      },
+      "entryWord": {
+        "field": "baseform",
+        "description": {
+          "swe": "grundform",
+          "eng": "baseform"
+        }
+      },
+      "updated": 1781095624,
+      "size": 655,
+      "link": "https://spraakbanken.gu.se/resurser/ao",
+      "tags": [
+        "modern"
+      ]
+    },
+    {
+      "resourceId": "flex",
+      "fields": [
+        {
+          "name": "ord",
+          "primary": false
+        },
+        {
+          "name": "romaner",
+          "primary": true
+        },
+        {
+          "name": "tidningar",
+          "primary": true
+        },
+        {
+          "name": "webbforum",
+          "primary": true
+        }
+      ],
+      "label": {
+        "swe": "Flex",
+        "eng": "Flex"
+      },
+      "description": {
+        "swe": "Frekvenslexikonet Flex listar för varje svenskt ord frekvensen (i antal förekomster per miljon ord) i tre olika texttyper: romaner, tidningar och webbforum.",
+        "eng": "The Swedish frequency lexicon Flex lists for each word the frequency (per million words) in three text types: novels, newspapers and web forums."
+      },
+      "entryWord": {
+        "field": "ord",
+        "description": {
+          "swe": "ord",
+          "eng": "word"
+        }
+      },
+      "updated": 1781098767,
+      "size": 4968346,
+      "link": "https://spraakbanken.gu.se/resurser/flex"
+    },
+    {
+      "resourceId": "fulaord",
+      "fields": [
+        {
+          "name": "baseform",
+          "primary": false
+        },
+        {
+          "name": "wordforms",
+          "primary": true
+        },
+        {
+          "name": "jfr",
+          "primary": true
+        },
+        {
+          "name": "text",
+          "primary": true
+        }
+      ],
+      "label": {
+        "swe": "Fula Ordboken",
+        "eng": "Fula Ordboken"
+      },
+      "description": {
+        "swe": "Ord från <a href=\"https://www.fulaordboken.se/\">https://www.fulaordboken.se/</a>",
+        "eng": "Words from <a href=\"https://www.fulaordboken.se/\">https://www.fulaordboken.se/</a>"
+      },
+      "entryWord": {
+        "field": "baseform",
+        "description": {
+          "swe": "grundform",
+          "eng": "baseform"
+        }
+      },
+      "updated": 1781095625,
+      "size": 15041,
+      "link": "https://spraakbanken.gu.se/resurser/fulaord",
+      "tags": [
+        "modern"
+      ]
+    }
+  ],
+  "tags": {
+    "modern": {
+      "label": {
+        "swe": "Moderna",
+        "eng": "Modern"
+      },
+      "description": {
+        "swe": "",
+        "eng": ""
+      }
+    },
+    "l2": {
+      "label": {
+        "swe": "Andraspråk",
+        "eng": "Second language"
+      },
+      "description": {
+        "swe": "",
+        "eng": ""
+      }
+    },
+    "sveak": {
+      "label": {
+        "swe": "Svenska Akademiens ordböcker",
+        "eng": "Svenska Akademiens ordböcker"
+      },
+      "description": {
+        "swe": "Baserad på nuvarande och tidigare versioner av lexikon från Svenska Akademien med normaliserad ordform som ingångsord.",
+        "eng": "Based on current and past versions of the Swedish Academy's lexicons, with normalized word forms as entry words."
+      }
+    }
+  },
+  "fields": {
+    "gloss": {
+      "name": "gloss",
+      "type": "text",
+      "collection": true,
+      "label": "gloss"
+    },
+    "core": {
+      "name": "core",
+      "type": "bool",
+      "collection": false,
+      "label": {
+        "swe": "kärn-",
+        "eng": "core"
+      }
+    },
+    "definition": {
+      "name": "definition",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Definition",
+        "eng": "Definition"
+      }
+    },
+    "frequency": {
+      "name": "frequency",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "frekvens",
+        "eng": "frequency"
+      }
+    },
+    "synset": {
+      "name": "synset",
+      "type": "text",
+      "collection": false,
+      "label": "synset"
+    },
+    "type": {
+      "name": "type",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "typ",
+        "eng": "type"
+      },
+      "categories": [
+        "eq_has_hyponym",
+        "eq_synonym"
+      ]
+    },
+    "saldo": {
+      "name": "saldo",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "SALDO betydelse",
+        "eng": "SALDO sense"
+      }
+    },
+    "examples": {
+      "name": "examples",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "Examples",
+        "eng": "Examples"
+      }
+    },
+    "upos": {
+      "name": "upos",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (UD)",
+        "eng": "part-of-speech (UD)"
+      },
+      "categories": [
+        "ADJ",
+        "ADP",
+        "ADV",
+        "AUX",
+        "CCONJ",
+        "DET",
+        "INTJ",
+        "NOUN",
+        "NUM",
+        "PART",
+        "PRON",
+        "PROPN",
+        "PUNCT",
+        "SCONJ",
+        "VERB",
+        "X"
+      ],
+      "categoryLabels": {
+        "ADJ": {
+          "swe": "ADJ",
+          "eng": "adjective"
+        },
+        "ADP": {
+          "swe": "ADP",
+          "eng": "adposition"
+        },
+        "ADV": {
+          "swe": "ADV",
+          "eng": "adverb"
+        },
+        "AUX": {
+          "swe": "AUX",
+          "eng": "auxiliary"
+        },
+        "CCONJ": {
+          "swe": "CCONJ",
+          "eng": "coordinating conjunction"
+        },
+        "DET": {
+          "swe": "DET",
+          "eng": "determiner"
+        },
+        "INTJ": {
+          "swe": "INTJ",
+          "eng": "interjection"
+        },
+        "NOUN": {
+          "swe": "NOUN",
+          "eng": "noun"
+        },
+        "NUM": {
+          "swe": "NUM",
+          "eng": "numeral"
+        },
+        "PART": {
+          "swe": "PART",
+          "eng": "particle"
+        },
+        "PRON": {
+          "swe": "PRON",
+          "eng": "pronoun"
+        },
+        "PROPN": {
+          "swe": "PROPN",
+          "eng": "proper noun"
+        },
+        "PUNCT": {
+          "swe": "PUNCT",
+          "eng": "punctuation"
+        },
+        "SCONJ": {
+          "swe": "SCONJ",
+          "eng": "subordinating conjunction"
+        },
+        "SYM": {
+          "swe": "SYM",
+          "eng": "symbol"
+        },
+        "VERB": {
+          "swe": "VERB",
+          "eng": "verb"
+        },
+        "X": {
+          "swe": "X",
+          "eng": "other"
+        }
+      }
+    },
+    "pos_saldo": {
+      "name": "pos_saldo",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (Saldo)",
+        "eng": "part-of-speech (Saldo)"
+      },
+      "categories": [
+        "av",
+        "nn",
+        "pp",
+        "vb",
+        "vbm",
+        "ab"
+      ]
+    },
+    "pos_wordnet": {
+      "name": "pos_wordnet",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (Wordnet)",
+        "eng": "part-of-speech (Wordnet)"
+      },
+      "categories": [
+        "s",
+        "v",
+        "a",
+        "n"
+      ]
+    },
+    "nativePartOfSpeech": {
+      "name": "nativePartOfSpeech",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (AO)",
+        "eng": "part-of-speech (AO)"
+      },
+      "categories": [
+        "adjektiv",
+        "adverb",
+        "frågande/relativt_possesivuttryck",
+        "konjunktion",
+        "particip",
+        "partikel",
+        "possessivuttryck",
+        "preposition",
+        "pronomen",
+        "subjunktion",
+        "substantiv",
+        "verb"
+      ]
+    },
+    "rank": {
+      "name": "rank",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "ranking",
+        "eng": "rank"
+      }
+    },
+    "baseform": {
+      "name": "baseform",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "grundform",
+        "eng": "baseform"
+      }
+    },
+    "lemgrams": {
+      "name": "lemgrams",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "lemgram",
+        "eng": "lemgram"
+      }
+    },
+    "wordforms": {
+      "name": "wordforms",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "ordformer",
+        "eng": "word forms"
+      }
+    },
+    "text": {
+      "name": "text",
+      "type": "text",
+      "collection": false,
+      "label": "text"
+    },
+    "jfr": {
+      "name": "jfr",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "jämför",
+        "eng": "compare"
+      }
+    },
+    "cefr": {
+      "name": "cefr",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "CEFR",
+        "eng": "CEFR"
+      },
+      "categories": []
+    },
+    "gram": {
+      "name": "gram",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "grammatik",
+        "eng": "grammar"
+      }
+    },
+    "kellyID": {
+      "name": "kellyID",
+      "type": "text",
+      "collection": false,
+      "label": "kellyID"
+    },
+    "kellyPartOfSpeech": {
+      "name": "kellyPartOfSpeech",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (Kelly)",
+        "eng": "part-of-speech (Kelly)"
+      },
+      "categories": [
+        "adjective",
+        "adverb",
+        "aux verb",
+        "conj",
+        "det",
+        "interj",
+        "noun",
+        "noun-en",
+        "noun-en/-ett",
+        "noun-ett",
+        "numeral",
+        "particip",
+        "particle",
+        "prep",
+        "pronoun",
+        "proper name",
+        "subj",
+        "verb"
+      ]
+    },
+    "rawFreq": {
+      "name": "rawFreq",
+      "type": "text",
+      "collection": false,
+      "label": "rawFreq"
+    },
+    "source": {
+      "name": "source",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "källa",
+        "eng": "source"
+      }
+    },
+    "wpm": {
+      "name": "wpm",
+      "type": "text",
+      "collection": false,
+      "label": "wpm"
+    },
+    "saldoLinks": {
+      "name": "saldoLinks",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "SALDO betydelser",
+        "eng": "SALDO senses"
+      }
+    },
+    "senseID": {
+      "name": "senseID",
+      "type": "text",
+      "collection": false,
+      "label": "senseID"
+    },
+    "example": {
+      "name": "example",
+      "type": "text",
+      "collection": false,
+      "label": "example"
+    },
+    "formInformation": {
+      "name": "formInformation",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "forminformation",
+        "eng": "form information"
+      }
+    },
+    "typ": {
+      "name": "typ",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "relation",
+        "eng": "relation"
+      }
+    },
+    "normaliserat_ord": {
+      "name": "normaliserat_ord",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "normaliserat ord",
+        "eng": "normalized word"
+      }
+    },
+    "homonr": {
+      "name": "homonr",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "homograf",
+        "eng": "homograf"
+      }
+    },
+    "ordkl": {
+      "name": "ordkl",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "morfosyntax",
+        "eng": "morfosyntax"
+      }
+    },
+    "stycke": {
+      "name": "stycke",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "relaterat ord",
+        "eng": "related word"
+      }
+    },
+    "sidnr1": {
+      "name": "sidnr1",
+      "type": "integer",
+      "collection": false,
+      "label": "sidnr1"
+    },
+    "sidnr2": {
+      "name": "sidnr2",
+      "type": "integer",
+      "collection": false,
+      "label": "sidnr2"
+    },
+    "urspr_lopnr": {
+      "name": "urspr_lopnr",
+      "type": "integer",
+      "collection": false,
+      "label": "urspr_lopnr"
+    },
+    "subnr": {
+      "name": "subnr",
+      "type": "integer",
+      "collection": false,
+      "label": "subnr"
+    },
+    "ord": {
+      "name": "ord",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ord",
+        "eng": "word"
+      }
+    },
+    "SAOL13lemmanr": {
+      "name": "SAOL13lemmanr",
+      "type": "integer",
+      "collection": false,
+      "label": "SAOL13lemmanr"
+    },
+    "year": {
+      "name": "year",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "år",
+        "eng": "year"
+      }
+    },
+    "count": {
+      "name": "count",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "antal",
+        "eng": "count"
+      }
+    },
+    "cumulative_count": {
+      "name": "cumulative_count",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "ackumulerat antal",
+        "eng": "cumulative count"
+      }
+    },
+    "wordform": {
+      "name": "wordform",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordform",
+        "eng": "word form"
+      }
+    },
+    "sucpos": {
+      "name": "sucpos",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (SUC)",
+        "eng": "part-of-speech (SUC)"
+      }
+    },
+    "entry_word": {
+      "name": "entry_word",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ingångsord",
+        "eng": "entry_word"
+      }
+    },
+    "word": {
+      "name": "word",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ord",
+        "eng": "word"
+      }
+    },
+    "base_word": {
+      "name": "base_word",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "huvudord",
+        "eng": "base word"
+      }
+    },
+    "meaning": {
+      "name": "meaning",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "betydelse",
+        "eng": "meaning"
+      }
+    },
+    "pos_fuol": {
+      "name": "pos_fuol",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (FUOL)",
+        "eng": "part-of-speech (FUOL)"
+      },
+      "categories": []
+    },
+    "valency": {
+      "name": "valency",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "valens",
+        "eng": "valency"
+      }
+    },
+    "paroleID": {
+      "name": "paroleID",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "parole-ID",
+        "eng": "parole ID"
+      }
+    },
+    "Ord": {
+      "name": "Ord",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ord",
+        "eng": "Ord"
+      }
+    },
+    "List/bokår": {
+      "name": "List/bokår",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "List/bokår",
+        "eng": "List/bokår"
+      }
+    },
+    "Förstaår": {
+      "name": "Förstaår",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Förstaår",
+        "eng": "Förstaår"
+      }
+    },
+    "Ordklass/ordtyp (vid export)": {
+      "name": "Ordklass/ordtyp (vid export)",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ordklass/ordtyp (vid export)",
+        "eng": "Ordklass/ordtyp (vid export)"
+      }
+    },
+    "Definition": {
+      "name": "Definition",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Definition",
+        "eng": "Definition"
+      }
+    },
+    "Excerpter + källor": {
+      "name": "Excerpter + källor",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Excerpter + källor",
+        "eng": "Excerpter + källor"
+      }
+    },
+    "Ekvivalenter/lån": {
+      "name": "Ekvivalenter/lån",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ekvivalenter/lån",
+        "eng": "Ekvivalenter/lån"
+      }
+    },
+    "Sakområde": {
+      "name": "Sakområde",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Sakområde",
+        "eng": "Sakområde"
+      }
+    },
+    "Kommentar": {
+      "name": "Kommentar",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Kommentar",
+        "eng": "Kommentar"
+      }
+    },
+    "CEFR": {
+      "name": "CEFR",
+      "type": "text",
+      "collection": false,
+      "label": "CEFR"
+    },
+    "Word": {
+      "name": "Word",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ord",
+        "eng": "word"
+      }
+    },
+    "Lemgram": {
+      "name": "Lemgram",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "lemgram",
+        "eng": "lemgram"
+      }
+    },
+    "Sense": {
+      "name": "Sense",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "betydelse",
+        "eng": "sense"
+      }
+    },
+    "POS": {
+      "name": "POS",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass",
+        "eng": "part-of-speech"
+      }
+    },
+    "SaldoPOS": {
+      "name": "SaldoPOS",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (SALDO)",
+        "eng": "part-of-speech (SALDO)"
+      }
+    },
+    "Type1:Syntactic-contiguity": {
+      "name": "Type1:Syntactic-contiguity",
+      "type": "text",
+      "collection": false,
+      "label": "Type1:Syntactic-contiguity"
+    },
+    "Type2:Lexical-categories": {
+      "name": "Type2:Lexical-categories",
+      "type": "text",
+      "collection": false,
+      "label": "Type2:Lexical-categories"
+    },
+    "Type3:Verbal-subcategory": {
+      "name": "Type3:Verbal-subcategory",
+      "type": "text",
+      "collection": false,
+      "label": "Type3:Verbal-subcategory"
+    },
+    "Receptive": {
+      "name": "Receptive",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "receptiv",
+        "eng": "receptive"
+      }
+    },
+    "Productive": {
+      "name": "Productive",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "produktiv",
+        "eng": "productive"
+      }
+    },
+    "Receptive (TTR)": {
+      "name": "Receptive (TTR)",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "receptiv (TTR)",
+        "eng": "receptive (TTR)"
+      }
+    },
+    "Productive (TTR)": {
+      "name": "Productive (TTR)",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "produktiv (TTR)",
+        "eng": "productive (TTR)"
+      }
+    },
+    "AdjectivalDeclension": {
+      "name": "AdjectivalDeclension",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "adjectival declension",
+        "eng": "adjectival declension"
+      }
+    },
+    "AdjectivalAdverbial": {
+      "name": "AdjectivalAdverbial",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "adjectival adverbial",
+        "eng": "adjectival adverbial"
+      }
+    },
+    "Regularity": {
+      "name": "Regularity",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "regularity",
+        "eng": "regularity"
+      }
+    },
+    "Declension": {
+      "name": "Declension",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "declension",
+        "eng": "declension"
+      }
+    },
+    "Gender": {
+      "name": "Gender",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "gender",
+        "eng": "gender"
+      }
+    },
+    "Conjugation": {
+      "name": "Conjugation",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "conjugation",
+        "eng": "conjugation"
+      }
+    },
+    "tag": {
+      "name": "tag",
+      "type": "text",
+      "collection": false,
+      "label": "tag"
+    },
+    "level_freq@a1": {
+      "name": "level_freq@a1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens nivå A1",
+        "eng": "Frequency level A1"
+      }
+    },
+    "level_freq@a2": {
+      "name": "level_freq@a2",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens nivå A2",
+        "eng": "Frequency level A2"
+      }
+    },
+    "level_freq@b1": {
+      "name": "level_freq@b1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens nivå B1",
+        "eng": "Frequency level B1"
+      }
+    },
+    "level_freq@b2": {
+      "name": "level_freq@b2",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens nivå B2",
+        "eng": "Frequency level B2"
+      }
+    },
+    "level_freq@c1": {
+      "name": "level_freq@c1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens nivå C1",
+        "eng": "Frequency level C1"
+      }
+    },
+    "total_freq@total": {
+      "name": "total_freq@total",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Frekvens total",
+        "eng": "Frequency total"
+      }
+    },
+    "nb_doc@a1": {
+      "name": "nb_doc@a1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument A1",
+        "eng": "Number of documents A1"
+      }
+    },
+    "nb_doc@a2": {
+      "name": "nb_doc@a2",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument A2",
+        "eng": "Number of documents A2"
+      }
+    },
+    "nb_doc@b1": {
+      "name": "nb_doc@b1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument B1",
+        "eng": "Number of documents B1"
+      }
+    },
+    "nb_doc@b2": {
+      "name": "nb_doc@b2",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument B2",
+        "eng": "Number of documents B2"
+      }
+    },
+    "nb_doc@c1": {
+      "name": "nb_doc@c1",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument C1",
+        "eng": "Number of documents C1"
+      }
+    },
+    "nb_doc@total": {
+      "name": "nb_doc@total",
+      "type": "float",
+      "collection": false,
+      "label": {
+        "swe": "Antal dokument total",
+        "eng": "Number of documents total"
+      }
+    },
+    "level_freq@c2": {
+      "name": "level_freq@c2",
+      "type": "float",
+      "collection": false,
+      "label": "level_freq@c2"
+    },
+    "nb_doc@c2": {
+      "name": "nb_doc@c2",
+      "type": "float",
+      "collection": false,
+      "label": "nb_doc@c2"
+    },
+    "name": {
+      "name": "name",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Namn",
+        "eng": "Name"
+      }
+    },
+    "nameCount": {
+      "name": "nameCount",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "bärare denna stavning",
+        "eng": "bearers this name"
+      }
+    },
+    "variantCount": {
+      "name": "variantCount",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "bärare stavningsvarianter",
+        "eng": "bearers all spelling variants"
+      }
+    },
+    "relatedCount": {
+      "name": "relatedCount",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "bärare besläktade namn",
+        "eng": "bearers related names"
+      }
+    },
+    "category": {
+      "name": "category",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "kategori",
+        "eng": "category"
+      }
+    },
+    "variants": {
+      "name": "variants",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "stavningsvarianter",
+        "eng": "spelling variants"
+      }
+    },
+    "related": {
+      "name": "related",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "besläktade namn",
+        "eng": "related names"
+      }
+    },
+    "romaner": {
+      "name": "romaner",
+      "type": "float",
+      "collection": false,
+      "label": "romaner"
+    },
+    "tidningar": {
+      "name": "tidningar",
+      "type": "float",
+      "collection": false,
+      "label": "tidningar"
+    },
+    "webbforum": {
+      "name": "webbforum",
+      "type": "float",
+      "collection": false,
+      "label": "webbforum"
+    },
+    "numberOfArguments": {
+      "name": "numberOfArguments",
+      "type": "integer",
+      "collection": false,
+      "label": {
+        "swe": "antal argument",
+        "eng": "number of arguments"
+      }
+    },
+    "domain": {
+      "name": "domain",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "domän",
+        "eng": "domain"
+      }
+    },
+    "semanticType": {
+      "name": "semanticType",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "semantisk typ",
+        "eng": "semantic type"
+      }
+    },
+    "GLDB": {
+      "name": "GLDB",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "GLDB-id",
+        "eng": "GLDB-id"
+      }
+    },
+    "predicate": {
+      "name": "predicate",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "predikat",
+        "eng": "predicate"
+      }
+    },
+    "class": {
+      "name": "class",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "klass",
+        "eng": "class"
+      }
+    },
+    "senseNumber": {
+      "name": "senseNumber",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "betydelseindex",
+        "eng": "sense number"
+      }
+    },
+    "simpleID": {
+      "name": "simpleID",
+      "type": "text",
+      "collection": false,
+      "label": "simpleID"
+    },
+    "wordformSimpleID": {
+      "name": "wordformSimpleID",
+      "type": "text",
+      "collection": false,
+      "label": "wordformSimpleID"
+    },
+    "GLDBExample": {
+      "name": "GLDBExample",
+      "type": "text",
+      "collection": false,
+      "label": "GLDBExample"
+    },
+    "numberOfUsynSemuLinks": {
+      "name": "numberOfUsynSemuLinks",
+      "type": "text",
+      "collection": false,
+      "label": "numberOfUsynSemuLinks"
+    },
+    "argumentRealisation": {
+      "name": "argumentRealisation",
+      "type": "text",
+      "collection": false,
+      "label": "argumentRealisation"
+    },
+    "basicConcept": {
+      "name": "basicConcept",
+      "type": "text",
+      "collection": false,
+      "label": "basicConcept"
+    },
+    "verbalizedNounType": {
+      "name": "verbalizedNounType",
+      "type": "text",
+      "collection": false,
+      "label": "verbalizedNounType"
+    },
+    "pos_saol15": {
+      "name": "pos_saol15",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (SAOL 15)",
+        "eng": "part-of-speech (SAOL 15)"
+      },
+      "categories": [
+        "pronomen",
+        "subjunktion",
+        "obestämd artikel",
+        "konjunktion",
+        "adjektiviskt slutled",
+        "adverbiellt slutled",
+        "preposition",
+        "namn",
+        "verb",
+        "adverb",
+        "substantiviskt slutled",
+        "adjektiv",
+        "verbalt slutled",
+        "interjektion",
+        "räkneord",
+        "infinitivmärke",
+        "förled",
+        "bestämd artikel",
+        "substantiv"
+      ]
+    },
+    "color_sv": {
+      "name": "color_sv",
+      "type": "text",
+      "collection": false,
+      "label": "color_sv"
+    },
+    "color_en": {
+      "name": "color_en",
+      "type": "text",
+      "collection": false,
+      "label": "color_en"
+    },
+    "freq_relative": {
+      "name": "freq_relative",
+      "type": "float",
+      "collection": false,
+      "label": "freq_relative"
+    },
+    "ID": {
+      "name": "ID",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ID",
+        "eng": "ID"
+      }
+    },
+    "sv.ord": {
+      "name": "sv.ord",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ord (svenska)",
+        "eng": "Ord (svenska)"
+      }
+    },
+    "sv.graminfo": {
+      "name": "sv.graminfo",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Graminfo (svenska)",
+        "eng": "Graminfo (svenska)"
+      }
+    },
+    "yi.ord.Hebr": {
+      "name": "yi.ord.Hebr",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ord (jiddisch, hebr)",
+        "eng": "Ord (jiddisch, hebr)"
+      }
+    },
+    "yi.ord.Latn": {
+      "name": "yi.ord.Latn",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Ord (jiddisch, latin)",
+        "eng": "Ord (jiddisch, latin)"
+      }
+    },
+    "sv.tilde": {
+      "name": "sv.tilde",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.tilde",
+        "eng": "sv.tilde"
+      }
+    },
+    "sv.baslex.ord": {
+      "name": "sv.baslex.ord",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.baslex.ord",
+        "eng": "sv.baslex.ord"
+      }
+    },
+    "sv.baslex.graminfo": {
+      "name": "sv.baslex.graminfo",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.baslex.graminfo",
+        "eng": "sv.baslex.graminfo"
+      }
+    },
+    "sv.komm": {
+      "name": "sv.komm",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Kommentar (svenska)",
+        "eng": "Kommentar (svenska)"
+      }
+    },
+    "sv.lexnr": {
+      "name": "sv.lexnr",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Lex. nr (svenska)",
+        "eng": "Lex. nr (svenska)"
+      }
+    },
+    "sv.hlex": {
+      "name": "sv.hlex",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.hlex",
+        "eng": "sv.hlex"
+      }
+    },
+    "sv.baslex.komm": {
+      "name": "sv.baslex.komm",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.baslex.komm",
+        "eng": "sv.baslex.komm"
+      }
+    },
+    "sv.baslex.lexnr": {
+      "name": "sv.baslex.lexnr",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "sv.baslex.lexnr",
+        "eng": "sv.baslex.lexnr"
+      }
+    },
+    "yi.graminfo": {
+      "name": "yi.graminfo",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Graminfo (jiddisch)",
+        "eng": "Graminfo (jiddisch)"
+      }
+    },
+    "yi.komm": {
+      "name": "yi.komm",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "Kommentar (jiddisch)",
+        "eng": "Kommentar (jiddisch)"
+      }
+    },
+    "eng.lemma": {
+      "name": "eng.lemma",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "engelska",
+        "eng": "English"
+      }
+    },
+    "eng.inflection": {
+      "name": "eng.inflection",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "böjningar (engelska)",
+        "eng": "inflections (English)"
+      }
+    },
+    "swe.lemma": {
+      "name": "swe.lemma",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "svenska",
+        "eng": "Swedish"
+      }
+    },
+    "swe.inflection": {
+      "name": "swe.inflection",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "böjningar (svenska)",
+        "eng": "inflections (Swedish)"
+      }
+    },
+    "src": {
+      "name": "src",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "källa",
+        "eng": "source"
+      }
+    },
+    "synonyms": {
+      "name": "synonyms",
+      "type": "text",
+      "collection": true,
+      "label": {
+        "swe": "synonymer",
+        "eng": "synonyms"
+      }
+    },
+    "comment": {
+      "name": "comment",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "kommentar",
+        "eng": "commment"
+      }
+    },
+    "pos_stunda": {
+      "name": "pos_stunda",
+      "type": "text",
+      "collection": false,
+      "label": {
+        "swe": "ordklass (Stunda)",
+        "eng": "part-of-speech (Stunda)"
+      },
+      "categories": []
+    }
+  },
+  "_truncated": "TRUNCATED FOR STORAGE. The live response described 31 lexical resources; the first 3 are kept verbatim."
+}

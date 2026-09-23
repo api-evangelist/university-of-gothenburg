@@ -1,0 +1,808 @@
+openapi: 3.2.0
+info:
+  title: Mink backend User Management API
+  description: '## Introduction
+
+
+    The Mink backend is a REST API that powers the Mink frontend, Språkbanken''s data
+
+    platform.'
+  x-logo:
+    url: https://raw.githubusercontent.com/spraakbanken/mink-backend/main/mink/static/mink.svg
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 3.1.0.dev
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/mink/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/mink/dev
+  description: Development server
+tags:
+- name: User Management
+  description: Routes for managing information about the authenticated user and admin mode status.
+paths:
+  /user/admin-mode/activate:
+    post:
+      tags:
+      - User Management
+      summary: Activate Admin Mode
+      description: 'Turn on admin mode for the user if the user can be verified as a Mink admin in the authentication system.
+
+
+        When admin mode is activated the user will have full access to all resources in Mink. This works by setting a
+
+        session cookie in the client. Admin mode will be activated until turned off or until the
+
+        session expires.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/user/admin-mode/activate'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: activate-admin-mode
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Admin mode turned on
+                return_code: admin_on
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /admin-mode-on:
+    post:
+      tags:
+      - User Management
+      summary: Admin-Mode-On-Deprecated
+      description: 'Turn on admin mode for the user if the user can be verified as a Mink admin in the authentication system.
+
+
+        When admin mode is activated the user will have full access to all resources in Mink. This works by setting a
+
+        session cookie in the client. Admin mode will be activated until turned off or until the
+
+        session expires.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/user/admin-mode/activate'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: admin_mode_on_deprecated_admin_mode_on_post
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/admin-mode/deactivate:
+    post:
+      tags:
+      - User Management
+      summary: Deactivate Admin Mode
+      description: 'Turn off admin mode for the user by removing the session cookie from the client.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/user/admin-mode/deactivate'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: deactivate-admin-mode
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Admin mode turned off
+                return_code: admin_off
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /admin-mode-off:
+    post:
+      tags:
+      - User Management
+      summary: Admin-Mode-Off-Deprecated
+      description: 'Turn off admin mode for the user by removing the session cookie from the client.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/user/admin-mode/deactivate'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: admin_mode_off_deprecated_admin_mode_off_post
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /admin-mode-status:
+    get:
+      tags:
+      - User Management
+      summary: Admin Mode Status
+      description: 'Check whether admin mode is activated.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/admin-mode-status'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: admin-mode-status
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Returning status of admin mode
+                return_code: admin_status
+                admin_mode_status: true
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /user/info/get:
+    get:
+      tags:
+      - User Management
+      summary: Get User Info
+      description: 'Return all user related info for the authenticated user.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/user/info/get'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: get-user-info
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+    ErrorResponse401:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 401 error responses.
+      examples:
+      - message: Failed to authenticate
+        return_code: failed_authenticating
+        status: error
+      - message: The provided JWT has expired
+        return_code: jwt_expired
+        status: error
+      - message: API key not recognized
+        return_code: apikey_not_found
+        status: error
+      - message: API key expired
+        return_code: apikey_expired
+        status: error
+      - message: No login credentials provided
+        return_code: missing_login_credentials
+        status: error
+      - message: Mink admin status could not be confirmed
+        return_code: not_admin
+        status: error
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+    BaseResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Base response model with common fields.
+    ErrorResponse400:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 400 error responses.
+      examples:
+      - message: No resource ID provided
+        return_code: missing_resource_id
+        status: error
+    ErrorResponse404Resource:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 resource not found error responses.
+      examples:
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
+        status: error
+    UserInfoResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: Listing contents
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the response status
+          default: listing_content
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Listing user info
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        user:
+          $ref: '#/components/schemas/DetailedUserModel'
+          description: Serialized user object with all available information about the user
+      type: object
+      description: Model for the /user/info/get response.
+      examples:
+      - info: Listing user info
+        message: Listing contents
+        return_code: listing_content
+        status: success
+        user:
+          admin_mode: false
+          email: anna.andersson@example.com
+          id: example-idp-abc123
+          idp: example-idp
+          is_admin: false
+          name: Anna Andersson
+          sub: abc123
+          ui_language: swe
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
+    DetailedUserModel:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: User ID
+          default: ''
+        name:
+          type: string
+          title: Name
+          description: Name of the user
+          default: ''
+        email:
+          type: string
+          title: Email
+          description: Email address of the user
+          default: ''
+        idp:
+          type: string
+          title: Idp
+          description: Identity provider of the user
+          default: ''
+        sub:
+          type: string
+          title: Sub
+          description: Subject identifier from the identity provider
+          default: ''
+        ui_language:
+          type: string
+          title: Ui Language
+          description: Preferred UI language of the user
+          default: swe
+        admin_mode:
+          type: boolean
+          title: Admin Mode
+          description: Whether the user is currently in admin mode
+          default: false
+        is_admin:
+          type: boolean
+          title: Is Admin
+          description: Whether the user has admin privileges
+          default: false
+        organization_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Prefix
+          description: Organization prefix associated with the user
+      type: object
+      description: Detailed model for the user object in the /user/info/get response.
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/main/json-schema/university-of-gothenburg-korp-info.json",
+  "title": "Korp /info response",
+  "description": "The discovery response of the Korp corpus search API. DERIVED on 2026-09-01 from the live response to GET https://ws.spraakbanken.gu.se/ws/korp/v8/info (HTTP 200, 25,974 bytes, 1,133 corpora), cross-checked against the published contract at openapi/_original/university-of-gothenburg-korp-api-openapi.yml. This is the one endpoint a machine consumer must call first: it enumerates every corpus id the rest of the API accepts, and names which of them are protected.",
+  "x-provenance": {
+    "generated": "2026-09-01",
+    "method": "derived",
+    "source": "GET https://ws.spraakbanken.gu.se/ws/korp/v8/info — HTTP 200, 2026-09-01. Truncated sample at examples/university-of-gothenburg-korp-info-example.json.",
+    "x-operator": "institution"
+  },
+  "type": "object",
+  "required": ["version", "corpora"],
+  "properties": {
+    "version": { "type": "string", "description": "Korp backend version. Observed 8.2.5 against a contract that declares 8.1.0." },
+    "cqp_version": { "type": "string", "description": "Underlying IMS Open Corpus Workbench CQP version, e.g. \"CQP version 3.5.0\"." },
+    "corpora": {
+      "type": "array",
+      "description": "Every queryable corpus id, upper-case. 1,133 observed on 2026-09-01.",
+      "items": { "type": "string" }
+    },
+    "protected_corpora": {
+      "type": "array",
+      "description": "Corpora requiring HTTP Basic credentials. No public issuance flow is documented for these.",
+      "items": { "type": "string" }
+    },
+    "time": { "type": "number", "description": "Server-side processing time in seconds. Present on every Korp response." }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,220 @@
+openapi: 3.2.0
+info:
+  title: Sparv Cleanup API
+  description: 'Sparv is Språkbanken’s annotation tool and contains a corpus import pipeline
+
+    and a web service including a web interface.
+
+    It can be used to annotate shorter texts using the same tools as are applied
+
+    in the annotation of the corpora in Korp and the texts in
+
+    Strix.
+
+
+    You can read more about Sparv on Språkbanken''s web page.'
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/sparv/v3/static/sparv_frame.png
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: '3.0'
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/sparv/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/sparvlabb/v3
+  description: Lab version
+tags:
+- name: Cleanup
+  description: Calls for removing builds.
+paths:
+  /cleanup:
+    get:
+      tags:
+      - Cleanup
+      summary: Cleanup
+      description: 'Removes builds that are finished and haven’t been accessed within the timeout (default: 7 days).'
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK (old builds removed)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/Cleanup'
+                - $ref: '#/components/schemas/NoCleanup'
+        '401':
+          description: 'Cleanup failed: secret key could not be confirmed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '500':
+          description: Failed to remove builds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getCleanup
+      x-operation-id-source: derived
+  /cleanup/errors:
+    get:
+      tags:
+      - Cleanup
+      summary: Cleanup errors
+      description: 'Removes builds that are finished and haven’t been accessed within the timeout (default: 7 days) and the builds with status Error.'
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK (cleanup succeeded)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/Cleanup'
+                - $ref: '#/components/schemas/NoCleanup'
+        '401':
+          description: 'Cleanup failed: secret key could not be confirmed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '500':
+          description: Failed to remove builds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getCleanupErrors
+      x-operation-id-source: derived
+  /cleanup/forceone:
+    get:
+      tags:
+      - Cleanup
+      summary: Cleanup one build
+      description: Removes a single build.
+      parameters:
+      - $ref: '#/components/parameters/HashParam'
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK (build removed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CleanupOne'
+        '400':
+          description: No hash supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+        '401':
+          description: 'Cleanup failed: secret key could not be confirmed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '500':
+          description: Failed to remove build
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getCleanupForceone
+      x-operation-id-source: derived
+  /cleanup/forceall:
+    get:
+      tags:
+      - Cleanup
+      summary: Cleanup all builds
+      description: Removes all the existing builds.
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK (builds removed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cleanup'
+        '401':
+          description: 'Cleanup failed: secret key could not be confirmed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '500':
+          description: Failed to remove builds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getCleanupForceall
+      x-operation-id-source: derived
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
+    Cleanup:
+      type: object
+      properties:
+        removed-builds:
+          example:
+          - d91d063efb5a8439643147c7367e3a4ddad5ec63
+          - a1b1de8f3508c5928352dbfc538025231a336801-f
+          items:
+            type: array
+            format: string
+    CleanupOne:
+      type: object
+      properties:
+        removed-builds:
+          example:
+          - d91d063efb5a8439643147c7367e3a4ddad5ec63
+          items:
+            type: array
+            format: string
+    NoCleanup:
+      type: object
+      properties:
+        message:
+          type: string
+          example: No hashes to be removed.
+  parameters:
+    HashParam:
+      name: hash
+      in: query
+      required: true
+      description: Hash of the analysis
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: secret_key

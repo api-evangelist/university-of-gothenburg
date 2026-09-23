@@ -1,0 +1,70 @@
+# x-method: derived
+# x-source-url: https://ws.spraakbanken.gu.se/docs/
+# Written by API Evangelist for the api-evangelist/university-of-gothenburg repo on
+# 2026-09-01. `x-method` uses the provenance-manifest vocabulary; the artifact's own
+# `method:` key uses the enrichment-contract vocabulary. They are not in conflict.
+generated: '2026-09-01'
+method: probed
+source: >-
+  Version strings and path segments read from live responses and from the six published OpenAPI
+  documents on 2026-09-01.
+description: >-
+  Lifecycle and versioning. Språkbanken Text versions in the URL path and runs the previous major
+  alongside the current one, which is more discipline than anything else in this repo shows — but
+  there is no changelog, no deprecation policy, no sunset header and no status page anywhere in
+  the University of Gothenburg's footprint. A consumer learns a version changed by noticing the
+  path segment moved.
+surfaces:
+  - name: Korp API
+    current: v8 (spec version 8.1.0; the running service reports 8.2.5)
+    path_versioning: /ws/korp/v8
+    x-operator: institution
+    note: >-
+      DRIFT WORTH RECORDING: the published contract says 8.1.0 while GET /info on the live
+      service returned "version": "8.2.5" on 2026-09-01. The contract trails the deployment.
+  - name: Karp API
+    current: v7 (7.0.0)
+    path_versioning: /karp/v7
+    x-operator: institution
+  - name: Karp search API
+    current: v1
+    path_versioning: /karps/v1
+    x-operator: institution
+  - name: Mink API
+    current: 3.1.0.dev
+    path_versioning: /ws/mink/v3, with /ws/mink/dev declared as a second server
+    x-operator: institution
+    note: >-
+      The production contract carries a `.dev` version suffix and declares a development server
+      alongside production. Pre-1.0 signalling on a production path.
+  - name: Sparv API
+    current: '3.0'
+    path_versioning: /ws/sparv/v3, with /ws/sparvlabb/v3 declared as a lab server
+    x-operator: institution
+    note: >-
+      The documentation index still links a v2 page (/docs/sparv resolves to a v3 contract while
+      /ws/sparv/v2/ still answers 200), so v2 and v3 are live simultaneously with no published
+      deprecation date.
+  - name: Språkbanken Text Metadata API
+    current: 3.3.1
+    path_versioning: /ws/metadata/v3, with /ws/metadata/dev declared
+    x-operator: institution
+    note: The only service whose contract is served by the service itself, at /ws/metadata/v3/openapi.json.
+  - name: Strix
+    current: unknown
+    x-operator: institution
+    note: >-
+      Listed in the Språkbanken service estate but https://ws.spraakbanken.gu.se/ws/strix/
+      returned HTTP 503 on 2026-09-01. Registered at the edge, not serving. Recorded as
+      degraded, not dead, and no contract is stored for it.
+  - name: GUPEA
+    current: DSpace 8.3-SNAPSHOT
+    x-operator: institution
+    note: >-
+      The repository self-reports a SNAPSHOT (pre-release) build of DSpace 8.3 in production, in
+      "dspaceVersion" on the REST root. OAI-PMH is pinned at protocol 2.0 and will not move.
+gaps:
+  - No changelog for any surface.
+  - No deprecation policy, sunset header or end-of-life date published for any version.
+  - No status page for any University of Gothenburg surface.
+  - No release notes; version discovery is by path inspection or by reading the spec.

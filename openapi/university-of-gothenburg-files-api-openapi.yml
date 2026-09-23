@@ -1,0 +1,257 @@
+openapi: 3.2.0
+info:
+  title: Sparv Files API
+  description: 'Sparv is Språkbanken’s annotation tool and contains a corpus import pipeline
+
+    and a web service including a web interface.
+
+    It can be used to annotate shorter texts using the same tools as are applied
+
+    in the annotation of the corpora in Korp and the texts in
+
+    Strix.
+
+
+    You can read more about Sparv on Språkbanken''s web page.'
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/sparv/v3/static/sparv_frame.png
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: '3.0'
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/sparv/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/sparvlabb/v3
+  description: Lab version
+tags:
+- name: Files
+  description: File upload and download.
+paths:
+  /upload:
+    post:
+      tags:
+      - Files
+      summary: File upload
+      description: 'Handles file uploads and runs the analysis.
+
+
+        ### Example
+
+
+        ```.bash
+
+        curl -X POST -F files[]=@/path/to/file/myfile.txt https://ws.spraakbanken.gu.se/ws/sparv/v3/upload?
+
+        ```'
+      parameters:
+      - $ref: '#/components/parameters/ModeParam'
+      - $ref: '#/components/parameters/IncrementalParam'
+      - $ref: '#/components/parameters/LanguageParam'
+      - $ref: '#/components/parameters/SettingsParam'
+      - name: email
+        in: query
+        required: false
+        description: The user's email address
+        schema:
+          type: string
+          default: ''
+      requestBody:
+        description: Files to be uploaded and analysed
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              format: binary
+          text/xml:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Download link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileSchema'
+        '500':
+          description: Analysis failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: postUpload
+      x-operation-id-source: derived
+  /download:
+    get:
+      tags:
+      - Files
+      summary: File download
+      description: Handles download of result files.
+      parameters:
+      - $ref: '#/components/parameters/HashParam'
+      responses:
+        '200':
+          description: Zip file downloaded
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Download failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getDownload
+      x-operation-id-source: derived
+components:
+  schemas:
+    FileSchema:
+      type: object
+      properties:
+        build:
+          type: object
+          properties:
+            hash:
+              type: string
+              example: a1b1de8f3508c5928352dbfc538025231a336801-f
+            type:
+              type: string
+              example: files
+        result:
+          type: object
+          properties:
+            link:
+              type: string
+              example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=a1b1de8f3508c5928352dbfc538025231a336801-f
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
+    SettingsSchema:
+      type: object
+      example:
+        corpus: exempelkorpus
+        lang: sv
+        textmode: plain
+        word_segmenter: default_tokenizer
+        sentence_segmentation:
+          sentence_chunk: paragraph
+          sentence_segmenter: default_tokenizer
+        paragraph_segmentation:
+          paragraph_segmenter: blanklines
+        positional_attributes:
+          lexical_attributes:
+          - pos
+          - msd
+          - lemma
+          - lex
+          - sense
+          compound_attributes:
+          - complemgram
+          - compwf
+          dependency_attributes:
+          - ref
+          - dephead
+          - deprel
+          sentiment:
+          - sentiment
+        named_entity_recognition: []
+        text_attributes:
+          readability_metrics:
+          - lix
+          - ovix
+          - nk
+  parameters:
+    HashParam:
+      name: hash
+      in: query
+      required: true
+      description: Hash of the analysis
+      schema:
+        type: string
+    LanguageParam:
+      name: language
+      in: query
+      required: false
+      description: 'The language of the text to be analysed.
+
+        Check [this language table](https://spraakbanken.gu.se/eng/research/infrastructure/sparv/distribution/pipeline#language_table) for more information.
+
+        '
+      schema:
+        type: string
+        default: sv
+        enum:
+        - it
+        - de
+        - sv-1800
+        - bg
+        - ca
+        - ru
+        - nl
+        - pl
+        - fr
+        - es
+        - sv-dev
+        - ro
+        - la
+        - sk
+        - pt
+        - sl
+        - et
+        - fi
+        - gl
+        - en
+        - sv
+        - 'no'
+    SettingsParam:
+      name: settings
+      in: query
+      required: false
+      description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
+      schema:
+        $ref: '#/components/schemas/SettingsSchema'
+    ModeParam:
+      name: mode
+      in: query
+      required: false
+      description: The input mode
+      schema:
+        type: string
+        default: plain
+        enum:
+        - plain
+        - xml
+        - file
+    IncrementalParam:
+      name: incremental
+      in: query
+      required: false
+      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
+
+        Note: Incremental information can only be displayed if your query is run for the first time.
+
+        The progress information is not available for older builds.
+
+        '
+      schema:
+        type: boolean
+        default: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: secret_key

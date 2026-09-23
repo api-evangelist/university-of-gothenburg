@@ -1,0 +1,381 @@
+openapi: 3.2.0
+info:
+  title: University Of Gothenburg Misc API
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Misc across 2 of this provider''s published API definitions: university-of-gothenburg-korp-api-openapi.yml, university-of-gothenburg-metadata-api-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/korp/v8
+- url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+  description: Development server
+tags:
+- name: Misc
+paths:
+  /loglike:
+    get:
+      summary: Log-Likelihood Comparison
+      description: 'Compare the results of two different searches by using log-likelihood.
+
+
+        A positive log-likelihood value indicates a relative increase in `set2` compared to `set1`, while a negative value indicates a relative decrease.
+
+
+        ### Example
+
+
+        Compare the nouns of two different corpora:
+
+        [`/loglike?set1_cqp=[pos="NN"]&set2_cqp=[pos="NN"]&group_by=word&max=10&set1_corpus=ROMI&set2_corpus=GP2012`](https://ws.spraakbanken.gu.se/ws/korp/v8/loglike?set1_cqp=[pos=%22NN%22]&set2_cqp=[pos=%22NN%22]&group_by=word&max=10&set1_corpus=ROMI&set2_corpus=GP2012&indent=4)'
+      tags:
+      - Misc
+      parameters:
+      - name: set1_cqp
+        description: CQP query for query 1.
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: set2_cqp
+        description: CQP query for query 2.
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: set1_corpus
+        description: Corpus name for query 1.
+        required: true
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+          example:
+          - ROMI
+          - SUC3
+        explode: false
+      - name: set2_corpus
+        description: Corpus name for query 2.
+        required: true
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+          example:
+          - ROMI
+          - SUC3
+        explode: false
+      - $ref: '#/components/parameters/GroupBy'
+      - $ref: '#/components/parameters/GroupByStruct'
+      - $ref: '#/components/parameters/IgnoreCase'
+      - name: max
+        description: Max numer of results per set.
+        in: query
+        schema:
+          type: integer
+          default: 15
+          example: 50
+      - $ref: '#/components/parameters/IncrementalProgress'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  average:
+                    type: number
+                    description: Log-likelihood average.
+                    example: −0,655
+                  loglike:
+                    type: object
+                    description: Log-likelihood values.
+                    additionalProperties:
+                      type: number
+                    example:
+                      cat: -5.43
+                      dog: 4.12
+                  set1:
+                    type: object
+                    description: Absolute frequency for the values in set 1.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      cat: 447
+                      dog: 808
+                  set2:
+                    type: object
+                    description: Absolute frequency for the values in set 2.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      cat: 254
+                      dog: 614
+                  time:
+                    $ref: '#/components/schemas/Time'
+      security:
+      - basicAuth: []
+      operationId: getLoglike
+      x-operation-id-source: derived
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/korp/v8
+  /attr_values:
+    get:
+      summary: Attribute Values
+      description: 'Get all available values for one or more attributes (structural or positional), together with number of tokens for each value. Similar to `/count_all` but without relative frequencies and with support for hierarchies.
+
+
+        ### Example
+
+
+        Get all authors and their titles together with token count:
+
+        `/attr_values?corpus=ROMI&attr=text_author>text_title&count=true`'
+      tags:
+      - Misc
+      parameters:
+      - $ref: '#/components/parameters/Corpus'
+      - name: attr
+        description: 'Structural or positional attribute. Each value can be either a plain attribute, or a hierarchy of two or more attributes, like so: `text_author>text_title>pos`.'
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+        in: query
+        explode: false
+      - name: count
+        description: Include token count. Disabled by default.
+        schema:
+          type: boolean
+          default: false
+        in: query
+      - name: per_corpus
+        description: Include per-corpus results. Enabled by default.
+        schema:
+          type: boolean
+          default: true
+        in: query
+      - name: combined
+        description: Include combined results. Enabled by default.
+        schema:
+          type: boolean
+          default: true
+        in: query
+      - $ref: '#/components/parameters/IncrementalProgress'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  corpora:
+                    description: Per corpus data.
+                    type: object
+                    additionalProperties:
+                      $ref: '#/paths/~1attr_values/get/responses/200/content/application~1json/schema/properties/combined'
+                  combined:
+                    type: object
+                    description: Structural and positional attributes as keys. The values are either given as arrays or objects depending on if `count` is `true`.
+                    additionalProperties:
+                      oneOf:
+                      - type: array
+                        description: Structural and positional values.
+                        items:
+                          type: string
+                      - type: object
+                        description: Structural and positional values as keys, token counts as values.
+                        additionalProperties:
+                          type: integer
+                  time:
+                    $ref: '#/components/schemas/Time'
+      security:
+      - basicAuth: []
+      operationId: getAttrValues
+      x-operation-id-source: derived
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/korp/v8
+  /check-id-availability:
+    get:
+      tags:
+      - Misc
+      summary: Check resource ID availability
+      description: Check if a given resource ID is available.
+      operationId: check_id_check_id_availability_get
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Resource ID
+        example: my-new-resource
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdAvailabilityResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+  /schema:
+    get:
+      tags:
+      - Misc
+      summary: Schema
+      description: Return JSON schema for the metadata.
+      operationId: schema_schema_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Schema Schema Get
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+components:
+  parameters:
+    GroupByStruct:
+      name: group_by_struct
+      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - text_author
+      - text_title
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    GroupBy:
+      name: group_by
+      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - pos
+      - baseform
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    IgnoreCase:
+      name: ignore_case
+      description: Change all values of the given attribute(s) to lowercase.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      example:
+      - word
+      - pos
+      explode: false
+  schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+    IdAvailabilityResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The resource ID that was checked
+          examples:
+          - my-new-resource
+        available:
+          type: boolean
+          title: Available
+          description: Indicates whether the resource ID is available
+          examples:
+          - true
+          - false
+      type: object
+      required:
+      - id
+      - available
+      title: IdAvailabilityResponse
+      description: Response model for resource ID availability check.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- university-of-gothenburg-korp-api-openapi.yml
+- university-of-gothenburg-metadata-api-openapi.json

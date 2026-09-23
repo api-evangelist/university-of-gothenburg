@@ -1,0 +1,403 @@
+openapi: 3.2.0
+info:
+  title: Karp Editing API
+  description: 'Karp is Språkbanken''s tool for editing structural data.
+
+
+    The
+
+    main goal of Karp is to be great for working with **lexical** data, but will work with
+
+    other data as well.
+
+
+    Read more here'
+  version: 7.0.0
+servers:
+- url: /karp/v7
+tags:
+- name: Editing
+paths:
+  /entries/{resource_id}/{entry_id}/{version}:
+    delete:
+      tags:
+      - Editing
+      summary: Delete Entry
+      description: Delete a entry from a resource.
+      operationId: delete_entry_entries__resource_id___entry_id___version__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Version
+      responses:
+        '204':
+          description: Successful Response
+        '400':
+          description: '
+
+            ### Error codes
+
+            - 30: Entry not found
+
+            - 32: Entry not valid
+
+            - 33: Version conflict
+
+            - 61: Database integrity error
+
+            '
+        '403':
+          description: User does not have write access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /entries/{resource_id}/{entry_id}:
+    put:
+      tags:
+      - Editing
+      summary: Add Entry With Id
+      description: 'Add a new entry. For data consistency reasons, first generate an ID (ULID), for example using the `create_id` API
+
+        call. If the request fails, use the same ID to try again, this ensures that the entry body is not added several
+
+        times. Answers:
+
+
+        - `201 Created` if the entry was created or already exists with the same body, at version 1
+
+        - `400`
+
+        - if the `entry_id` exists, but the body is different (error code 61)
+
+        - if the entry is not valid according to resource settings (errror code 32)'
+      operationId: add_entry_with_id_entries__resource_id___entry_id__put
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryAdd'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryAddResponse'
+        '400':
+          description: '
+
+            ### Error codes
+
+            - 30: Entry not found
+
+            - 32: Entry not valid
+
+            - 33: Version conflict
+
+            - 61: Database integrity error
+
+            '
+        '403':
+          description: User does not have write access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Editing
+      summary: Update Entry
+      operationId: update_entry_entries__resource_id___entry_id__post
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryAddResponse'
+        '400':
+          description: '
+
+            ### Error codes
+
+            - 30: Entry not found
+
+            - 32: Entry not valid
+
+            - 33: Version conflict
+
+            - 61: Database integrity error
+
+            '
+        '403':
+          description: User does not have write access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /entries/create_id:
+    get:
+      tags:
+      - Editing
+      summary: Create Id
+      description: Create an ID (ULID) to be used as input for `add//`.
+      operationId: create_id_entries_create_id_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryAddResponse'
+  /entries/{resource_id}:
+    put:
+      tags:
+      - Editing
+      summary: Add Entry
+      description: Deprecated, use `add//` instead.
+      operationId: add_entry_entries__resource_id__put
+      deprecated: true
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryAdd'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryAddResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /entries/{resource_id}/preview:
+    post:
+      tags:
+      - Editing
+      summary: Preview Entry
+      operationId: preview_entry_entries__resource_id__preview_post
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryPreview'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryPreviewResponse'
+        '403':
+          description: User does not have read access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    EntryPreviewResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - entry
+      title: EntryPreviewResponse
+    EntryAddResponse:
+      properties:
+        newID:
+          type: string
+          title: Newid
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+      type: object
+      required:
+      - newID
+      title: EntryAddResponse
+    EntryPreview:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - entry
+      title: EntryPreview
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryUpdate:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        message:
+          type: string
+          title: Message
+        version:
+          type: integer
+          title: Version
+      type: object
+      required:
+      - entry
+      - message
+      - version
+      title: EntryUpdate
+    EntryAdd:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        message:
+          type: string
+          title: Message
+          default: ''
+      type: object
+      required:
+      - entry
+      title: EntryAdd
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    HTTPBearer:
+      type: http
+      scheme: bearer

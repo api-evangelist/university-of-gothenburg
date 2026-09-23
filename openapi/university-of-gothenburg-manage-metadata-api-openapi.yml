@@ -1,0 +1,920 @@
+openapi: 3.2.0
+info:
+  title: Mink backend Manage Metadata API
+  description: '## Introduction
+
+
+    The Mink backend is a REST API that powers the Mink frontend, Språkbanken''s data
+
+    platform.'
+  x-logo:
+    url: https://raw.githubusercontent.com/spraakbanken/mink-backend/main/mink/static/mink.svg
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 3.1.0.dev
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/mink/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/mink/dev
+  description: Development server
+tags:
+- name: Manage Metadata
+  description: Routes for creating, uploading, and downloading metadata resources.
+paths:
+  /metadata/create:
+    post:
+      tags:
+      - Manage Metadata
+      summary: Create Metadata
+      description: 'Create a new metadata resource.
+
+
+        A `public_id` must be supplied, containing the correct organization prefix for the user making the request.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/metadata/create?public_id=org-prefix-resource-id'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: create_metadata_metadata_create_post
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: public_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public resource ID
+          title: Public Id
+        description: Public resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceResponse'
+              example:
+                status: success
+                message: Resource created successfully
+                return_code: created_resource
+                resource_id: mink-dxh6e6wtff
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to create resource
+                return_code: failed_creating_resource
+                info: ID not available
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /metadata/remove/{resource_id}:
+    delete:
+      tags:
+      - Manage Metadata
+      summary: Remove Metadata
+      description: 'Remove a metadata resource.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X DELETE ''https://ws.spraakbanken.gu.se/ws/mink/v3/metadata/remove/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: remove_metadata_metadata_remove__resource_id__delete
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Resource successfully removed
+                return_code: removed_resource
+        '400':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Invalid resource type
+                return_code: invalid_resource_type
+                info: Expected a metadata resource
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to remove content
+                return_code: failed_removing_content
+                info: Failed to remove resource from storage
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /metadata/list:
+    get:
+      tags:
+      - Manage Metadata
+      summary: List Metadata
+      description: 'List the IDs of all available metadata resources.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/metadata/list'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: list_metadata_metadata_list_get
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mink__core__models__ListResourcesResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /metadata/config/upload/{resource_id}:
+    put:
+      tags:
+      - Manage Metadata
+      summary: Upload Metadata Yaml
+      description: 'Upload a YAML metadata file or provide metadata as plain text.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X PUT ''https://ws.spraakbanken.gu.se/ws/mink/v3/metadata/config/upload/'' -H ''Authorization: Bearer YOUR_JWT'' -F ''file=@path_to_metadata.yaml''
+
+        ```'
+      operationId: upload_metadata_yaml_metadata_config_upload__resource_id__put
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: yaml
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The yaml metadata in plain text
+          title: Yaml
+        description: The yaml metadata in plain text
+      - name: custom-config
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether this upload should be marked as a custom config upload
+          default: true
+          title: Custom-Config
+        description: Whether this upload should be marked as a custom config upload
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload_metadata_yaml_metadata_config_upload__resource_id__put'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: File(s) successfully uploaded
+                return_code: uploaded_file
+        '400':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Invalid file format
+                return_code: invalid_file
+                info: File format needs to be YAML
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to upload file(s)
+                return_code: failed_uploading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /metadata/config/download/{resource_id}:
+    get:
+      tags:
+      - Manage Metadata
+      summary: Download Metadata Yaml
+      description: 'Download the metadata yaml file for a specific resource.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/metadata/config/download/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: download_metadata_yaml_metadata_config_download__resource_id__get
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: A file download response
+          content:
+            application/octet-stream: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to download file(s)
+                return_code: failed_downloading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+    ErrorResponse401:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 401 error responses.
+      examples:
+      - message: Failed to authenticate
+        return_code: failed_authenticating
+        status: error
+      - message: The provided JWT has expired
+        return_code: jwt_expired
+        status: error
+      - message: API key not recognized
+        return_code: apikey_not_found
+        status: error
+      - message: API key expired
+        return_code: apikey_expired
+        status: error
+      - message: No login credentials provided
+        return_code: missing_login_credentials
+        status: error
+      - message: Mink admin status could not be confirmed
+        return_code: not_admin
+        status: error
+    mink__core__models__ListResourcesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resources:
+          items:
+            type: string
+          type: array
+          title: Resources
+          description: List of resource IDs
+          default: []
+      type: object
+      description: Model for responses listing resource IDs.
+      examples:
+      - info: Listing available resources
+        message: Listing contents
+        resources:
+        - mink-dxh6e6wtff
+        - mink-j86tfreaf9
+        - mink-3qbh7tra6g
+        return_code: listing_content
+        status: success
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+    BaseErrorResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Abstract base model for error responses.
+    CreateResourceResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resource_id:
+          type: string
+          title: Resource Id
+          description: The ID of the created resource
+          default: ''
+      type: object
+      description: Model for the response to a resource creation request.
+      examples:
+      - message: Resource created successfully
+        resource_id: mink-dxh6e6wtff
+        return_code: created_resource
+        status: success
+    ErrorResponse404File:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 file not found error responses.
+      examples:
+      - message: File(s) not found
+        return_code: file_not_found
+        status: error
+    BaseResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Base response model with common fields.
+    ErrorResponse400:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 400 error responses.
+      examples:
+      - message: No resource ID provided
+        return_code: missing_resource_id
+        status: error
+    ErrorResponse404Resource:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 resource not found error responses.
+      examples:
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
+        status: error
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
+    Body_upload_metadata_yaml_metadata_config_upload__resource_id__put:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: The file to upload
+          format: binary
+      type: object
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

@@ -1,0 +1,145 @@
+openapi: 3.2.0
+info:
+  title: Sparv General API
+  description: 'Sparv is Språkbanken’s annotation tool and contains a corpus import pipeline
+
+    and a web service including a web interface.
+
+    It can be used to annotate shorter texts using the same tools as are applied
+
+    in the annotation of the corpora in Korp and the texts in
+
+    Strix.
+
+
+    You can read more about Sparv on Språkbanken''s web page.'
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/sparv/v3/static/sparv_frame.png
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: '3.0'
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/sparv/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/sparvlabb/v3
+  description: Lab version
+tags:
+- name: General
+paths:
+  /status:
+    get:
+      tags:
+      - General
+      summary: Status
+      description: Returns the status of existing builds.
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK (successfully authenticated)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusSchema'
+        '401':
+          description: 'Failed to show status: secret key could not be confirmed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+        '500':
+          description: Failed to show status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getStatus
+      x-operation-id-source: derived
+  /ping:
+    get:
+      tags:
+      - General
+      summary: Ping backend
+      description: 'Pings the backend, responds with the status of the catapult.
+
+
+        ### Example
+
+
+        `/ping`'
+      responses:
+        '200':
+          description: OK (catapult responds)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingSchema'
+        '500':
+          description: Failed to ping catapult
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+      operationId: getPing
+      x-operation-id-source: derived
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
+    StatusSchema:
+      type: object
+      properties:
+        builds:
+          type: array
+          items:
+            properties:
+              accessed:
+                type: string
+                example: '2018-05-11 18:29:57'
+              accessed-secs-ago:
+                type: integer
+                example: 326021.5
+              hash:
+                type: string
+                example: d91d063efb5a8439643147c7367e3a4ddad5ec63
+              since:
+                type: string
+                example: '2018-05-11 18:48:32'
+              status:
+                type: string
+                example: Done
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
+    PingSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: PONG
+        time:
+          type: integer
+          example: 0.0081
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: secret_key

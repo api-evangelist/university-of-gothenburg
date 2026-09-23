@@ -1,0 +1,252 @@
+openapi: 3.2.0
+info:
+  title: Korp Word Picture API
+  version: 8.1.0
+  description: '# Introduction
+
+
+    Korp is a tool for searching in text corpora, developed at Språkbanken.'
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/korp/v8/static/raven_black.png
+    altText: Logo
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/korp/v8
+security:
+- basicAuth: []
+tags:
+- name: Word Picture
+paths:
+  /relations:
+    get:
+      summary: Word Picture
+      description: 'Get typical dependency relations for a given lemgram or word.
+
+
+        ### Example
+
+
+        Get dependency relations for the lemgram ge..vb.1:
+
+        `/relations?word=ge..vb.1&type=lemgram&corpus=ROMI`'
+      tags:
+      - Word Picture
+      parameters:
+      - $ref: '#/components/parameters/Corpus'
+      - name: word
+        description: Word or lemgram.
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: type
+        description: 'Search type. Available options:
+
+
+          * `word` (default)
+
+          * `lemgram`
+
+          '
+        schema:
+          type: string
+          enum:
+          - word
+          - lemgram
+          default: word
+        in: query
+      - name: min
+        description: Cut-off frequency. No cut-off if omitted.
+        schema:
+          type: integer
+        in: query
+      - name: max
+        description: Maximum number of results. 0 = unlimited.
+        schema:
+          type: integer
+          default: 15
+        in: query
+      - $ref: '#/components/parameters/IncrementalProgress'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  relations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dep:
+                          description: Dependent lemgram or word.
+                          type: string
+                        depextra:
+                          description: Dependent prefix.
+                          type: string
+                        deppos:
+                          description: Dependent part of speech.
+                          type: string
+                        freq:
+                          description: Number of occurrences.
+                          type: integer
+                        head:
+                          description: Head lemgram or word.
+                          type: string
+                        headpos:
+                          description: Head part of speech.
+                          type: string
+                        mi:
+                          description: Lexicographer's mutual information score.
+                          type: number
+                          example: 17.326
+                        rel:
+                          description: Relation.
+                          type: string
+                        source:
+                          description: List of IDs, for getting the source sentences.
+                          type: array
+                          items:
+                            type: string
+                      example:
+                        dep: black
+                        depextra: ''
+                        deppos: JJ
+                        rel: AT
+                        headpos: NN
+                        head: cat
+                        freq: 5
+                        mi: 17.92607125616987
+                        source:
+                        - ROMI:253662
+                  time:
+                    $ref: '#/components/schemas/Time'
+      operationId: getRelations
+      x-operation-id-source: derived
+  /relations_sentences:
+    get:
+      summary: Word Picture Sentences
+      description: 'Given the source ID for a relation (from a Word Picture query), return the sentences in which this relation occurs.
+
+
+        Returns a structure identical to a regular `/query`.'
+      tags:
+      - Word Picture
+      parameters:
+      - name: source
+        description: List of source IDs (from a Word Picture query).
+        schema:
+          type: array
+          items:
+            type: string
+        in: query
+        explode: false
+      - $ref: '#/components/parameters/Start'
+      - $ref: '#/components/parameters/End'
+      - $ref: '#/components/parameters/Show'
+      - $ref: '#/components/parameters/ShowStruct'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1query/get/responses/200/content/application~1json/schema'
+      operationId: getRelationsSentences
+      x-operation-id-source: derived
+components:
+  parameters:
+    Show:
+      name: show
+      description: Positional attributes to show. 'word' will always be included.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - pos
+        - baseform
+        default:
+        - word
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
+    Start:
+      name: start
+      description: First result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 0
+        example: 0
+    End:
+      name: end
+      description: Last result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 9
+        example: 9
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+  schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+    Match:
+      type: object
+      properties:
+        start:
+          type: integer
+          description: Start position of the match within the context.
+          example: 5
+        end:
+          type: integer
+          description: End position of the match within the context.
+          example: 6
+        position:
+          type: integer
+          description: Global corpus position of the match.
+          example: 73648
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

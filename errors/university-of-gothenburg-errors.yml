@@ -1,0 +1,65 @@
+# x-method: derived
+# x-source-url: https://ws.spraakbanken.gu.se/ws/sparv/v3/
+# Written by API Evangelist for the api-evangelist/university-of-gothenburg repo on
+# 2026-09-01. `x-method` uses the provenance-manifest vocabulary; the artifact's own
+# `method:` key uses the enrichment-contract vocabulary. They are not in conflict.
+generated: '2026-09-01'
+method: probed
+source: >-
+  Real error responses observed on 2026-09-01, plus the error schemas declared in the six
+  Språkbanken Text OpenAPI documents in openapi/_original/. No error shape below is invented;
+  each one was either returned to a live request in this run or is declared in a published
+  contract.
+description: >-
+  Error handling across the University of Gothenburg's surfaces. There is no single institutional
+  error convention — there are four, one per software family, which is what you would expect from
+  a footprint that is a research unit's engineering plus a library's repository rather than a
+  central API programme.
+conventions:
+  - name: Språkbanken Text JSON envelope (Sparv, Mink)
+    x-operator: institution
+    shape: '{"error": {"message": "<human-readable>"}}' 
+    http_status: 200
+    observed: >-
+      GET https://ws.spraakbanken.gu.se/ws/sparv/v3/ returned HTTP 200 with
+      {"error": {"message": "No input was found."}} — the error is in the body, not the status
+      line. Mink additionally publishes a machine-readable `return_code` catalogue: GET
+      /ws/mink/v3/info returned HTTP 200 listing named job status codes (`none`, `waiting`, …)
+      with descriptions, captured at
+      examples/university-of-gothenburg-mink-info-example.json.
+    note: >-
+      A 200-with-error-body convention. Callers must inspect the payload; status-code-only error
+      handling will silently treat failures as successes.
+  - name: FastAPI validation errors (Karp v7, Karp search v1, Mink, Metadata)
+    x-operator: institution
+    shape: '{"detail": [{"loc": [...], "msg": "...", "type": "..."}]}'
+    http_status: 422
+    observed: >-
+      Declared as `HTTPValidationError` in components.schemas of the Karp, Karp-search, Mink and
+      Metadata specifications. Standard FastAPI/Pydantic shape.
+  - name: Flask JSON 404 (Metadata API)
+    x-operator: institution
+    shape: '{"Error": "Not Found"}'
+    http_status: 404
+    observed: >-
+      GET https://ws.spraakbanken.gu.se/ws/metadata/v3/list returned HTTP 404 application/json
+      {"Error":"Not Found"} — capital-E key, distinct from the FastAPI `detail` shape used
+      elsewhere in the same service family.
+  - name: OAI-PMH protocol errors (GUPEA)
+    x-operator: institution
+    shape: '<OAI-PMH><error code="badVerb|badArgument|cannotDisseminateFormat|idDoesNotExist|noRecordsMatch|noSetHierarchy|noMetadataFormats|badResumptionToken">…</error></OAI-PMH>'
+    http_status: 200
+    observed: >-
+      OAI-PMH 2.0 returns protocol errors inside a well-formed envelope with HTTP 200, per the
+      specification. Codes are fixed by OAI-PMH 2.0, not by the institution.
+  - name: Apache/nginx edge responses (front door)
+    x-operator: institution
+    shape: HTML error page
+    observed: >-
+      Three distinct edge behaviours were observed and matter to any harvester. (1)
+      https://ws.spraakbanken.gu.se/ws/metadata (no version segment) returns HTTP 403 Apache
+      HTML — a routing artefact, not an authorisation decision; the versioned path returns 200.
+      (2) https://ws.spraakbanken.gu.se/ws/strix/ returned HTTP 503 Service Unavailable, so Strix
+      is registered at the edge but not currently serving. (3) https://www.gu.se/ returns nginx
+      HTTP 403 for /.well-known/security.txt and /llms.txt — a blanket edge deny on unknown
+      paths, NOT evidence that those files were considered and withheld.

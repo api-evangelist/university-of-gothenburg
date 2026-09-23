@@ -1,0 +1,230 @@
+openapi: 3.2.0
+info:
+  title: Korp Information API
+  version: 8.1.0
+  description: '# Introduction
+
+
+    Korp is a tool for searching in text corpora, developed at Språkbanken.'
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-logo:
+    url: https://ws.spraakbanken.gu.se/ws/korp/v8/static/raven_black.png
+    altText: Logo
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/korp/v8
+security:
+- basicAuth: []
+tags:
+- name: Information
+paths:
+  /info:
+    get:
+      summary: General Information
+      description: 'Get information about available corpora, which corpora are protected, and CWB and API version.
+
+
+        ### Example
+
+
+        `/info`'
+      tags:
+      - Information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: API version.
+                    example: 8.0.0
+                  cqp_version:
+                    type: string
+                    description: CQP version.
+                    example: 3.2.1
+                  corpora:
+                    type: array
+                    description: List of corpora on the server.
+                    items:
+                      type: string
+                    example:
+                    - NOVELS
+                    - BLOGS2018
+                  protected_corpora:
+                    type: array
+                    description: List of which of the above corpora that are password protected.
+                    items:
+                      type: string
+                    example:
+                    - CLASSIFIED
+                    - MYDIARY
+                  time:
+                    $ref: '#/components/schemas/Time'
+      operationId: getInfo
+      x-operation-id-source: derived
+  /corpus_info:
+    get:
+      summary: Corpus Information
+      description: 'Fetch information about one or more corpora.
+
+
+        ### Example
+
+
+        `/corpus_info?corpus=ROMI,PAROLE`'
+      parameters:
+      - $ref: '#/components/parameters/Corpus'
+      tags:
+      - Information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  corpora:
+                    type: object
+                    description: List of corpora.
+                    additionalProperties:
+                      type: object
+                      properties:
+                        attrs:
+                          type: object
+                          properties:
+                            p:
+                              type: array
+                              description: List of positional attributes.
+                              items:
+                                type: string
+                                description: Positional attribute.
+                                example:
+                                - baseform
+                                - pos
+                            s:
+                              type: array
+                              description: List of structural attributes.
+                              items:
+                                type: string
+                                description: Structural attribute.
+                                example:
+                                - text_author
+                                - text_title
+                            a:
+                              type: array
+                              description: List of align attributes, for linked corpora.
+                              items:
+                                type: string
+                                description: Align attribute.
+                                example:
+                                - link_n
+                        info:
+                          type: object
+                          description: Miscellaneous information about the corpus given by Corpus Workbench, including any key-value pairs from the corresponding `.info` file.
+                          properties:
+                            Charset:
+                              type: string
+                              description: Character encoding of the corpus.
+                              example: utf8
+                            FirstDate:
+                              type: string
+                              description: Date and time of the oldest dated text in the corpus.
+                              example: '1976-01-01 00:00:00'
+                            LastDate:
+                              type: string
+                              description: Date and time of the newest dated text in the corpus.
+                              example: '1990-12-31 23:59:59'
+                            Size:
+                              type: string
+                              description: Number of tokens in the corpus.
+                              example: '2531038'
+                            Sentences:
+                              type: string
+                              description: Number of sentences in the corpus.
+                              example: '83643'
+                            Updated:
+                              type: string
+                              description: Date when the corpus was last updated.
+                              example: '2018-05-13'
+                          additionalProperties:
+                            type: string
+                          required:
+                          - Charset
+                          - Size
+                  total_size:
+                    type: integer
+                    description: Total number of tokens in the above corpora.
+                    example: 82762958
+                  total_sentences:
+                    type: integer
+                    description: Total number of sentences in the above corpora.
+                    example: 326556
+                  time:
+                    $ref: '#/components/schemas/Time'
+      operationId: getCorpusInfo
+      x-operation-id-source: derived
+  /corpus_config:
+    get:
+      summary: Corpus Configuration for the Frontend
+      description: 'Get corpus configurations to be used by the frontend, either for a whole mode or a specific list of corpora.
+
+
+        ### Example
+
+
+        `/corpus_config?mode=kubhist`'
+      parameters:
+      - name: mode
+        description: The mode for which corpus configurations should be returned.
+        schema:
+          type: string
+        in: query
+      - name: corpus
+        description: Corpora to include.
+        schema:
+          type: array
+          items:
+            type: string
+          example:
+          - ROMI
+          - SUC3
+        explode: false
+        in: query
+      tags:
+      - Information
+      operationId: getCorpusConfig
+      x-operation-id-source: derived
+components:
+  parameters:
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+  schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

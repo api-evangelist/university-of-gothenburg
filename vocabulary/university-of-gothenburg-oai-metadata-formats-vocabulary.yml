@@ -1,0 +1,76 @@
+# x-method: derived
+# x-source-url: https://gupea.ub.gu.se/server/oai/request?verb=ListMetadataFormats
+# Written by API Evangelist for the api-evangelist/university-of-gothenburg repo on
+# 2026-09-01. `x-method` uses the provenance-manifest vocabulary; the artifact's own
+# `method:` key uses the enrichment-contract vocabulary. They are not in conflict.
+generated: '2026-09-01'
+method: probed
+source: >-
+  GET https://gupea.ub.gu.se/server/oai/request?verb=ListMetadataFormats — HTTP 200 text/xml,
+  3,553 bytes, 2026-09-01. Every prefix, namespace and schema URI below is copied verbatim from
+  that response, stored at
+  examples/university-of-gothenburg-gupea-oai-metadata-formats-example.xml.
+description: >-
+  The metadata format vocabulary GUPEA actually advertises. Fourteen formats, all of them stock
+  DSpace or standards-body schemas — unlike some peers in this cohort, the Gothenburg University
+  Library has not added an institution-specific crosswalk of its own. Two entries are worth
+  noting for what they say about who this repository serves: `uppsok`, the Swedish national
+  student-thesis harvesting profile consumed by the national Uppsök/DiVA services, and `rioxx`
+  v3.0, the UK research-outputs profile. The presence of `uppsok` is the clearest signal in this
+  repository that GUPEA is wired into Swedish national infrastructure rather than run in isolation.
+x-operator: institution
+x-endpoint: https://gupea.ub.gu.se/server/oai/request
+formats:
+  - prefix: oai_dc
+    namespace: http://www.openarchives.org/OAI/2.0/oai_dc/
+    schema: http://www.openarchives.org/OAI/2.0/oai_dc.xsd
+    note: Mandatory OAI-PMH 2.0 baseline format (Dublin Core).
+  - prefix: qdc
+    namespace: http://purl.org/dc/terms/
+    schema: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd
+    note: Qualified Dublin Core.
+  - prefix: dim
+    namespace: http://www.dspace.org/xmlns/dspace/dim
+    schema: http://www.dspace.org/schema/dim.xsd
+    note: DSpace Intermediate Metadata — stock DSpace, not institution-specific.
+  - prefix: xoai
+    namespace: http://www.lyncode.com/xoai
+    schema: http://www.lyncode.com/schemas/xoai.xsd
+    note: XOAI, the DSpace OAI-PMH engine's own serialisation.
+  - prefix: mods
+    namespace: http://www.loc.gov/mods/v3
+    schema: http://www.loc.gov/standards/mods/v3/mods-3-1.xsd
+  - prefix: mets
+    namespace: http://www.loc.gov/METS/
+    schema: http://www.loc.gov/standards/mets/mets.xsd
+  - prefix: marc
+    namespace: http://www.loc.gov/MARC21/slim
+    schema: http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
+  - prefix: didl
+    namespace: urn:mpeg:mpeg21:2002:02-DIDL-NS
+    schema: http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-21_schema_files/did/didl.xsd
+  - prefix: ore
+    namespace: http://www.w3.org/2005/Atom
+    schema: http://tweety.lanl.gov/public/schemas/2008-06/atom-tron.sch
+    note: OAI-ORE resource maps expressed in Atom.
+  - prefix: rdf
+    namespace: http://www.openarchives.org/OAI/2.0/rdf/
+    schema: http://www.openarchives.org/OAI/2.0/rdf.xsd
+  - prefix: rioxx
+    namespace: http://www.rioxx.net/schema/v3.0/rioxx/
+    schema: http://www.rioxx.net/schema/v3.0/rioxx/rioxx.xsd
+    note: RIOXX v3.0, the UK research-outputs metadata profile.
+  - prefix: etdms
+    namespace: http://www.ndltd.org/standards/metadata/etdms/1.0/
+    schema: http://www.ndltd.org/standards/metadata/etdms/1.0/etdms.xsd
+    note: NDLTD electronic theses and dissertations profile.
+  - prefix: uketd_dc
+    namespace: http://naca.central.cranfield.ac.uk/ethos-oai/2.0/
+    schema: http://naca.central.cranfield.ac.uk/ethos-oai/2.0/uketd_dc.xsd
+    note: UK EThOS thesis profile.
+  - prefix: uppsok
+    namespace: http://www.openarchives.org/OAI/2.0/oai_dc/
+    schema: http://www.openarchives.org/OAI/2.0/oai_dc.xsd
+    note: >-
+      Swedish national student-thesis harvesting profile (Uppsök). Institution-relevant: this is
+      the format Swedish national aggregators harvest GUPEA theses in.

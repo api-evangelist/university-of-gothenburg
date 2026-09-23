@@ -1,0 +1,206 @@
+openapi: 3.2.0
+info:
+  title: Karps sökgränssnitt Count API
+  description: '## Karps sökgränssnitt / Karp''s search mode
+
+
+    Språkbanken has many lexical resources, listed on our webpage.'
+  version: v1
+servers:
+- url: /karps/v1
+tags:
+- name: Count
+paths:
+  /count:
+    get:
+      summary: Count
+      description: 'From each provided resource, get the entries that match the query q. See http://ws.spraakbanken.gu.se/ws/karp/v7 for a description of the query language.
+
+
+        Compile the matching entries on the fields in compile.
+
+
+        Add additional data requested by using the `columns` parameter.
+
+
+        ### Sorting
+
+
+        Sorting is supported for fields that are used in `compile`. The default fields are all the fields in `compile`
+
+        (**ascending** order) (they themselves sorted alphabetically, just like the columns).'
+      operationId: do_count_count_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: The query. See https://ws.spraakbanken.gu.se/docs/karp for a description of the query language, however, Karp-s does not support sub-queries, exists, missing and freetext.
+        description: The query. See https://ws.spraakbanken.gu.se/docs/karp for a description of the query language, however, Karp-s does not support sub-queries, exists, missing and freetext.
+      - name: resources
+        in: query
+        required: true
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+            pattern: ^[^,]+(,[^,]+)*$
+          - type: 'null'
+          title: Resources
+          description: '
+
+            A comma-separated list of resource ID:s, for example `saldo`
+
+            '
+        description: '
+
+          A comma-separated list of resource ID:s, for example `saldo`
+
+          '
+      - name: compile
+        in: query
+        required: true
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+            pattern: ^[^,]+(,[^,]+)*$
+          - type: 'null'
+          title: Compile on
+          description: '
+
+            A list of fields to compile statistics on, for example `baseform`, `pos`, `normalized_form`
+
+            '
+        description: '
+
+          A list of fields to compile statistics on, for example `baseform`, `pos`, `normalized_form`
+
+          '
+      - name: columns
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Extra columns
+          description: "\nAdd extra data columns to the result. For example: `field1=val_field1,field2=val_field2`\n\nThe left-hand side of `=` denotes  a field that will be used to create columns. Good examples\nare `resourceId` and `ud_pos`. For each unique value in the result, a column will be created \nand the field in the right-hand side of `=` \nwill be used for values in the cells of that column. If there are multiple values for the right-hand side field they\nwill be shown as a list.\n\nIt is possible to replace the field of the right-hand side with the keyword `_count` - `columns=resourceId=_count`.\nThis is the default value if `columns` is omitted. With this, the number of\nhits per unique value of the selected field will be shown.\n\nThe total number of rows and columns from `compile` will always be shown regardless of the value of `columns`.\n"
+          default: resourceId=_count
+        description: "\nAdd extra data columns to the result. For example: `field1=val_field1,field2=val_field2`\n\nThe left-hand side of `=` denotes  a field that will be used to create columns. Good examples\nare `resourceId` and `ud_pos`. For each unique value in the result, a column will be created \nand the field in the right-hand side of `=` \nwill be used for values in the cells of that column. If there are multiple values for the right-hand side field they\nwill be shown as a list.\n\nIt is possible to replace the field of the right-hand side with the keyword `_count` - `columns=resourceId=_count`.\nThis is the default value if `columns` is omitted. With this, the number of\nhits per unique value of the selected field will be shown.\n\nThe total number of rows and columns from `compile` will always be shown regardless of the value of `columns`.\n"
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '
+
+            See [Sorting the results](#section/Sorting-the-results) and API call description for more information.
+
+            '
+          default: asc
+          title: Sort
+        description: '
+
+          See [Sorting the results](#section/Sorting-the-results) and API call description for more information.
+
+          '
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserErrorSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Count
+components:
+  schemas:
+    UserErrorSchema:
+      properties:
+        message:
+          type: string
+          title: ''
+        code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: ''
+          description: '### Code definitions
+
+
+            1: Returned when the database was forced to truncate a value. Query parameter "columns" is the issue.
+
+
+            2: Returned when an unauthenticated user or a user without the proper access tries access a restricted resource.
+
+
+            3: Returned when a JWT was given, but the JWT was malformed or expired.
+
+
+            4: Returned when an API key was given, but it was malformed, expired or it was not possible to verify the key.'
+        extra:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: ''
+          description: Some errors have data output in addition to the human readable message.
+      type: object
+      required:
+      - message
+      title: UserErrorSchema
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

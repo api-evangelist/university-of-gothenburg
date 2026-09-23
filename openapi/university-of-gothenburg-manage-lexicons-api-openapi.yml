@@ -1,0 +1,2455 @@
+openapi: 3.2.0
+info:
+  title: Mink backend Manage Lexicons API
+  description: '## Introduction
+
+
+    The Mink backend is a REST API that powers the Mink frontend, Språkbanken''s data
+
+    platform.'
+  x-logo:
+    url: https://raw.githubusercontent.com/spraakbanken/mink-backend/main/mink/static/mink.svg
+  contact:
+    name: Språkbanken
+    url: https://spraakbanken.gu.se/
+    email: sb-info@svenska.gu.se
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 3.1.0.dev
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/mink/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/mink/dev
+  description: Development server
+tags:
+- name: Manage Lexicons
+  description: Routes for managing lexicon resources with Karp.
+paths:
+  /lexicon/create:
+    post:
+      tags:
+      - Manage Lexicons
+      summary: Create Lexicon
+      description: 'Create a new lexicon.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/create'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: create-lexicon
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to create resource
+                return_code: failed_creating_resource
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/list:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: List Lexicons
+      description: 'List the IDs of all available lexicons.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/list'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: list-lexicons
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mink__karp__models__ListResourcesResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/remove/{resource_id}:
+    delete:
+      tags:
+      - Manage Lexicons
+      summary: Remove Lexicon
+      description: 'Remove a lexicon from the storage server.
+
+
+        Will attempt to abort any running job for this lexicon and also remove it from the Karp server.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X DELETE ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/remove/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: remove-lexicon
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Resource successfully removed
+                return_code: removed_resource
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to remove content
+                return_code: failed_removing_content
+                info: Failed to remove resource from Karp's search mode
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/sources/upload/{resource_id}:
+    put:
+      tags:
+      - Manage Lexicons
+      summary: Upload Sources
+      description: 'Upload the attached files as source files.
+
+
+        Attached files will be added to the resource or replace existing ones. Files identical in name, size and md5
+
+        checksum will not be uploaded again.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X PUT ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/sources/upload/'' -H ''Authorization: Bearer YOUR_JWT'' -F ''files=@path_to_file''
+
+        ```'
+      operationId: upload-lexicon-sources
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload-lexicon-sources'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '201':
+          content:
+            application/json:
+              example:
+                status: success
+                message: File(s) successfully uploaded
+                return_code: uploaded_file
+                warnings:
+                - File 'example.jsonl' already existed and was replaced during upload.
+          description: Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to upload file(s)
+                return_code: failed_uploading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '413':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Request data too large
+                return_code: content_too_large
+                file: example.txt
+                info: max file size exceeded
+                max_size_mb: 10
+              schema:
+                $ref: '#/components/schemas/ErrorResponse413'
+          description: Request Entity Too Large
+  /lexicon/sources/list/{resource_id}:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: List Sources
+      description: 'List the available source files.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/sources/list/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: list-lexicon-sources
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingFilesResponse'
+              example:
+                status: success
+                message: Listing contents
+                return_code: listing_content
+                info: Listing source files
+                contents:
+                - name: dokument1.xml
+                  type: application/xml
+                  last_modified: '2022-06-10T17:05:18+02:00'
+                  size: 1397
+                  path: dokument1.xml
+                - name: dokument2.xml
+                  type: application/xml
+                  last_modified: '2022-06-10T17:05:16+02:00'
+                  size: 116
+                  path: dokument2.xml
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to list contents
+                return_code: failed_listing_content
+                info: Failed to list source files
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/sources/remove/{resource_id}:
+    delete:
+      tags:
+      - Manage Lexicons
+      summary: Remove Sources
+      description: 'Remove the source file given in the `remove` parameter from the resource.
+
+
+        The file is provided as path relative to the source directory.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X DELETE ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/sources/remove/?remove='' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: remove-lexicon-sources
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: remove
+        in: query
+        required: true
+        schema:
+          type: string
+          description: File to remove, given as path relative to the source directory
+          title: Remove
+        description: File to remove, given as path relative to the source directory
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Content successfully removed
+                return_code: removed_content
+                info: Removed source files
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to remove content
+                return_code: failed_removing_content
+                info: Failed to remove some source files
+                failed:
+                - file1.xml
+                - file2.xml
+                succeeded:
+                - file3.xml
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/sources/download/{resource_id}:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: Download Sources
+      description: 'Download the source file.
+
+
+        Download as zip if the `zip` query parameter is set to `true`.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/sources/download/&zip=true'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: download-lexicon-sources
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: zip
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to zip the file or not
+          default: false
+          title: Zip
+        description: Whether to zip the file or not
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: A file download response
+          content:
+            application/octet-stream: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to download file(s)
+                return_code: failed_downloading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/config/upload/{resource_id}:
+    put:
+      tags:
+      - Manage Lexicons
+      summary: Upload Config
+      description: 'Upload a lexicon configuration as file or plain text (using the `config` parameter).
+
+
+        The config must be in yaml format. If a config file already exists for the given resource it will be replaced by the
+
+        newly uploaded one.
+
+
+        Please note that any yaml comments may be removed from your config upon upload.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X PUT ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/config/upload/'' -H ''Authorization: Bearer YOUR_JWT'' -F ''file=@path_to_config_file''
+
+        ```'
+      operationId: upload-lexicon-config
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: config
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The config file as plain text
+          title: Config
+        description: The config file as plain text
+      - name: custom-config
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether this upload should be marked as a custom config upload
+          default: true
+          title: Custom-Config
+        description: Whether this upload should be marked as a custom config upload
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload-lexicon-config'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: File(s) successfully uploaded
+                return_code: uploaded_file
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Validation Error
+                return_code: validation_error
+                info: Both a file and plain text config were provided
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to upload file(s)
+                return_code: failed_uploading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/config/download/{resource_id}:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: Download Config
+      description: 'Download the lexicon config file in YAML format.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/config/download/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: download-lexicon-config
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: A file download response
+          content:
+            application/octet-stream: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to download file(s)
+                return_code: failed_downloading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/exports/list/{resource_id}:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: List Exports
+      description: 'List the available export files created by Karp pipeline.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/exports/list/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: list-lexicon-exports
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingFilesResponse'
+              example:
+                status: success
+                message: Listing contents
+                return_code: listing_content
+                info: Listing export files
+                contents:
+                - name: dokument1.csv
+                  type: text/csv
+                  last_modified: '2022-06-10T17:55:37+02:00'
+                  size: 4876
+                  path: csv_export/dokument1.csv
+                - name: dokument1_export.xml
+                  type: application/xml
+                  last_modified: '2022-06-10T17:55:38+02:00'
+                  size: 13429
+                  path: xml_export.pretty/dokument1_export.xml
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to list contents
+                return_code: failed_listing_content
+                info: Failed to list export files
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/exports/download/{resource_id}:
+    get:
+      tags:
+      - Manage Lexicons
+      summary: Download Exports
+      description: 'Download all available export files created by the Karp pipeline.
+
+
+        The parameters `file` and `dir` may be used to download a specific export file or a directory of export files. These
+
+        parameters must be supplied as paths relative to the export directory. Only one of these parameters may be applied
+
+        at a time.
+
+
+        The `zip` parameter may be set to `false` in combination with the `file` param to avoid zipping the file to be
+
+        downloaded. If `zip` is used without the file parameter it will have no effect.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/exports/download/?file=some_file_name&zip=true'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: download-lexicon-exports
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: file
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The file name or path to download
+          title: File
+        description: The file name or path to download
+      - name: dir
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The directory to download
+          title: Dir
+        description: The directory to download
+      - name: zip
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Whether to zip the file or not
+          default: true
+          title: Zip
+        description: Whether to zip the file or not
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: A file download response
+          content:
+            application/octet-stream: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Validation Error
+                return_code: validation_error
+                info: Both 'file' and 'dir' parameters were provided
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to download file(s)
+                return_code: failed_downloading_file
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/exports/remove/{resource_id}:
+    delete:
+      tags:
+      - Manage Lexicons
+      summary: Remove Exports
+      description: 'Remove all output files for the resource from the Karp pipeline server.
+
+
+        This action cannot be performed while a job is running.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X DELETE ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/exports/remove/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: remove-lexicon-exports
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Content successfully removed
+                return_code: removed_content
+                info: Removed output
+                karp_output: Karp pipeline output removed
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to remove content
+                return_code: failed_removing_content
+                info: Failed to remove output
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '503':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to perform operation, process is currently running
+                return_code: process_running
+                info: Cannot remove output while a job is running
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Service Unavailable
+  /lexicon/job/run/{resource_id}:
+    put:
+      tags:
+      - Manage Lexicons
+      summary: Run Karp Pipeline
+      description: 'Add a Karp pipeline job to the queue.
+
+
+        There can only be one active job (''run'' or ''install'') for each resource at a time. A job must finish or be
+
+        aborted before a new one can be started.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X PUT ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/job/run/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: run-lexicon-job
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          content:
+            application/json:
+              example:
+                status: error
+                message: The config file is invalid or incompatible with your resource
+                return_code: invalid_config
+                info: The importer in your config file is incompatible with your source files
+                current_importer: text_import
+                expected_importer: xml_import
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              example:
+                status: error
+                message: File(s) not found
+                return_code: file_not_found
+                info: No source files found for this resource
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to queue job
+                return_code: failed_queuing
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/job/abort/{resource_id}:
+    post:
+      tags:
+      - Manage Lexicons
+      summary: Abort Job
+      description: 'Abort the currently running job for the resource.
+
+
+        If the job is in the queue but not yet running, it will be removed from the queue. If the job is running, it will be
+
+        stopped.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X POST ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/job/abort/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: abort-lexicon-job
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Successfully aborted job
+                return_code: aborted_job
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              example:
+                status: error
+                message: No running job found for this resource
+                return_code: no_running_job
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404File'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to abort job
+                return_code: failed_aborting
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '503':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to perform operation, process is currently running
+                return_code: process_running
+                info: Cannot abort job while syncing files
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Service Unavailable
+  /lexicon/karps/install/{resource_id}:
+    put:
+      tags:
+      - Manage Lexicons
+      summary: Install Karps
+      description: 'Install the resource in Karp''s search mode.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X PUT ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/karps/install/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: install-karps
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to queue job
+                return_code: failed_queuing
+                info: BaseException
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+  /lexicon/karps/uninstall/{resource_id}:
+    delete:
+      tags:
+      - Manage Lexicons
+      summary: Uninstall Karps
+      description: 'Uninstall the lexicon from Karp''s search mode.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X DELETE ''https://ws.spraakbanken.gu.se/ws/mink/v3/lexicon/karps/uninstall/'' -H ''Authorization: Bearer YOUR_JWT''
+
+        ```'
+      operationId: uninstall-karps
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID
+          title: Resource Id
+        description: Resource ID
+      - name: session_id
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Session ID
+          title: Session Id
+        description: Session ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              example:
+                status: success
+                message: Resource uninstalled successfully
+                return_code: uninstalled
+                info: Uninstalled from KarpS
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse401'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404Resource'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to uninstall resource
+                return_code: failed_uninstalling
+                info: Error when uninstalling from KarpS
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '503':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to perform operation, process is currently running
+                return_code: process_running
+                info: Cannot uninstall while a job is running
+              schema:
+                $ref: '#/components/schemas/BaseErrorResponse'
+          description: Service Unavailable
+components:
+  schemas:
+    mink__karp__models__ListResourcesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resources:
+          items:
+            type: string
+          type: array
+          title: Resources
+          description: List of resource IDs
+          default: []
+      type: object
+      description: Model for responses where lexicon resources are listed.
+      examples:
+      - info: Listing lexicons
+        message: Listing contents
+        resources:
+        - mink-dxh6e6wtff
+        - mink-j86tfreaf9
+        - mink-3qbh7tra6g
+        return_code: listing_content
+        status: success
+    ResourceModel:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Mink resource ID
+          default: ''
+        public_id:
+          type: string
+          title: Public Id
+          description: Public resource ID
+          default: ''
+        name:
+          additionalProperties:
+            type: string
+          type: object
+          title: Name
+          description: Name of the resource in different languages
+          default: {}
+        type:
+          type: string
+          title: Type
+          description: Type of the resource (e.g., 'corpus', 'metadata')
+          default: ''
+        custom_config:
+          type: boolean
+          title: Custom Config
+          description: Whether the current resource config was uploaded as a custom config
+          default: false
+        source_files:
+          items:
+            $ref: '#/components/schemas/FileModel'
+          type: array
+          title: Source Files
+          description: List of source files associated with the resource
+          default: []
+      type: object
+      description: Model for the resource object.
+      examples:
+      - custom_config: false
+        id: mink-dxh6e6wtff
+        name:
+          eng: ''
+          swe: Min testkorpus
+        public_id: mink-dxh6e6wtff
+        source_files:
+        - last_modified: '2022-06-10T17:05:18+02:00'
+          name: dokument1.xml
+          path: dokument1.xml
+          size: 1397
+          type: application/xml
+        - last_modified: '2022-06-10T17:05:16+02:00'
+          name: dokument2.xml
+          path: dokument2.xml
+          size: 116
+          type: application/xml
+        type: corpus
+    FileModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the file
+          default: ''
+        type:
+          type: string
+          title: Type
+          description: MIME type of the file
+          default: ''
+        last_modified:
+          type: string
+          title: Last Modified
+          description: Last modified date of the file
+          default: ''
+        size:
+          type: integer
+          title: Size
+          description: Size of the file in bytes
+          default: 0
+        path:
+          type: string
+          title: Path
+          description: Path to the file in the storage system
+          default: ''
+      type: object
+      description: Model for file list.
+      examples:
+      - last_modified: '2022-06-10T17:05:18+02:00'
+        name: dokument1.xml
+        path: dokument1.xml
+        size: 1397
+        type: application/xml
+      - last_modified: '2022-06-10T17:05:16+02:00'
+        name: dokument2.xml
+        path: dokument2.xml
+        size: 116
+        type: application/xml
+    ListingFilesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        contents:
+          items:
+            $ref: '#/components/schemas/FileModel'
+          type: array
+          title: Contents
+          description: List of contents, each containing information about a file
+          default:
+          - name: ''
+            type: ''
+            last_modified: ''
+            size: 0
+            path: ''
+      type: object
+      description: Model for responses with file contents field.
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+    StatusResponse:
+      properties:
+        job_status:
+          type: string
+          title: Job Status
+          description: Status of the current job for the resource
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        resource:
+          $ref: '#/components/schemas/ResourceModel'
+          description: Object containing information about the resource
+          default:
+            id: ''
+            public_id: ''
+            name: {}
+            type: ''
+            custom_config: false
+            source_files: []
+        owner:
+          $ref: '#/components/schemas/UserModel'
+          description: User object containing information about the resource owner
+          default:
+            id: ''
+            name: ''
+            email: ''
+        job:
+          $ref: '#/components/schemas/JobModel'
+          description: Job object containing information about the job status
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for job status responses.
+      examples:
+      - status: success
+        message: Checked status of job
+        return_code: checked_status
+        job_status: waiting
+        info: Job has been queued
+        resource:
+          id: mink-vajfgwcqdw
+          public_id: mink-vajfgwcqdw
+          name:
+            swe: Mitt testlexikon
+            eng: My test lexicon
+          custom_config: true
+          source_files:
+          - name: test_lexicon_data2.jsonl
+            type: unknown
+            last_modified: '2026-04-22T12:50:37+02:00'
+            size: 62
+            path: test_lexicon_data2.jsonl
+          sources_deleted: '2026-04-22T12:50:37+02:00'
+        job:
+          status:
+            karp_pipeline: waiting
+            karps: none
+          current_process: karp_pipeline
+          pid: null
+          installed_karps: false
+          priority: 1
+          warnings: ''
+          errors: ''
+          output: 'Running mink-vajfgwcqdw
+
+            Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl
+
+            Using entry schema: {"baseform":{"type":"text","name":"baseform","collection":false,"fields":{},"extra":{"length":4},"categories":[]}}
+
+            Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl'
+          queued: '2026-06-02T10:25:14+02:00'
+          started: ''
+          ended: ''
+          duration: 0
+          progress: 0%
+    UserModel:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: User ID
+          default: ''
+        name:
+          type: string
+          title: Name
+          description: Name of the user
+          default: ''
+        email:
+          type: string
+          title: Email
+          description: Email address of the user
+          default: ''
+        idp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idp
+          description: Identity provider of the user
+        sub:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sub
+          description: Subject identifier from the identity provider
+      type: object
+      description: Model for the user object.
+      examples:
+      - email: anna.andersson@example.com
+        id: example-idp-abc123
+        idp: example-idp
+        name: Anna Andersson
+        sub: abc123
+    BaseErrorResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Abstract base model for error responses.
+    ErrorResponse404File:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 file not found error responses.
+      examples:
+      - message: File(s) not found
+        return_code: file_not_found
+        status: error
+    BaseResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Base response model with common fields.
+    ErrorResponse413:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Request data too large
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: content_too_large
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        max_size_mb:
+          type: integer
+          title: Max Size Mb
+          description: Max allowed size in MB
+          default: 100
+        file:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File
+          description: Name of the file that was too large
+      type: object
+      description: Model for 413 error responses.
+      examples:
+      - max_size_mb: 100
+        message: Request data too large
+        return_code: content_too_large
+        status: error
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
+    JobModel:
+      properties:
+        status:
+          additionalProperties:
+            type: string
+          type: object
+          title: Status
+          description: Statuses for the job's processes
+        current_process:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Process
+          description: The current process being executed
+        pid:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pid
+          description: The process ID of the current job
+        priority:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Priority
+          description: Queue priority
+          default: ''
+        warnings:
+          type: string
+          title: Warnings
+          description: Warnings from the job
+          default: ''
+        errors:
+          type: string
+          title: Errors
+          description: Errors from the job
+          default: ''
+        queued:
+          type: string
+          title: Queued
+          description: Timestamp of when the job was queued
+          default: ''
+        started:
+          type: string
+          title: Started
+          description: Timestamp of when the job started
+          default: ''
+        ended:
+          type: string
+          title: Ended
+          description: Timestamp of when the job ended
+          default: ''
+        duration:
+          type: integer
+          title: Duration
+          description: Duration of the job in seconds
+          default: 0
+        progress:
+          type: string
+          title: Progress
+          description: Progress percentage as a string
+          default: 0%
+      type: object
+      description: Model for a generic job.
+      examples:
+      - status:
+          karp_pipeline: waiting
+          karps: none
+        current_process: karp_pipeline
+        pid: null
+        installed_karps: false
+        priority: 1
+        warnings: ''
+        errors: ''
+        output: 'Running mink-vajfgwcqdw
+
+          Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl
+
+          Using entry schema: {"baseform":{"type":"text","name":"baseform","collection":false,"fields":{},"extra":{"length":4},"categories":[]}}
+
+          Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl'
+        queued: '2026-06-02T10:25:14+02:00'
+        started: ''
+        ended: ''
+        duration: 0
+        progress: 0%
+    ErrorResponse401:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 401 error responses.
+      examples:
+      - message: Failed to authenticate
+        return_code: failed_authenticating
+        status: error
+      - message: The provided JWT has expired
+        return_code: jwt_expired
+        status: error
+      - message: API key not recognized
+        return_code: apikey_not_found
+        status: error
+      - message: API key expired
+        return_code: apikey_expired
+        status: error
+      - message: No login credentials provided
+        return_code: missing_login_credentials
+        status: error
+      - message: Mink admin status could not be confirmed
+        return_code: not_admin
+        status: error
+    Body_upload-lexicon-config:
+      properties:
+        file:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+            format: binary
+          - type: 'null'
+          title: File
+          description: The file to upload
+      type: object
+    CreateResourceResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resource_id:
+          type: string
+          title: Resource Id
+          description: The ID of the created resource
+          default: ''
+      type: object
+      description: Model for the response to a resource creation request.
+      examples:
+      - message: Resource created successfully
+        resource_id: mink-dxh6e6wtff
+        return_code: created_resource
+        status: success
+    ErrorResponse400:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 400 error responses.
+      examples:
+      - message: No resource ID provided
+        return_code: missing_resource_id
+        status: error
+    ErrorResponse404Resource:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 resource not found error responses.
+      examples:
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
+        status: error
+    Body_upload-lexicon-sources:
+      properties:
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+            format: binary
+          type: array
+          title: Files
+          description: The files to upload
+      type: object
+      required:
+      - files
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

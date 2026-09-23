@@ -1,0 +1,137 @@
+# x-method: derived
+# x-source-url: https://mds.swamid.se/entities/https%3A%2F%2Fidp3.it.gu.se%2Fidp%2Fshibboleth
+# Written by API Evangelist for the api-evangelist/university-of-gothenburg repo on
+# 2026-09-01. `x-method` uses the provenance-manifest vocabulary; the artifact's own
+# `method:` key uses the enrichment-contract vocabulary. They are not in conflict.
+generated: '2026-09-01'
+method: probed
+source: >-
+  Live probes on 2026-09-01 of gupea.ub.gu.se, ws.spraakbanken.gu.se, spraakbanken4.it.gu.se,
+  mds.swamid.se, api.crossref.org, api.ror.org and api.datacite.org. Every status code quoted
+  below was observed in this run; response bodies are stored under examples/.
+description: >-
+  Conformance of the University of Gothenburg's surfaces against the Kin Score `education`
+  regime standards. REWARD-ONLY: a standard is `conforms: true` only where a live response
+  carried the evidence quoted. Anything not observed is `null`, never false-by-assumption.
+
+
+  Note the operator column. Four of the five confirmed hits sit on University of Gothenburg
+  hosts. The fifth, `crossref`, is a registry membership — a fact about the institution, held
+  in a third party's registry, and recorded as such rather than as a contract of theirs.
+standards:
+  - id: oai-pmh
+    name: OAI-PMH 2.0
+    conforms: true
+    x-operator: institution
+    location: https://gupea.ub.gu.se/server/oai/request
+    evidence: >-
+      verb=Identify returned HTTP 200 text/xml with <protocolVersion>2.0</protocolVersion>,
+      <repositoryName>GUPEA</repositoryName>, <repositoryIdentifier>gupea.ub.gu.se</repositoryIdentifier>,
+      <adminEmail>gup@ub.gu.se</adminEmail>, <earliestDatestamp>1906-05-30T00:00:00Z</earliestDatestamp>,
+      <granularity>YYYY-MM-DDThh:mm:ssZ</granularity> and
+      <sampleIdentifier>oai:gupea.ub.gu.se:2077/1234</sampleIdentifier>. verb=ListMetadataFormats
+      returned HTTP 200 with fourteen formats. Captured verbatim at
+      examples/university-of-gothenburg-gupea-oai-identify-example.xml and
+      examples/university-of-gothenburg-gupea-oai-metadata-formats-example.xml.
+  - id: shibboleth
+    name: Shibboleth Identity Provider
+    conforms: true
+    x-operator: federation
+    location: https://idp3.it.gu.se/idp/shibboleth
+    evidence: >-
+      The entityID https://idp3.it.gu.se/idp/shibboleth resolves through the SWAMID MDQ service
+      at https://mds.swamid.se/entities/ to HTTP 200 application/samlmetadata+xml, 13,045 bytes,
+      carrying an <md:IDPSSODescriptor>, <shibmd:Scope regexp="false">gu.se</shibmd:Scope> and
+      <md:OrganizationName xml:lang="en">University of Gothenburg</md:OrganizationName>. The
+      Shibboleth-specific `shibmd:Scope` extension is what makes this a Shibboleth IdP rather
+      than a bare SAML entity. Captured at
+      examples/university-of-gothenburg-idp-saml-metadata-example.xml.
+  - id: saml
+    name: SAML 2.0 Metadata
+    conforms: true
+    x-operator: federation
+    location: https://mds.swamid.se/md/swamid-idp.xml
+    evidence: >-
+      The SWAMID aggregate (HTTP 200 text/xml, 627,363 bytes) contains two University of
+      Gothenburg <md:EntityDescriptor> elements — https://idp3.it.gu.se/idp/shibboleth
+      (Shibboleth) and http://idp.auth.gu.se/adfs/services/trust (Microsoft AD FS), both with
+      <mdui:DisplayName xml:lang="en">University of Gothenburg</mdui:DisplayName>. SSO bindings
+      observed on the Shibboleth entity are urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST at
+      https://idp3.it.gu.se/idp/profile/SAML2/POST/SSO and HTTP-Redirect at
+      https://idp3.it.gu.se/idp/profile/SAML2/Redirect/SSO. SWAMID participates in eduGAIN.
+  - id: crossref
+    name: Crossref DOI registration
+    conforms: true
+    x-operator: registry
+    location: https://api.crossref.org/members/36737
+    evidence: >-
+      https://api.crossref.org/members?query=gothenburg returned HTTP 200 with TWO member records
+      whose primary-name is "University of Gothenburg": member 36737 (DOI prefixes 10.58323,
+      10.58235, 10.57126; 520 DOIs; alternate names include "University of Gothenburg, Department
+      of historical studies" and "Förvaltningshögskolan, Göteborgs Universitet") and member 51378
+      (prefix 10.70733; 351 DOIs). This is a membership fact about the institution held in a
+      registry, not a contract the institution operates. The registry's own specification is NOT
+      stored under this slug.
+  - id: ror
+    name: Research Organization Registry
+    conforms: true
+    x-operator: registry
+    location: https://ror.org/01tm6cn81
+    evidence: >-
+      https://api.ror.org/v2/organizations?query=%22University%20of%20Gothenburg%22 returned
+      HTTP 200 resolving the institution to ROR id https://ror.org/01tm6cn81 (names "Göteborgs
+      universitet", "Goeteborgs Universitet", "Göteborgin yliopisto"; link https://www.gu.se).
+      A second ROR record, https://ror.org/048rhnt15, covers the Wallenberg Centre for Molecular
+      and Translational Medicine as a University of Gothenburg sub-organisation. ROR is not in
+      the `education` regime standards[] list; recorded here because it is the identifier other
+      registries resolve this institution by.
+  - id: datacite
+    name: DataCite DOI registration
+    conforms: true
+    x-operator: registry
+    location: https://api.datacite.org/clients/snd.sprkb
+    evidence: >-
+      CONFIRMED, but only by resolving a DOI rather than by name search. Both
+      https://api.datacite.org/providers?query=gothenburg and
+      https://api.datacite.org/clients?query=gothenburg return HTTP 200 with "total": 0, because
+      the registrant is not named "Gothenburg". Resolving a DOI minted by the University's own
+      Språkbanken Text unit — https://api.datacite.org/dois/10.23695/y43g-bx28, HTTP 200,
+      publisher "Språkbanken Text", url https://spraakbanken.gu.se/resurser/abotidning — returns
+      client `snd.sprkb`. https://api.datacite.org/clients/snd.sprkb returns HTTP 200:
+      name "Språkbanken Text", symbol SND.SPRKB, clientType repository, url
+      https://spraakbanken.gu.se/, prefix 10.23695, active since 2017-03-13, under DataCite
+      provider `iuvp` — the Swedish National Data Service consortium. A University of Gothenburg
+      unit is therefore a live DataCite repository registrant. The registry's own contract is
+      NOT stored under this slug; the membership is.
+  - id: orcid
+    name: ORCID
+    conforms: null
+    evidence: >-
+      Not observed. No ORCID member API integration, ORCID-enabled login, or ORCID field was
+      found on any probed University of Gothenburg surface in this run.
+  - id: scim
+    name: SCIM 2.0
+    conforms: null
+    evidence: Not observed on any probed surface.
+  - id: lti
+    name: Learning Tools Interoperability
+    conforms: null
+    evidence: >-
+      Not observed. The University's learning platform (Canvas) is a vendor tenancy and was not
+      probed for LTI advertisement; nothing on a gu.se host advertises an LTI tool configuration.
+  - id: oneroster
+    name: OneRoster
+    conforms: null
+    evidence: Not observed on any probed surface.
+  - id: ed-fi
+    name: Ed-Fi
+    conforms: null
+    evidence: Not observed. Ed-Fi is a US K-12 / state-education standard with no Swedish uptake.
+  - id: caliper
+    name: Caliper Analytics
+    conforms: null
+    evidence: Not observed on any probed surface.
+  - id: qti
+    name: QTI
+    conforms: null
+    evidence: Not observed on any probed surface.

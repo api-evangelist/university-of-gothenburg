@@ -1,38 +1,100 @@
----
 name: University of Gothenburg
 description: University of Gothenburg public developer/API footprint review for APIs.json cataloging.
 url: https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/refs/heads/main/review.yml
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 reviews:
-  - date: '2026-06-03'
-    rating: 2
-    summary: >-
-      No central documented developer portal or public REST API program was
-      found for the University of Gothenburg. Confirmed live machine-accessible
-      surfaces are the GUPEA institutional repository OAI-PMH 2.0 endpoint
-      (verified responding with repository name "GUPEA") and the Quality of
-      Government open-data downloads plus Data Finder tool (file-based, no
-      keyed API). Affiliated technical activity is distributed across
-      departmental GitHub organizations (e.g. bcfgothenburg) rather than a
-      single official org. No endpoints or sign-up flows were fabricated; only
-      URLs probed live are reported below.
-    endpoints:
-      - url: https://gupea.ub.gu.se/server/oai/request?verb=Identify
-        status: 200
-        note: Live OAI-PMH 2.0 endpoint, repository "GUPEA", admin gup@ub.gu.se.
-      - url: https://www.gu.se/en/quality-government/qog-data/data-downloads
-        status: 200
-        note: QoG open-data downloads (CSV/SPSS/Stata); no keyed REST API.
-      - url: https://datafinder.qog.gu.se/
-        status: 200
-        note: QoG Data Finder interactive dataset/variable browser.
-      - url: https://www.gu.se/en
-        status: 200
-        note: Official university website (English).
-      - url: https://github.com/bcfgothenburg
-        status: 200
-        note: Bioinformatics and Data Centre GitHub org, affiliated; departmental.
-      - url: https://www.linkedin.com/school/university-of-gothenburg/
-        status: 200
-        note: Official LinkedIn school page.
+- date: '2026-09-01'
+  rating: 6
+  summary: 'RE-PROFILE under the university pipeline, correcting the 2026-06-03 review upward. The June
+    review found two surfaces and concluded there was no developer programme. That was wrong in one important
+    respect: Språkbanken Text, the Swedish Language Bank''s text division at the University of Gothenburg,
+    publishes SIX OpenAPI documents from a single documentation index at ws.spraakbanken.gu.se/docs —
+    Korp, Karp v7, Karp search v1, Mink, Sparv and the Språkbanken Text Metadata API. All six run on gu.se
+    hosts and all six answered anonymous requests with HTTP 200 on 2026-09-01. Also newly found and verified:
+    the GUPEA DSpace 8.3 REST API on the library''s own host, the University''s own Shibboleth SAML 2.0
+    identity provider in SWAMID/eduGAIN, a live DataCite repository registrant (SND.SPRKB, prefix 10.23695)
+    and two Crossref memberships. Every surface is x-operator: institution, federation or registry — no
+    vendor contract is stored under this slug. What remains genuinely absent: a central developer portal
+    (api.gu.se and data.gu.se do not resolve), any changelog, any status page, any rate-limit signal,
+    and any documented way to obtain a credential for the five declared security schemes. Nothing was
+    fabricated; only URLs probed live in this run are reported.'
+  endpoints:
+  - url: https://ws.spraakbanken.gu.se/docs/
+    status: 200
+    note: Språkbanken Text API documentation index — links six published OpenAPI documents.
+  - url: https://ws.spraakbanken.gu.se/ws/korp/v8/info
+    status: 200
+    note: Korp API v8 — 1,133 corpora, backend version 8.2.5, anonymous.
+  - url: https://ws.spraakbanken.gu.se/ws/metadata/v3/
+    status: 200
+    note: Metadata API v3 — 2,531,491 bytes of catalogue JSON, 1,499 resource ids.
+  - url: https://ws.spraakbanken.gu.se/ws/mink/v3/openapi.json
+    status: 200
+    note: Mink API v3 OpenAPI — 63 paths, OAuth2 bearer + API key.
+  - url: https://ws.spraakbanken.gu.se/ws/sparv/v3/ping
+    status: 200
+    note: Sparv API v3 — {"message":"PONG"}, anonymous.
+  - url: https://spraakbanken4.it.gu.se/karp/v7/resources/
+    status: 200
+    note: Karp API v7 — 1,042,817 bytes; spec publishes a RELATIVE servers[] and no contact.
+  - url: https://spraakbanken4.it.gu.se/karps/v1/config
+    status: 200
+    note: Karp search API v1 — 31 lexical resources; also relative servers[].
+  - url: https://ws.spraakbanken.gu.se/ws/strix/
+    status: 503
+    note: Strix — registered at the edge, not serving. Degraded, not dead.
+  - url: https://gupea.ub.gu.se/server/api
+    status: 200
+    note: GUPEA DSpace 8.3-SNAPSHOT REST root, HAL+JSON, anonymous. Deployment recorded; DSpace contract
+      not stored.
+  - url: https://gupea.ub.gu.se/server/oai/request?verb=ListMetadataFormats
+    status: 200
+    note: Fourteen OAI metadata formats including uppsok (Swedish national thesis profile) and rioxx v3.0.
+  - url: https://idp3.it.gu.se/idp/shibboleth
+    status: 200
+    note: University's own Shibboleth IdP entityID, resolves directly to SAML metadata.
+  - url: https://mds.swamid.se/md/swamid-idp.xml
+    status: 200
+    note: 'SWAMID aggregate carries TWO GU entities: idp3.it.gu.se (Shibboleth) and idp.auth.gu.se (AD
+      FS).'
+  - url: https://api.datacite.org/clients/snd.sprkb
+    status: 200
+    note: DataCite repository registrant "Språkbanken Text", prefix 10.23695, via SND. Invisible to a
+      name search for "gothenburg".
+  - url: https://api.crossref.org/members?query=gothenburg
+    status: 200
+    note: 'Two Crossref members named University of Gothenburg: 36737 (520 DOIs) and 51378 (351 DOIs).'
+  - url: https://kursplaner.gu.se/
+    status: 404
+    note: No course-catalog API. Programme catalogue is HTML only.
+  - url: https://www.gu.se/.well-known/security.txt
+    status: 403
+    note: nginx blanket deny on unknown paths — NOT evidence of a considered withholding.
+- date: '2026-06-03'
+  rating: 2
+  summary: No central documented developer portal or public REST API program was found for the University
+    of Gothenburg. Confirmed live machine-accessible surfaces are the GUPEA institutional repository OAI-PMH
+    2.0 endpoint (verified responding with repository name "GUPEA") and the Quality of Government open-data
+    downloads plus Data Finder tool (file-based, no keyed API). Affiliated technical activity is distributed
+    across departmental GitHub organizations (e.g. bcfgothenburg) rather than a single official org. No
+    endpoints or sign-up flows were fabricated; only URLs probed live are reported below.
+  endpoints:
+  - url: https://gupea.ub.gu.se/server/oai/request?verb=Identify
+    status: 200
+    note: Live OAI-PMH 2.0 endpoint, repository "GUPEA", admin gup@ub.gu.se.
+  - url: https://www.gu.se/en/quality-government/qog-data/data-downloads
+    status: 200
+    note: QoG open-data downloads (CSV/SPSS/Stata); no keyed REST API.
+  - url: https://datafinder.qog.gu.se/
+    status: 200
+    note: QoG Data Finder interactive dataset/variable browser.
+  - url: https://www.gu.se/en
+    status: 200
+    note: Official university website (English).
+  - url: https://github.com/bcfgothenburg
+    status: 200
+    note: Bioinformatics and Data Centre GitHub org, affiliated; departmental.
+  - url: https://www.linkedin.com/school/university-of-gothenburg/
+    status: 200
+    note: Official LinkedIn school page.

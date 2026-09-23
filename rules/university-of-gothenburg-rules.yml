@@ -1,0 +1,87 @@
+# x-method: generated
+# x-source-url: https://ws.spraakbanken.gu.se/docs/
+# Written by API Evangelist for the api-evangelist/university-of-gothenburg repo on
+# 2026-09-01. `x-method` uses the provenance-manifest vocabulary; the artifact's own
+# `method:` key uses the enrichment-contract vocabulary. They are not in conflict.
+generated: '2026-09-01'
+method: generated
+source: >-
+  Written for this repository by API Evangelist. A Spectral ruleset using built-in functions
+  only, targeting the six Språkbanken Text OpenAPI documents in openapi/. NOT published by the
+  University of Gothenburg — this is our governance lens on their contracts, not theirs.
+description: >-
+  Spectral ruleset expressing the contract-quality gaps actually observed in this repository's
+  OpenAPIs, so a re-run measures the same things. Every rule below fires on at least one of the
+  six documents as fetched on 2026-09-01.
+rules:
+  gu-servers-must-be-absolute:
+    description: >-
+      servers[] must carry an absolute URL. Karp v7 and Karp search v1 publish the relative
+      values `/karp/v7` and `/karps/v1`, which makes the contract unresolvable to any consumer
+      that did not already know the host — and invisible to host-based ownership audits.
+    message: '{{property}} must be an absolute URL'
+    given: $.servers[*].url
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://'
+  gu-info-contact-required:
+    description: >-
+      info.contact must be present. Korp, Mink, Sparv and Metadata all carry
+      sb-info@svenska.gu.se; Karp v7 and Karp search v1 carry no contact at all, which is what
+      makes them hostless AND ownerless on their face.
+    message: info.contact is missing
+    given: $.info
+    severity: error
+    then:
+      field: contact
+      function: truthy
+  gu-info-license-required:
+    description: info.license must be present. Four of six declare MIT; Karp v7 and Karp search v1 declare none.
+    message: info.license is missing
+    given: $.info
+    severity: warn
+    then:
+      field: license
+      function: truthy
+  gu-operations-need-operation-id:
+    description: Every operation needs an operationId for client generation.
+    message: Operation is missing operationId
+    given: $.paths[*][get,put,post,delete,patch]
+    severity: warn
+    then:
+      field: operationId
+      function: truthy
+  gu-operations-need-tags:
+    description: >-
+      Every operation must be tagged. Korp tags all fourteen operations; the FastAPI-generated
+      documents tag inconsistently.
+    message: Operation is missing tags
+    given: $.paths[*][get,put,post,delete,patch]
+    severity: warn
+    then:
+      field: tags
+      function: truthy
+  gu-no-dev-version-in-production-contract:
+    description: >-
+      A contract served on a production path must not carry a pre-release version. Mink publishes
+      `3.1.0.dev` at /ws/mink/v3/openapi.json.
+    message: info.version looks like a pre-release
+    given: $.info.version
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '(dev|alpha|beta|rc|SNAPSHOT)'
+  gu-security-scheme-must-document-issuance:
+    description: >-
+      Where a securityScheme is declared, its description must say how a caller obtains a
+      credential. Five of the six documents declare a scheme; none explains issuance, so every
+      write surface here is undocumented in the one respect a consumer needs.
+    message: securityScheme has no description explaining how to obtain credentials
+    given: $.components.securitySchemes[*]
+    severity: warn
+    then:
+      field: description
+      function: truthy

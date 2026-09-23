@@ -1,0 +1,856 @@
+openapi: 3.2.0
+info:
+  title: University Of Gothenburg Documentation API
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Documentation across 2 of this provider''s published API definitions: university-of-gothenburg-metadata-api-openapi.json, university-of-gothenburg-mink-api-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+  description: Development server
+- url: https://ws.spraakbanken.gu.se/ws/mink/v3
+  description: Production server
+- url: https://ws.spraakbanken.gu.se/ws/mink/dev
+  description: Development server
+tags:
+- name: Documentation
+  description: Endpoints for API documentation
+paths:
+  /openapi.json:
+    get:
+      tags:
+      - Documentation
+      summary: OpenAPI schema
+      description: Serve the OpenAPI specification as JSON data.
+      operationId: openapi_json_openapi_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+  /doc:
+    get:
+      tags:
+      - Documentation
+      summary: OpenAPI schema
+      description: Serve the same JSON as /openapi.json (Backward-compatible alias).
+      operationId: openapi_alias_doc_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Openapi Alias Doc Get
+      deprecated: true
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+  /redoc:
+    get:
+      tags:
+      - Documentation
+      summary: ReDoc API documentation
+      description: Serve ReDoc documentation.
+      operationId: overridden_redoc_redoc_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+  /docs:
+    get:
+      tags:
+      - Documentation
+      summary: Swagger UI documentation
+      description: Serve Swagger UI documentation.
+      operationId: overridden_swagger_docs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/metadata/dev
+      description: Development server
+  /swagger:
+    get:
+      tags:
+      - Documentation
+      summary: Swagger
+      description: Render Swagger UI HTML (documentation for this API).
+      operationId: swagger
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+  /info:
+    get:
+      tags:
+      - Documentation
+      summary: Info
+      description: Show info about data processing, e.g. job status codes, file size limits and Sparv importer modules.
+      operationId: info
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoResponse'
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+  /return-codes:
+    get:
+      tags:
+      - Documentation
+      summary: List Return Codes
+      description: List all return codes.
+      operationId: return-codes
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnCodesResponse'
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+  /corpus/sparv/get-schema:
+    get:
+      tags:
+      - Documentation
+      summary: Sparv Schema
+      description: 'Get the JSON schema for the Sparv config format.
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/corpus/sparv/get-schema''
+
+        ```'
+      operationId: get-sparv-schema
+      parameters:
+      - name: update-cache
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, force update the cached Sparv data
+          default: false
+          title: Update-Cache
+        description: If true, force update the cached Sparv data
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaResponse'
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to list contents
+                return_code: failed_listing_content
+                info: Failed getting Sparv config schema
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+  /corpus/sparv/list-languages:
+    get:
+      tags:
+      - Documentation
+      summary: Sparv Languages
+      description: 'List languages available in Sparv along with their language codes (ISO 639-3).
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/corpus/sparv/list-languages''
+
+        ```'
+      operationId: list-sparv-languages
+      parameters:
+      - name: update-cache
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, force update the cached Sparv data
+          default: false
+          title: Update-Cache
+        description: If true, force update the cached Sparv data
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguagesResponse'
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to list contents
+                return_code: failed_listing_content
+                info: Failed listing languages
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+  /corpus/sparv/list-exports:
+    get:
+      tags:
+      - Documentation
+      summary: Sparv Exports
+      description: 'List available Sparv export formats for the chosen language (default: ''swe'').
+
+
+        The language is specified with the `language` as ISO 639-3 code. See available languages by calling
+
+        .
+
+
+        ### Example
+
+
+        ```bash
+
+        curl -X GET ''https://ws.spraakbanken.gu.se/ws/mink/v3/corpus/sparv/list-exports?language=swe''
+
+        ```'
+      operationId: list-sparv-exports
+      parameters:
+      - name: language
+        in: query
+        required: false
+        schema:
+          type: string
+          description: languages for which to list exports
+          default: swe
+          title: Language
+        description: languages for which to list exports
+      - name: update-cache
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, force update the cached Sparv data
+          default: false
+          title: Update-Cache
+        description: If true, force update the cached Sparv data
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportsResponse'
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse422'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              example:
+                status: error
+                message: Failed to list contents
+                return_code: failed_listing_content
+                info: Failed listing exports
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+          description: Internal Server Error
+    servers:
+    - url: https://ws.spraakbanken.gu.se/ws/mink/v3
+      description: Production server
+    - url: https://ws.spraakbanken.gu.se/ws/mink/dev
+      description: Development server
+components:
+  schemas:
+    InfoResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        status_codes:
+          $ref: '#/components/schemas/InfoDataModel_StatusCodeModel_'
+        file_size_limits:
+          $ref: '#/components/schemas/InfoDataModel_NameDescriptionValue_'
+        resource_info:
+          additionalProperties:
+            additionalProperties: true
+            type: object
+          type: object
+          title: Resource Info
+          description: Resource-type specific information keyed by resource type
+      type: object
+      required:
+      - status_codes
+      - file_size_limits
+      description: Model for the /info response.
+      example:
+        file_size_limits:
+          data:
+          - description: max size for one request (which may contain multiple files)
+            name: max_content_length
+            value: 104857600
+          - description: max size for one corpus source file
+            name: max_file_length
+            value: 10485760
+          - description: max size for one resource (total of all source files)
+            name: max_resource_length
+            value: 524288000
+          info: size limits (in bytes) for uploaded files
+        info: Listing Mink API information
+        message: Listing contents
+        resource_info:
+          <resource_type>:
+            <section>:
+              data: []
+              info: '...'
+            description: '...'
+        return_code: listing_content
+        status: success
+        status_codes:
+          data:
+          - description: Process does not exist
+            name: none
+          - description: Waiting to be processed
+            name: waiting
+          - description: Process is running
+            name: running
+          - description: Process has finished
+            name: done
+          - description: An error occurred in the process
+            name: error
+          - description: Process was aborted by the user
+            name: aborted
+          info: job status codes
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+    ReturnCodesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        data:
+          additionalProperties:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+          type: object
+          title: Data
+          description: Dictionary containing lists of return codes keyed by tag
+      type: object
+      description: Model for the /return-codes response.
+      example:
+        data:
+          Authentication and authorization:
+          - code: failed_authenticating
+            message: Failed to authenticate
+            status_code: 200
+          - code: missing_login_credentials
+            message: No login credentials provided
+            status_code: 200
+          Common errors:
+          - code: unexpected_error
+            message: An unexpected error occurred
+            status_code: 500
+          - code: page_not_found
+            message: Page not found
+            status_code: 404
+        info: Listing all return codes
+        message: Listing contents
+        return_code: listing_content
+        status: success
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+    SchemaResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        schema:
+          additionalProperties: true
+          type: object
+          title: Schema
+          description: The JSON schema for the Sparv configuration format
+          default: {}
+      type: object
+      description: Model for the /corpus/sparv/get-schema response.
+      examples:
+      - info: Returning Sparv config schema
+        message: Listing contents
+        return_code: listing_content
+        schema:
+          type: object
+        status: success
+    LanguagesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        languages:
+          items:
+            type: string
+          type: array
+          title: Languages
+          description: List of supported languages (language names and ISO codes)
+          default: []
+      type: object
+      description: Model for the /corpus/sparv/list-languages response.
+      examples:
+      - info: Listing languages available in Sparv
+        languages:
+        - code: eng
+          name: English
+        - code: fin
+          name: Finnish
+        - code: swe
+          name: Swedish
+        message: Listing contents
+        return_code: listing_content
+        status: success
+    InfoDataModel_StatusCodeModel_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
+        data:
+          items:
+            $ref: '#/components/schemas/StatusCodeModel'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
+    NameDescriptionValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the value
+          default: ''
+        description:
+          type: string
+          title: Description
+          description: Description of the value
+          default: ''
+        value:
+          type: integer
+          title: Value
+      type: object
+      required:
+      - value
+      description: Model containing name, description, and value.
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+    InfoDataModel_NameDescriptionValue_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
+        data:
+          items:
+            $ref: '#/components/schemas/NameDescriptionValue'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
+    StatusCodeModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the status code
+          default: ''
+        description:
+          type: string
+          title: Description
+          description: Description of the status code
+          default: ''
+      type: object
+      description: Status codes for job processes.
+    ExportsResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        exports:
+          items:
+            type: string
+          type: array
+          title: Exports
+          description: List of available export formats
+          default: []
+        language:
+          type: string
+          title: Language
+          description: ISO code of the language chosen for the export listing
+          default: swe
+      type: object
+      description: Model for the /corpus/sparv/list-exports response.
+      examples:
+      - exports:
+        - description: CoNLL-U (SBX version) export
+          export: conll_export:conllu
+          export_files:
+          - conll_export/{file}.conllu
+        - description: CSV export
+          export: csv_export:csv
+          export_files:
+          - csv_export/{file}.csv
+        - description: Corpus word frequency list
+          export: stats_export:freq_list
+          export_files:
+          - stats_export.frequency_list/stats_standard-swe.csv
+        - description: XML export with one token element per line
+          export: xml_export:pretty
+          export_files:
+          - xml_export.pretty/{file}_export.xml
+        - description: Scrambled XML export
+          export: xml_export:scrambled
+          export_files:
+          - xml_export.scrambled/{file}_export.xml
+        info: Listing exports available in Sparv
+        language: swe
+        message: Listing contents
+        return_code: listing_content
+        status: success
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+x-refined-from:
+- university-of-gothenburg-metadata-api-openapi.json
+- university-of-gothenburg-mink-api-openapi.json

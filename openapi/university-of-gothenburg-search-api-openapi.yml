@@ -1,0 +1,227 @@
+openapi: 3.2.0
+info:
+  title: Karps sökgränssnitt Search API
+  description: '## Karps sökgränssnitt / Karp''s search mode
+
+
+    Språkbanken has many lexical resources, listed on our webpage.'
+  version: v1
+servers:
+- url: /karps/v1
+tags:
+- name: Search
+paths:
+  /search:
+    get:
+      summary: Search
+      description: 'From each provided resource, return the entries that match the query q.
+
+
+        ### Sorting
+
+        Sorting is supported on fields that are present in all selected resources. The default field is `entryWord` (**ascending** order).
+
+
+        The sort is done within each resource, the results from each resource are not mixed.'
+      operationId: do_search_search_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: The query. See https://ws.spraakbanken.gu.se/docs/karp for a description of the query language, however, Karp-s does not support sub-queries, exists, missing and freetext.
+        description: The query. See https://ws.spraakbanken.gu.se/docs/karp for a description of the query language, however, Karp-s does not support sub-queries, exists, missing and freetext.
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          title: Size
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+          title: From
+      - name: resources
+        in: query
+        required: true
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+            pattern: ^[^,]+(,[^,]+)*$
+          - type: 'null'
+          title: Resources
+          description: '
+
+            A comma-separated list of resource ID:s, for example `saldo`
+
+            '
+        description: '
+
+          A comma-separated list of resource ID:s, for example `saldo`
+
+          '
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: '
+
+            See [Sorting the results](#section/Sorting-the-results) and API call description for more information.
+
+            '
+          default: asc
+          title: Sort
+        description: '
+
+          See [Sorting the results](#section/Sorting-the-results) and API call description for more information.
+
+          '
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '500':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserErrorSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Search
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HitResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        resourceId:
+          type: string
+          title: Resourceid
+      type: object
+      required:
+      - entry
+      - resourceId
+      title: HitResponse
+    UserErrorSchema:
+      properties:
+        message:
+          type: string
+          title: ''
+        code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: ''
+          description: '### Code definitions
+
+
+            1: Returned when the database was forced to truncate a value. Query parameter "columns" is the issue.
+
+
+            2: Returned when an unauthenticated user or a user without the proper access tries access a restricted resource.
+
+
+            3: Returned when a JWT was given, but the JWT was malformed or expired.
+
+
+            4: Returned when an API key was given, but it was malformed, expired or it was not possible to verify the key.'
+        extra:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: ''
+          description: Some errors have data output in addition to the human readable message.
+      type: object
+      required:
+      - message
+      title: UserErrorSchema
+    SearchResult:
+      properties:
+        hits:
+          items:
+            $ref: '#/components/schemas/HitResponse'
+          type: array
+          title: Hits
+        resourceHits:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Resourcehits
+        resourceOrder:
+          items:
+            type: string
+          type: array
+          title: Resourceorder
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - hits
+      - resourceHits
+      - resourceOrder
+      - total
+      title: SearchResult
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

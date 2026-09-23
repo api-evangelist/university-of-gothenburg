@@ -1,0 +1,293 @@
+openapi: 3.2.0
+info:
+  title: Karps sökgränssnitt Config API
+  description: '## Karps sökgränssnitt / Karp''s search mode
+
+
+    Språkbanken has many lexical resources, listed on our webpage.'
+  version: v1
+servers:
+- url: /karps/v1
+tags:
+- name: Config
+paths:
+  /config:
+    get:
+      summary: Get config
+      description: 'Returns a description of the contents of each installed resource/lexicon. For example the available fields and their types.
+
+
+        Some resources have `limitedAccess: true` - they will not be searchable without access.
+
+
+        Some resources have `protectedMetadata: true` - they will not be returned by this call without access.'
+      operationId: get_config_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      tags:
+      - Config
+components:
+  schemas:
+    EntryWord:
+      properties:
+        field:
+          type: string
+          title: Field
+        description:
+          $ref: '#/components/schemas/MultiLang'
+      type: object
+      required:
+      - field
+      - description
+      title: EntryWord
+    ResourceField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the field. Corresponds to a key under the top-level `fields`.
+        primary:
+          type: boolean
+          title: Primary
+          description: 'Fields with `primary: true` are more relevant than fields with `primary: false`.'
+      type: object
+      required:
+      - name
+      - primary
+      title: ResourceField
+    Field:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: (Machine) name of the field. This name is used by resources to list the available fields.
+        type:
+          type: string
+          title: Type
+          description: Type of the field, can be text, integer or float or table.
+        collection:
+          type: boolean
+          title: Collection
+          description: If `true`, the field is a list of `type`.
+          default: false
+        label:
+          anyOf:
+          - $ref: '#/components/schemas/MultiLang'
+          - type: 'null'
+          description: Label for the field, can be in mulitple languages.
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/Field'
+          type: object
+          title: Fields
+          description: If type is table, then there can be sub-fields (that cannot be table).
+        categories:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Categories
+          description: If set, a list of possible values for this field.
+        categoryLabels:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/MultiLang'
+            type: object
+          - type: 'null'
+          title: Categorylabels
+          description: For fields with categories, labels for each value (optional, even if categories is given).
+        protectedMetadata:
+          type: boolean
+          title: Protectedmetadata
+          description: The field is only available for users with access
+          default: false
+        resourceId:
+          items:
+            type: string
+          type: array
+          title: Resourceid
+          description: The resources that this field is available in.
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - type
+      title: Field
+    ResourceConfig:
+      properties:
+        resourceId:
+          type: string
+          title: Resourceid
+          description: The resource ID
+        fields:
+          items:
+            $ref: '#/components/schemas/ResourceField'
+          type: array
+          title: Fields
+          description: The fields available in this resource.
+        label:
+          $ref: '#/components/schemas/MultiLang'
+          description: Name for this resource, can be in mulitple languages.
+        limitedAccess:
+          type: boolean
+          title: Limitedaccess
+          description: The resource is only available for users with access
+          default: false
+        protectedMetadata:
+          type: boolean
+          title: Protectedmetadata
+          description: The metadata of the resource is only available for users with access
+          default: false
+        description:
+          anyOf:
+          - $ref: '#/components/schemas/MultiLang'
+          - type: 'null'
+          description: Description of this resource, can be in mulitple languages.
+        entryWord:
+          $ref: '#/components/schemas/EntryWord'
+          description: The default field for this resource.
+        updated:
+          type: integer
+          title: Updated
+          description: The timestamp for when this resource was last updated (data or configuration). UNIX timestmap in milliseconds.
+        size:
+          type: integer
+          title: Size
+          description: The number of entries in this resource.
+        link:
+          type: string
+          title: Link
+          description: A link to a relevant page for the resource.
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+          description: The tags for this resource, see top-level `tags`, for tag labels and description.
+      additionalProperties: false
+      type: object
+      required:
+      - resourceId
+      - fields
+      - label
+      - entryWord
+      - updated
+      - size
+      - link
+      title: ResourceConfig
+    MultiLang:
+      anyOf:
+      - type: string
+      - additionalProperties:
+          type: string
+        type: object
+      title: MultiLang
+    ConfigResponse:
+      properties:
+        resources:
+          items:
+            $ref: '#/components/schemas/ResourceConfig'
+          type: array
+          title: Resources
+          description: All resources available in this instance.
+        tags:
+          additionalProperties:
+            $ref: '#/components/schemas/Tag'
+          type: object
+          title: Tags
+          description: All tags available in this instance. Will be used by some of the resources under "resources".
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/ConfigField'
+          type: object
+          title: Fields
+          description: All fields available in this instance.
+      type: object
+      required:
+      - resources
+      - tags
+      - fields
+      title: ConfigResponse
+    Tag:
+      properties:
+        label:
+          $ref: '#/components/schemas/MultiLang'
+        description:
+          $ref: '#/components/schemas/MultiLang'
+      type: object
+      required:
+      - label
+      - description
+      title: Tag
+    ConfigField:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: (Machine) name of the field. This name is used by resources to list the available fields.
+        type:
+          type: string
+          title: Type
+          description: Type of the field, can be text, integer or float or table.
+        collection:
+          type: boolean
+          title: Collection
+          description: If `true`, the field is a list of `type`.
+          default: false
+        label:
+          anyOf:
+          - $ref: '#/components/schemas/MultiLang'
+          - type: 'null'
+          description: Label for the field, can be in mulitple languages.
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/Field'
+          type: object
+          title: Fields
+          description: If type is table, then there can be sub-fields (that cannot be table).
+        categories:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Categories
+          description: If set, a list of possible values for this field.
+        categoryLabels:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/MultiLang'
+            type: object
+          - type: 'null'
+          title: Categorylabels
+          description: For fields with categories, labels for each value (optional, even if categories is given).
+        protectedMetadata:
+          type: boolean
+          title: Protectedmetadata
+          description: The field is only available for users with access
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - type
+      title: ConfigField
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Api-Key

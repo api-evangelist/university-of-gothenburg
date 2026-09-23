@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-gothenburg/main/json-schema/university-of-gothenburg-sbx-resource.json",
+  "title": "Språkbanken Text resource (corpus / lexicon / model / analysis / utility)",
+  "description": "The record shape returned by the Språkbanken Text Metadata API v3 for every catalogued resource. DERIVED on 2026-09-01 from the live response to GET https://ws.spraakbanken.gu.se/ws/metadata/v3/ (HTTP 200, 2,531,491 bytes, 1,499 resource ids), cross-checked against the published OpenAPI at openapi/_original/university-of-gothenburg-metadata-api-openapi.json. Field presence and types are observed, not assumed; only fields present on every sampled record are marked required.",
+  "x-provenance": {
+    "generated": "2026-09-01",
+    "method": "derived",
+    "source": "GET https://ws.spraakbanken.gu.se/ws/metadata/v3/ — HTTP 200, 2026-09-01. Sample stored at examples/university-of-gothenburg-metadata-list-ids-example.json.",
+    "x-operator": "institution"
+  },
+  "type": "object",
+  "required": ["id", "name", "type"],
+  "properties": {
+    "id": { "type": "string", "description": "Stable lower-case resource id, e.g. \"abotidning\". The value returned by /list-ids." },
+    "type": { "type": "string", "enum": ["corpus", "lexicon", "model", "analysis", "utility", "collection"] },
+    "name": { "$ref": "#/$defs/localizedString" },
+    "short_description": { "$ref": "#/$defs/localizedString" },
+    "has_description": { "type": "boolean" },
+    "doi": { "type": "string", "description": "DataCite DOI. Språkbanken Text mints under prefix 10.23695 as DataCite client snd.sprkb." },
+    "updated": { "type": "string", "format": "date" },
+    "origin": { "type": "string", "description": "Originating unit, e.g. \"sbx\" for Språkbanken Text." },
+    "unlisted": { "type": "boolean" },
+    "trainingdata": { "type": "boolean" },
+    "size": {
+      "type": "object",
+      "description": "Counts vary by resource type; corpora report tokens and sentences.",
+      "additionalProperties": { "type": ["integer", "string"] }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string", "description": "ISO 639-3 language code." },
+          "name": { "$ref": "#/$defs/localizedString" }
+        }
+      }
+    },
+    "in_collections": { "type": "array", "items": { "type": "string" } },
+    "successors": { "type": "array", "items": { "type": "string" } },
+    "downloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "type": { "type": "string" },
+          "format": { "type": "string" },
+          "size": { "type": ["integer", "string"] },
+          "licence": { "type": "string" }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "array",
+      "description": "Where the resource can be used interactively — typically a Korp or Karp deep link on a gu.se host.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "access": { "type": "string", "format": "uri" },
+          "licence": { "type": "string" }
+        }
+      }
+    },
+    "contact_info": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "affiliation": { "type": "object" }
+      }
+    },
+    "other_references": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "localizedString": {
+      "type": "object",
+      "description": "Every human-readable string in this API is a language map. Swedish is always present; English usually is. A consumer that expects a bare string will break.",
+      "properties": {
+        "swe": { "type": "string" },
+        "eng": { "type": "string" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

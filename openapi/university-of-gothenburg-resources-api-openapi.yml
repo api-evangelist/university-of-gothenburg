@@ -1,0 +1,364 @@
+openapi: 3.2.0
+info:
+  title: Karp Resources API
+  description: 'Karp is Språkbanken''s tool for editing structural data.
+
+
+    The
+
+    main goal of Karp is to be great for working with **lexical** data, but will work with
+
+    other data as well.
+
+
+    Read more here'
+  version: 7.0.0
+servers:
+- url: /karp/v7
+tags:
+- name: Resources
+paths:
+  /resources/permissions:
+    get:
+      tags:
+      - Resources
+      summary: List Resource Permissions
+      operationId: list_resource_permissions_resources_permissions_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ResourcePermissionDto'
+                type: array
+                title: Response List Resource Permissions Resources Permissions Get
+  /resources/:
+    get:
+      tags:
+      - Resources
+      summary: Get All Resources
+      operationId: get_all_resources_resources__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ResourceProtected'
+                type: array
+                title: Response Get All Resources Resources  Get
+  /resources/{resource_id}:
+    get:
+      tags:
+      - Resources
+      summary: Get Resource By Resource Id
+      operationId: get_resource_by_resource_id_resources__resource_id__get
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePublic'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceProtected:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        resourceId:
+          type: string
+          title: Resourceid
+        name:
+          type: string
+          title: Name
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        lastModified:
+          type: number
+          title: Lastmodified
+        isPublished:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ispublished
+        version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
+        lastModifiedBy:
+          type: string
+          title: Lastmodifiedby
+      type: object
+      required:
+      - id
+      - resourceId
+      - name
+      - config
+      - lastModified
+      - lastModifiedBy
+      title: ResourceProtected
+    Field:
+      properties:
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        required:
+          type: boolean
+          title: Required
+          default: false
+        collection:
+          type: boolean
+          title: Collection
+          default: false
+        store:
+          type: boolean
+          title: Store
+          default: true
+        virtual:
+          type: boolean
+          title: Virtual
+          default: false
+        plugin:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plugin
+        params:
+          additionalProperties: true
+          type: object
+          title: Params
+          default: {}
+        fieldParams:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - items:
+                type: string
+              type: array
+          type: object
+          title: Fieldparams
+          default: {}
+        fields:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/Field'
+            type: object
+          - type: 'null'
+          title: Fields
+        hidden:
+          type: boolean
+          title: Hidden
+          default: false
+        flattenParams:
+          type: boolean
+          title: Flattenparams
+          default: false
+        allowMissingParams:
+          type: boolean
+          title: Allowmissingparams
+          default: false
+        cachePluginExpansion:
+          type: boolean
+          title: Cachepluginexpansion
+          default: true
+        searchable:
+          type: boolean
+          title: Searchable
+          default: true
+        skipRaw:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Skipraw
+          default: false
+        additionalProperties:
+          type: boolean
+          title: Additionalproperties
+          default: true
+      additionalProperties: false
+      type: object
+      title: Field
+    Scope:
+      type: string
+      enum:
+      - ADMIN
+      - WRITE
+      - READ
+      title: Scope
+    ResourceConfig:
+      properties:
+        resourceId:
+          type: string
+          title: Resourceid
+        resourceName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resourcename
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/Field'
+          type: object
+          title: Fields
+        plugins:
+          additionalProperties:
+            additionalProperties:
+              type: string
+            type: object
+          type: object
+          title: Plugins
+          default: {}
+        sort:
+          anyOf:
+          - type: string
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Sort
+        protected:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Protected
+          default: {}
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        additionalProperties:
+          type: boolean
+          title: Additionalproperties
+          default: true
+        configStr:
+          type: string
+          title: Configstr
+      additionalProperties: false
+      type: object
+      required:
+      - resourceId
+      - fields
+      - configStr
+      title: ResourceConfig
+    ResourcePublic:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        resourceId:
+          type: string
+          title: Resourceid
+        name:
+          type: string
+          title: Name
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        lastModified:
+          type: number
+          title: Lastmodified
+        isPublished:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ispublished
+        version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
+      type: object
+      required:
+      - id
+      - resourceId
+      - name
+      - config
+      - lastModified
+      title: ResourcePublic
+    ResourcePermissionDto:
+      properties:
+        resource_id:
+          type: string
+          title: Resource Id
+        protected:
+          anyOf:
+          - $ref: '#/components/schemas/Scope'
+          - type: 'null'
+      type: object
+      required:
+      - resource_id
+      - protected
+      title: ResourcePermissionDto
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    HTTPBearer:
+      type: http
+      scheme: bearer

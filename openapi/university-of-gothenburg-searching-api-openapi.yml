@@ -1,0 +1,363 @@
+openapi: 3.2.0
+info:
+  title: Karp Searching API
+  description: 'Karp is Språkbanken''s tool for editing structural data.
+
+
+    The
+
+    main goal of Karp is to be great for working with **lexical** data, but will work with
+
+    other data as well.
+
+
+    Read more here'
+  version: 7.0.0
+servers:
+- url: /karp/v7
+tags:
+- name: Searching
+  description: Searching is the main way to get data from Karp.
+paths:
+  /query/entries/{resource_id}/{entry_ids}:
+    get:
+      tags:
+      - Searching
+      summary: Get Entries By Id
+      description: Returns a list of entries matching the given ids
+      operationId: Get_entries_by_id_query_entries__resource_id___entry_ids__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The resource to perform operation on
+          title: Resource Id
+        description: The resource to perform operation on
+      - name: entry_ids
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^\w(,\w)*
+          description: Comma-separated. The ids to perform operation on.
+          title: Entry Ids
+        description: Comma-separated. The ids to perform operation on.
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntriesByIdResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-openapi-router-order: 3
+  /query/stats/{resources}:
+    get:
+      tags:
+      - Searching
+      summary: Get statistics for search
+      description: Same as `/query`, but without returning the hits.
+      operationId: query_stats_query_stats__resources__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resources
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-z_0-9\-]+(,[a-z_0-9\-]+)*$
+          description: A comma-separated list of resource identifiers
+          title: Resources
+        description: A comma-separated list of resource identifiers
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: query
+          description: "The query. If missing, the number of entries in the chosen resource(s) \n            will be returned. See [Query DSL](#section/Query-DSL)"
+        description: "The query. If missing, the number of entries in the chosen resource(s) \n            will be returned. See [Query DSL](#section/Query-DSL)"
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryStatsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-openapi-router-order: 2
+  /query/{resources}:
+    get:
+      tags:
+      - Searching
+      summary: Search
+      description: Returns a list of entries matching the given query in the given resources. The results are mixed from the given resources.
+      operationId: query_query__resources__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resources
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-z_0-9\-]+(,[a-z_0-9\-]+)*$
+          description: A comma-separated list of resource identifiers
+          title: Resources
+        description: A comma-separated list of resource identifiers
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: query
+          description: The query. If missing, all entries in chosen resource(s) will be returned. See [Searching](#section/Searching)
+        description: The query. If missing, all entries in chosen resource(s) will be returned. See [Searching](#section/Searching)
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Specify which entry should be the first returned.
+          default: 0
+          title: From
+        description: Specify which entry should be the first returned.
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Number of entries in page.
+          default: 25
+          title: Size
+        description: Number of entries in page.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The `field` to sort by. If missing, default order for each resource will be used.
+          title: Sort
+        description: The `field` to sort by. If missing, default order for each resource will be used.
+      - name: lexicon_stats
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Show the hit count per lexicon
+          default: true
+          title: Lexicon Stats
+        description: Show the hit count per lexicon
+      - name: path
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: "A dot-separataed path to for returning a specific field in JSON. \n        Only supports one path down into the tree with no indexing.\n        For example, to fetch only the field `baseform` in the entry, use: `?path=entry.baseform`\n        If the selected field is an array, the result will also be wrapped in an array."
+          title: Path
+        description: "A dot-separataed path to for returning a specific field in JSON. \n        Only supports one path down into the tree with no indexing.\n        For example, to fetch only the field `baseform` in the entry, use: `?path=entry.baseform`\n        If the selected field is an array, the result will also be wrapped in an array."
+      - name: highlight
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/HighlightParam'
+          description: "Adds which fields the query matched and a small hit context with `<em>` wrapped around the match.\n                        For compatibility reasons the values are true/new/false. true gives an older version of the highlight and\n                        new gives the future format, which includes indices for lists."
+          default: 'false'
+        description: "Adds which fields the query matched and a small hit context with `<em>` wrapped around the match.\n                        For compatibility reasons the values are true/new/false. true gives an older version of the highlight and\n                        new gives the future format, which includes indices for lists."
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      x-openapi-router-order: 1
+components:
+  schemas:
+    EntryDto:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        version:
+          type: integer
+          title: Version
+        lastModified:
+          type: number
+          title: Lastmodified
+        lastModifiedBy:
+          type: string
+          title: Lastmodifiedby
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        discarded:
+          type: boolean
+          title: Discarded
+        resource:
+          type: string
+          title: Resource
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - id
+      - version
+      - lastModified
+      - lastModifiedBy
+      - discarded
+      - resource
+      - entry
+      title: EntryDto
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HighlightParam:
+      type: string
+      enum:
+      - 'true'
+      - 'false'
+      - new
+      title: HighlightParam
+    QueryStatsResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        distribution:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Distribution
+      type: object
+      required:
+      - total
+      - distribution
+      title: QueryStatsResponse
+    EntriesByIdResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+      type: object
+      required:
+      - total
+      - hits
+      title: EntriesByIdResponse
+    QueryResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+        distribution:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Distribution
+      type: object
+      required:
+      - total
+      - hits
+      - distribution
+      title: QueryResponse
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    HTTPBearer:
+      type: http
+      scheme: bearer

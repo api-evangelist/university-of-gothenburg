@@ -1,0 +1,102 @@
+openapi: 3.2.0
+info:
+  title: University of Gothenburg — GUPEA 2.0 Interface OAI PMH API
+  version: '2.0'
+  description: OAI-PMH 2.0 metadata harvesting interface for GUPEA (Gothenburg University Publications Electronic Archive), the University of Gothenburg Library's institutional repository.
+  contact:
+    name: GUPEA repository administration, Gothenburg University Library
+    email: gup@ub.gu.se
+    url: https://gupea.ub.gu.se/
+  x-operator: institution
+  x-institution: University of Gothenburg
+  x-software: DSpace 8.3-SNAPSHOT OAI-PMH module
+  x-provenance:
+    generated: '2026-09-01'
+    method: derived
+    source: Live probes of https://gupea.ub.gu.se/server/oai/request with verb=Identify and verb=ListMetadataFormats on 2026-09-01; both returned HTTP 200 text/xml. Responses captured verbatim at examples/university-of-gothenburg-gupea-oai-identify-example.xml and examples/university-of-gothenburg-gupea-oai-metadata-formats-example.xml.
+servers:
+- url: https://gupea.ub.gu.se/server/oai
+  description: GUPEA OAI-PMH request endpoint
+tags:
+- name: oai pmh
+  description: Open Archives Initiative Protocol for Metadata Harvesting 2.0
+paths:
+  /request:
+    get:
+      tags:
+      - oai pmh
+      operationId: oaiRequest
+      summary: Issue an OAI-PMH 2.0 request
+      description: 'All six OAI-PMH verbs are issued against this one path, selected by the `verb` query parameter. Verified: `Identify` (200, repositoryName GUPEA) and `ListMetadataFormats` (200, fourteen formats). No authentication is required.'
+      parameters:
+      - name: verb
+        in: query
+        required: true
+        description: The OAI-PMH verb.
+        schema:
+          type: string
+          enum:
+          - Identify
+          - ListMetadataFormats
+          - ListSets
+          - ListIdentifiers
+          - ListRecords
+          - GetRecord
+      - name: metadataPrefix
+        in: query
+        required: false
+        description: Metadata format. Fourteen prefixes were advertised by this repository on 2026-09-01; see vocabulary/university-of-gothenburg-oai-metadata-formats-vocabulary.yml.
+        schema:
+          type: string
+          enum:
+          - oai_dc
+          - didl
+          - mods
+          - ore
+          - mets
+          - xoai
+          - dim
+          - rioxx
+          - uketd_dc
+          - qdc
+          - rdf
+          - marc
+          - etdms
+          - uppsok
+      - name: identifier
+        in: query
+        required: false
+        description: Record identifier, e.g. oai:gupea.ub.gu.se:2077/1234 (sampleIdentifier from Identify).
+        schema:
+          type: string
+      - name: set
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        description: Granularity YYYY-MM-DDThh:mm:ssZ, as declared by Identify.
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: resumptionToken
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An OAI-PMH XML envelope. Protocol errors are also returned with HTTP 200 and an <error> element carrying an OAI-PMH error code — see errors/university-of-gothenburg-errors.yml.
+          content:
+            text/xml:
+              schema:
+                type: string
+                description: OAI-PMH 2.0 XML envelope.

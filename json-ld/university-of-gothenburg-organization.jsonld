@@ -1,0 +1,49 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "CollegeOrUniversity",
+  "@id": "https://ror.org/01tm6cn81",
+  "name": "University of Gothenburg",
+  "alternateName": ["Göteborgs universitet", "Goeteborgs Universitet", "Göteborgin yliopisto"],
+  "url": "https://www.gu.se/en",
+  "foundingDate": "1891",
+  "address": { "@type": "PostalAddress", "addressLocality": "Gothenburg", "addressCountry": "SE" },
+  "identifier": [
+    { "@type": "PropertyValue", "propertyID": "ROR", "value": "https://ror.org/01tm6cn81" },
+    { "@type": "PropertyValue", "propertyID": "Crossref member", "value": "36737" },
+    { "@type": "PropertyValue", "propertyID": "Crossref member", "value": "51378" },
+    { "@type": "PropertyValue", "propertyID": "DataCite client", "value": "snd.sprkb" },
+    { "@type": "PropertyValue", "propertyID": "SAML entityID", "value": "https://idp3.it.gu.se/idp/shibboleth" }
+  ],
+  "sameAs": [
+    "https://ror.org/01tm6cn81",
+    "https://www.linkedin.com/school/university-of-gothenburg/",
+    "https://en.wikipedia.org/wiki/University_of_Gothenburg"
+  ],
+  "subOrganization": [
+    {
+      "@type": "ResearchOrganization",
+      "name": "Språkbanken Text",
+      "url": "https://spraakbanken.gu.se/en",
+      "description": "The Swedish Language Bank's text division, at the Department of Swedish, Multilingualism, Language Technology. Operates the six public APIs recorded in this profile.",
+      "email": "sb-info@svenska.gu.se"
+    },
+    {
+      "@type": "Library",
+      "name": "Gothenburg University Library",
+      "url": "https://gupea.ub.gu.se/",
+      "description": "Operates GUPEA, the institutional repository, on DSpace 8.3.",
+      "email": "gup@ub.gu.se"
+    },
+    {
+      "@type": "ResearchOrganization",
+      "name": "The Quality of Government Institute",
+      "url": "https://www.gu.se/en/quality-government"
+    }
+  ],
+  "x-provenance": {
+    "generated": "2026-09-01",
+    "method": "derived",
+    "source": "Assembled from verified registry lookups on 2026-09-01: api.ror.org (ROR 01tm6cn81), api.crossref.org/members?query=gothenburg (members 36737, 51378), api.datacite.org/clients/snd.sprkb, and the SWAMID MDQ SAML metadata for idp3.it.gu.se. Every identifier above resolved with HTTP 200 in this run. Nothing is asserted that was not resolved.",
+    "x-operator": "institution"
+  }
+}

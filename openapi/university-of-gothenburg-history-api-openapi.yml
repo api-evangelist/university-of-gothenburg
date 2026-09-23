@@ -1,0 +1,466 @@
+openapi: 3.2.0
+info:
+  title: Karp History API
+  description: 'Karp is Språkbanken''s tool for editing structural data.
+
+
+    The
+
+    main goal of Karp is to be great for working with **lexical** data, but will work with
+
+    other data as well.
+
+
+    Read more here'
+  version: 7.0.0
+servers:
+- url: /karp/v7
+tags:
+- name: History
+paths:
+  /entries/{resource_id}/{entry_id}/{version}:
+    get:
+      tags:
+      - History
+      summary: Get entry history
+      operationId: get_history_for_entry_entries__resource_id___entry_id___version__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      - name: version
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryDto'
+        '403':
+          description: User does not have write access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /entries/{resource_id}/{entry_id}:
+    get:
+      tags:
+      - History
+      summary: Get entry
+      operationId: get_history_for_entry_entries__resource_id___entry_id__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      - name: version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryDto'
+        '403':
+          description: User does not have write access to resource
+        '404':
+          description: Resource do not exist
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /history/diff/{resource_id}/{entry_id}:
+    post:
+      tags:
+      - History
+      summary: Get Diff
+      operationId: get_diff_history_diff__resource_id___entry_id__post
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+          title: Entry Id
+      - name: from_version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: From Version
+      - name: to_version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: To Version
+      - name: from_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: From Date
+      - name: to_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: To Date
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - type: object
+                additionalProperties: true
+              - type: 'null'
+              title: Entry
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryDiffDto'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /history/{resource_id}:
+    get:
+      tags:
+      - History
+      summary: Get History
+      operationId: get_history_history__resource_id__get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      - name: entry_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - examples:
+            - 01BJQMF54D093DXEAWZ6JYRPAQ
+          - type: 'null'
+          title: Entry Id
+      - name: from_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: From Date
+      - name: to_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: To Date
+      - name: to_version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: To Version
+      - name: from_version
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: From Version
+      - name: current_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+          title: Current Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
+          title: Page Size
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHistoryDto'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    EntryDto:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        version:
+          type: integer
+          title: Version
+        lastModified:
+          type: number
+          title: Lastmodified
+        lastModifiedBy:
+          type: string
+          title: Lastmodifiedby
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        discarded:
+          type: boolean
+          title: Discarded
+        resource:
+          type: string
+          title: Resource
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - id
+      - version
+      - lastModified
+      - lastModifiedBy
+      - discarded
+      - resource
+      - entry
+      title: EntryDto
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryDiffDto:
+      properties:
+        diff:
+          title: Diff
+        fromVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Fromversion
+        toVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Toversion
+      type: object
+      required:
+      - diff
+      - fromVersion
+      - toVersion
+      title: EntryDiffDto
+    GetHistoryDto:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/HistoryDto'
+          type: array
+          title: History
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - history
+      - total
+      title: GetHistoryDto
+    HistoryDto:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        timestamp:
+          type: number
+          title: Timestamp
+        message:
+          type: string
+          title: Message
+        version:
+          type: integer
+          title: Version
+        op:
+          $ref: '#/components/schemas/EntryOp'
+        userId:
+          type: string
+          title: Userid
+        diff:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Diff
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - id
+      - timestamp
+      - message
+      - version
+      - op
+      - userId
+      - diff
+      - entry
+      title: HistoryDto
+    EntryOp:
+      type: string
+      enum:
+      - ADDED
+      - DELETED
+      - UPDATED
+      title: EntryOp
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    HTTPBearer:
+      type: http
+      scheme: bearer

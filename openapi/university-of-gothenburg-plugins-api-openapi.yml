@@ -1,0 +1,377 @@
+openapi: 3.2.0
+info:
+  title: Karp Plugins API
+  description: 'Karp is Språkbanken''s tool for editing structural data.
+
+
+    The
+
+    main goal of Karp is to be great for working with **lexical** data, but will work with
+
+    other data as well.
+
+
+    Read more here'
+  version: 7.0.0
+servers:
+- url: /karp/v7
+tags:
+- name: Plugins
+  description: API calls here are not part of Karp's basic functionality and may be tailored for a specific resource.
+paths:
+  /inflectionrules/inflection/generate_inflection_table:
+    get:
+      tags:
+      - Plugins
+      summary: Generate inflection table
+      description: Given a lemma and an inflection class, generate an inflection table.
+      operationId: generate_inflection_table_inflectionrules_inflection_generate_inflection_table_get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: lemma
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Lemma
+      - name: inflection_class
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inflection Class
+      - name: wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wordforms
+      - name: exclude_wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Wordforms
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                title: Response Generate Inflection Table Inflectionrules Inflection Generate Inflection Table Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /inflectionrules_saol15/inflection/generate_inflection_table:
+    get:
+      tags:
+      - Plugins
+      summary: Generate inflection table
+      description: Given a lemma and an inflection class, generate an inflection table.
+      operationId: generate_inflection_table_inflectionrules_saol15_inflection_generate_inflection_table_get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: lemma
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Lemma
+      - name: inflection_class
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inflection Class
+      - name: wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wordforms
+      - name: exclude_wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Wordforms
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                title: Response Generate Inflection Table Inflectionrules Saol15 Inflection Generate Inflection Table Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /inflectionrules_saol15_20251202/inflection/generate_inflection_table:
+    get:
+      tags:
+      - Plugins
+      summary: Generate inflection table
+      description: Given a lemma and an inflection class, generate an inflection table.
+      operationId: generate_inflection_table_inflectionrules_saol15_20251202_inflection_generate_inflection_table_get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: lemma
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Lemma
+      - name: inflection_class
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inflection Class
+      - name: wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wordforms
+      - name: exclude_wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Wordforms
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                title: Response Generate Inflection Table Inflectionrules Saol15 20251202 Inflection Generate Inflection Table Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /inflectionrules_so-frys_20260122/inflection/generate_inflection_table:
+    get:
+      tags:
+      - Plugins
+      summary: Generate inflection table
+      description: Given a lemma and an inflection class, generate an inflection table.
+      operationId: generate_inflection_table_inflectionrules_so_frys_20260122_inflection_generate_inflection_table_get
+      security:
+      - APIKeyQuery: []
+      parameters:
+      - name: lemma
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Lemma
+      - name: inflection_class
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inflection Class
+      - name: wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wordforms
+      - name: exclude_wordforms
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Wordforms
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                title: Response Generate Inflection Table Inflectionrules So Frys 20260122 Inflection Generate Inflection Table Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /salex/salex_spellcheck/spellcheck:
+    get:
+      tags:
+      - Plugins
+      summary: Spellcheck
+      description: Check which of the given words are not found in Salex. Looks in inflection tables and fields called 'ortografi'.
+      operationId: spellcheck_salex_salex_spellcheck_spellcheck_get
+      security:
+      - HTTPBearer: []
+      - APIKeyQuery: []
+      parameters:
+      - name: words
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Words to be spellchecked. Should not contain whitespace or punctuation.
+          title: Words
+        description: Words to be spellchecked. Should not contain whitespace or punctuation.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpellcheckResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SpellcheckResult:
+      properties:
+        notFound:
+          items:
+            type: string
+          type: array
+          title: Notfound
+          description: Those of the given words that were not found in Salex.
+      type: object
+      required:
+      - notFound
+      title: SpellcheckResult
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+    HTTPBearer:
+      type: http
+      scheme: bearer
