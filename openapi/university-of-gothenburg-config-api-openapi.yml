@@ -36,18 +36,92 @@ paths:
       - Config
 components:
   schemas:
-    EntryWord:
+    ConfigField:
       properties:
-        field:
+        name:
           type: string
-          title: Field
-        description:
-          $ref: '#/components/schemas/MultiLang'
+          title: Name
+          description: (Machine) name of the field. This name is used by resources to list the available fields.
+        type:
+          type: string
+          title: Type
+          description: Type of the field, can be text, integer or float or table.
+        collection:
+          type: boolean
+          title: Collection
+          description: If `true`, the field is a list of `type`.
+          default: false
+        label:
+          anyOf:
+          - $ref: '#/components/schemas/MultiLang'
+          - type: 'null'
+          description: Label for the field, can be in mulitple languages.
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/Field'
+          type: object
+          title: Fields
+          description: If type is table, then there can be sub-fields (that cannot be table).
+        categories:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Categories
+          description: If set, a list of possible values for this field.
+        categoryLabels:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/MultiLang'
+            type: object
+          - type: 'null'
+          title: Categorylabels
+          description: For fields with categories, labels for each value (optional, even if categories is given).
+        protectedMetadata:
+          type: boolean
+          title: Protectedmetadata
+          description: The field is only available for users with access
+          default: false
+      additionalProperties: false
       type: object
       required:
-      - field
-      - description
-      title: EntryWord
+      - name
+      - type
+      title: ConfigField
+    ConfigResponse:
+      properties:
+        resources:
+          items:
+            $ref: '#/components/schemas/ResourceConfig'
+          type: array
+          title: Resources
+          description: All resources available in this instance.
+        tags:
+          additionalProperties:
+            $ref: '#/components/schemas/Tag'
+          type: object
+          title: Tags
+          description: All tags available in this instance. Will be used by some of the resources under "resources".
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/ConfigField'
+          type: object
+          title: Fields
+          description: All fields available in this instance.
+      type: object
+      required:
+      - resources
+      - tags
+      - fields
+      title: ConfigResponse
+    MultiLang:
+      anyOf:
+      - type: string
+      - additionalProperties:
+          type: string
+        type: object
+      title: MultiLang
     ResourceField:
       properties:
         name:
@@ -63,6 +137,17 @@ components:
       - name
       - primary
       title: ResourceField
+    Tag:
+      properties:
+        label:
+          $ref: '#/components/schemas/MultiLang'
+        description:
+          $ref: '#/components/schemas/MultiLang'
+      type: object
+      required:
+      - label
+      - description
+      title: Tag
     Field:
       properties:
         name:
@@ -122,6 +207,18 @@ components:
       - name
       - type
       title: Field
+    EntryWord:
+      properties:
+        field:
+          type: string
+          title: Field
+        description:
+          $ref: '#/components/schemas/MultiLang'
+      type: object
+      required:
+      - field
+      - description
+      title: EntryWord
     ResourceConfig:
       properties:
         resourceId:
@@ -186,103 +283,6 @@ components:
       - size
       - link
       title: ResourceConfig
-    MultiLang:
-      anyOf:
-      - type: string
-      - additionalProperties:
-          type: string
-        type: object
-      title: MultiLang
-    ConfigResponse:
-      properties:
-        resources:
-          items:
-            $ref: '#/components/schemas/ResourceConfig'
-          type: array
-          title: Resources
-          description: All resources available in this instance.
-        tags:
-          additionalProperties:
-            $ref: '#/components/schemas/Tag'
-          type: object
-          title: Tags
-          description: All tags available in this instance. Will be used by some of the resources under "resources".
-        fields:
-          additionalProperties:
-            $ref: '#/components/schemas/ConfigField'
-          type: object
-          title: Fields
-          description: All fields available in this instance.
-      type: object
-      required:
-      - resources
-      - tags
-      - fields
-      title: ConfigResponse
-    Tag:
-      properties:
-        label:
-          $ref: '#/components/schemas/MultiLang'
-        description:
-          $ref: '#/components/schemas/MultiLang'
-      type: object
-      required:
-      - label
-      - description
-      title: Tag
-    ConfigField:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: (Machine) name of the field. This name is used by resources to list the available fields.
-        type:
-          type: string
-          title: Type
-          description: Type of the field, can be text, integer or float or table.
-        collection:
-          type: boolean
-          title: Collection
-          description: If `true`, the field is a list of `type`.
-          default: false
-        label:
-          anyOf:
-          - $ref: '#/components/schemas/MultiLang'
-          - type: 'null'
-          description: Label for the field, can be in mulitple languages.
-        fields:
-          additionalProperties:
-            $ref: '#/components/schemas/Field'
-          type: object
-          title: Fields
-          description: If type is table, then there can be sub-fields (that cannot be table).
-        categories:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Categories
-          description: If set, a list of possible values for this field.
-        categoryLabels:
-          anyOf:
-          - additionalProperties:
-              $ref: '#/components/schemas/MultiLang'
-            type: object
-          - type: 'null'
-          title: Categorylabels
-          description: For fields with categories, labels for each value (optional, even if categories is given).
-        protectedMetadata:
-          type: boolean
-          title: Protectedmetadata
-          description: The field is only available for users with access
-          default: false
-      additionalProperties: false
-      type: object
-      required:
-      - name
-      - type
-      title: ConfigField
   securitySchemes:
     HTTPBearer:
       type: http

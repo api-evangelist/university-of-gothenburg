@@ -556,27 +556,6 @@ paths:
     - url: https://ws.spraakbanken.gu.se/ws/korp/v8
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     StatisticsDto:
       properties:
         value:
@@ -601,42 +580,52 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     Time:
       type: number
       description: Execution time in seconds.
       example: 0.0125
   parameters:
-    DefaultWithin:
-      name: default_within
-      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
-      in: query
-      schema:
-        type: string
-        example: sentence
-    IgnoreCase:
-      name: ignore_case
-      description: Change all values of the given attribute(s) to lowercase.
+    Corpus:
+      name: corpus
+      description: Corpus name.
       in: query
       schema:
         type: array
         items:
           type: string
-      example:
-      - word
-      - pos
+        example:
+        - ROMI
+        - SUC3
       explode: false
-    TimeTo:
-      name: to
-      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `from`. On the format `YYYYMMDDhhmmss`.
+      required: true
+    CQPn:
+      name: cqp#
+      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
       in: query
       schema:
         type: string
-    TimeFrom:
-      name: from
-      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `to`. On the format `YYYYMMDDhhmmss`.
-      in: query
-      schema:
-        type: string
+        example: '[pos="NN"]'
     GroupByStruct:
       name: group_by_struct
       description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
@@ -649,6 +638,89 @@ components:
       example:
       - text_author
       - text_title
+    TimeTo:
+      name: to
+      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `from`. On the format `YYYYMMDDhhmmss`.
+      in: query
+      schema:
+        type: string
+    IgnoreCase:
+      name: ignore_case
+      description: Change all values of the given attribute(s) to lowercase.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      example:
+      - word
+      - pos
+      explode: false
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    ExpandPrequeries:
+      name: expand_prequeries
+      description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
+      in: query
+      schema:
+        type: boolean
+        default: true
+    DefaultWithin:
+      name: default_within
+      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
+      in: query
+      schema:
+        type: string
+        example: sentence
+    CQP:
+      name: cqp
+      description: CQP query.
+      in: query
+      schema:
+        type: string
+      required: true
+      example: '[word="flower"]'
+    Within:
+      name: within
+      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI:paragraph
+        - SUC3:text
+    SubCQPn:
+      name: subcqp#
+      description: 'Where # is a number. Sub-queries to the main query (or last **cqp#** query). Any number of numbered subcqp-parameters can be used. These will always be executed on just the actual matched tokens from the main query (i.e. no expansion), and the result for each subquery will be included as a separate object in the final JSON, in addition to the main query result.'
+      in: query
+      schema:
+        type: string
+    GroupBy:
+      name: group_by
+      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - pos
+      - baseform
+    TimeFrom:
+      name: from
+      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `to`. On the format `YYYYMMDDhhmmss`.
+      in: query
+      schema:
+        type: string
     Granularity:
       name: granularity
       description: 'Time resolution. Available options are:
@@ -677,78 +749,6 @@ components:
         - n
         - s
         default: y
-    ExpandPrequeries:
-      name: expand_prequeries
-      description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
-      in: query
-      schema:
-        type: boolean
-        default: true
-    Corpus:
-      name: corpus
-      description: Corpus name.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI
-        - SUC3
-      explode: false
-      required: true
-    IncrementalProgress:
-      name: incremental
-      description: Incrementally return progress updates when the calculation for each corpus is finished.
-      in: query
-      schema:
-        type: boolean
-        default: false
-    Within:
-      name: within
-      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI:paragraph
-        - SUC3:text
-    CQPn:
-      name: cqp#
-      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
-      in: query
-      schema:
-        type: string
-        example: '[pos="NN"]'
-    CQP:
-      name: cqp
-      description: CQP query.
-      in: query
-      schema:
-        type: string
-      required: true
-      example: '[word="flower"]'
-    GroupBy:
-      name: group_by
-      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: false
-      example:
-      - pos
-      - baseform
-    SubCQPn:
-      name: subcqp#
-      description: 'Where # is a number. Sub-queries to the main query (or last **cqp#** query). Any number of numbered subcqp-parameters can be used. These will always be executed on just the actual matched tokens from the main query (i.e. no expansion), and the result for each subquery will be included as a separate object in the final JSON, in addition to the main query result.'
-      in: query
-      schema:
-        type: string
   securitySchemes:
     APIKeyQuery:
       type: apiKey

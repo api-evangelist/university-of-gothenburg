@@ -162,34 +162,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
-    AuthenticationError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Authentication failed.
-    Cleanup:
-      type: object
-      properties:
-        removed-builds:
-          example:
-          - d91d063efb5a8439643147c7367e3a4ddad5ec63
-          - a1b1de8f3508c5928352dbfc538025231a336801-f
-          items:
-            type: array
-            format: string
     CleanupOne:
       type: object
       properties:
@@ -205,6 +177,34 @@ components:
         message:
           type: string
           example: No hashes to be removed.
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
+    Cleanup:
+      type: object
+      properties:
+        removed-builds:
+          example:
+          - d91d063efb5a8439643147c7367e3a4ddad5ec63
+          - a1b1de8f3508c5928352dbfc538025231a336801-f
+          items:
+            type: array
+            format: string
   parameters:
     HashParam:
       name: hash

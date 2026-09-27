@@ -225,7 +225,7 @@ apis:
   humanURL: https://medarbetarportalen.gu.se/
   tags:
   - Tenants
-  - Microsoft-365
+  - Microsoft 365
   - Entra ID
   - SharePoint
   - Authentication
@@ -235,6 +235,7 @@ apis:
   - Entra ID
   - SharePoint
   - Authentication
+  - Microsoft-365
   properties:
   - type: Authentication
     url: authentication/university-of-gothenburg-authentication.yml
@@ -1099,8 +1100,8 @@ apis:
 - aid: university-of-gothenburg:university-of-gothenburg-oai-pmh-api
   name: University of Gothenburg OAI PMH API
   description: Open Archives Initiative Protocol for Metadata Harvesting 2.0
-  humanURL: https://ws.spraakbanken.gu.se/docs/korp
-  baseURL: https://ws.spraakbanken.gu.se/ws/korp/v8
+  humanURL: https://gupea.ub.gu.se/
+  baseURL: https://gupea.ub.gu.se/server/oai/request
   tags:
   - OAI-PMH
   properties:

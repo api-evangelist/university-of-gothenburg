@@ -260,18 +260,6 @@ paths:
       description: Development server
 components:
   parameters:
-    GroupByStruct:
-      name: group_by_struct
-      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: false
-      example:
-      - text_author
-      - text_title
     Corpus:
       name: corpus
       description: Corpus name.
@@ -285,9 +273,9 @@ components:
         - SUC3
       explode: false
       required: true
-    GroupBy:
-      name: group_by
-      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
+    GroupByStruct:
+      name: group_by_struct
+      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
       in: query
       schema:
         type: array
@@ -295,8 +283,8 @@ components:
           type: string
       explode: false
       example:
-      - pos
-      - baseform
+      - text_author
+      - text_title
     IncrementalProgress:
       name: incremental
       description: Incrementally return progress updates when the calculation for each corpus is finished.
@@ -316,6 +304,18 @@ components:
       - word
       - pos
       explode: false
+    GroupBy:
+      name: group_by
+      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - pos
+      - baseform
   schemas:
     Time:
       type: number
@@ -342,6 +342,15 @@ components:
       - available
       title: IdAvailabilityResponse
       description: Response model for resource ID availability check.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -363,15 +372,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     basicAuth:
       type: http

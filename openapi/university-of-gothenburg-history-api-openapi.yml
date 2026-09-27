@@ -301,6 +301,79 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HistoryDto:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        timestamp:
+          type: number
+          title: Timestamp
+        message:
+          type: string
+          title: Message
+        version:
+          type: integer
+          title: Version
+        op:
+          $ref: '#/components/schemas/EntryOp'
+        userId:
+          type: string
+          title: Userid
+        diff:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Diff
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - id
+      - timestamp
+      - message
+      - version
+      - op
+      - userId
+      - diff
+      - entry
+      title: HistoryDto
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryOp:
+      type: string
+      enum:
+      - ADDED
+      - DELETED
+      - UPDATED
+      title: EntryOp
+    GetHistoryDto:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/HistoryDto'
+          type: array
+          title: History
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - history
+      - total
+      title: GetHistoryDto
     EntryDto:
       properties:
         id:
@@ -363,15 +436,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     EntryDiffDto:
       properties:
         diff:
@@ -392,70 +456,6 @@ components:
       - fromVersion
       - toVersion
       title: EntryDiffDto
-    GetHistoryDto:
-      properties:
-        history:
-          items:
-            $ref: '#/components/schemas/HistoryDto'
-          type: array
-          title: History
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - history
-      - total
-      title: GetHistoryDto
-    HistoryDto:
-      properties:
-        id:
-          type: string
-          title: Id
-          examples:
-          - 01BJQMF54D093DXEAWZ6JYRPAQ
-        timestamp:
-          type: number
-          title: Timestamp
-        message:
-          type: string
-          title: Message
-        version:
-          type: integer
-          title: Version
-        op:
-          $ref: '#/components/schemas/EntryOp'
-        userId:
-          type: string
-          title: Userid
-        diff:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Diff
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-      type: object
-      required:
-      - id
-      - timestamp
-      - message
-      - version
-      - op
-      - userId
-      - diff
-      - entry
-      title: HistoryDto
-    EntryOp:
-      type: string
-      enum:
-      - ADDED
-      - DELETED
-      - UPDATED
-      title: EntryOp
   securitySchemes:
     APIKeyQuery:
       type: apiKey

@@ -138,6 +138,35 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    RenewCacheResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: ID of the cache renewal task
+          examples:
+          - c09e5583-dd05-4949-9734-e02b60fad42a
+        message:
+          type: string
+          title: Message
+          description: Message indicating the status of the cache renewal request
+          examples:
+          - Cache renewal triggered in background.
+      type: object
+      required:
+      - task_id
+      - message
+      title: RenewCacheResponse
+      description: Response model for cache renewal requests.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -159,32 +188,3 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RenewCacheResponse:
-      properties:
-        task_id:
-          type: string
-          title: Task Id
-          description: ID of the cache renewal task
-          examples:
-          - c09e5583-dd05-4949-9734-e02b60fad42a
-        message:
-          type: string
-          title: Message
-          description: Message indicating the status of the cache renewal request
-          examples:
-          - Cache renewal triggered in background.
-      type: object
-      required:
-      - task_id
-      - message
-      title: RenewCacheResponse
-      description: Response model for cache renewal requests.

@@ -218,6 +218,32 @@ paths:
       x-openapi-router-order: 1
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntriesByIdResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+      type: object
+      required:
+      - total
+      - hits
+      title: EntriesByIdResponse
     EntryDto:
       properties:
         id:
@@ -280,54 +306,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    HighlightParam:
-      type: string
-      enum:
-      - 'true'
-      - 'false'
-      - new
-      title: HighlightParam
-    QueryStatsResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        distribution:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Distribution
-      type: object
-      required:
-      - total
-      - distribution
-      title: QueryStatsResponse
-    EntriesByIdResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        hits:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/EntryDto'
-            - {}
-          type: array
-          title: Hits
-      type: object
-      required:
-      - total
-      - hits
-      title: EntriesByIdResponse
     QueryResponse:
       properties:
         total:
@@ -353,6 +331,28 @@ components:
       - hits
       - distribution
       title: QueryResponse
+    HighlightParam:
+      type: string
+      enum:
+      - 'true'
+      - 'false'
+      - new
+      title: HighlightParam
+    QueryStatsResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        distribution:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Distribution
+      type: object
+      required:
+      - total
+      - distribution
+      title: QueryStatsResponse
   securitySchemes:
     APIKeyQuery:
       type: apiKey

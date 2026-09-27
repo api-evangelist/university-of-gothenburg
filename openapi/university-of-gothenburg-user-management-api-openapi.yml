@@ -416,6 +416,228 @@ paths:
           description: Internal Server Error
 components:
   schemas:
+    ErrorResponse404Resource:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 resource not found error responses.
+      examples:
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
+        status: error
+    DetailedUserModel:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: User ID
+          default: ''
+        name:
+          type: string
+          title: Name
+          description: Name of the user
+          default: ''
+        email:
+          type: string
+          title: Email
+          description: Email address of the user
+          default: ''
+        idp:
+          type: string
+          title: Idp
+          description: Identity provider of the user
+          default: ''
+        sub:
+          type: string
+          title: Sub
+          description: Subject identifier from the identity provider
+          default: ''
+        ui_language:
+          type: string
+          title: Ui Language
+          description: Preferred UI language of the user
+          default: swe
+        admin_mode:
+          type: boolean
+          title: Admin Mode
+          description: Whether the user is currently in admin mode
+          default: false
+        is_admin:
+          type: boolean
+          title: Is Admin
+          description: Whether the user has admin privileges
+          default: false
+        organization_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Prefix
+          description: Organization prefix associated with the user
+      type: object
+      description: Detailed model for the user object in the /user/info/get response.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+    ErrorResponse400:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 400 error responses.
+      examples:
+      - message: No resource ID provided
+        return_code: missing_resource_id
+        status: error
     ValidationError:
       properties:
         loc:
@@ -441,6 +663,39 @@ components:
       - loc
       - msg
       - type
+    BaseResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Base response model with common fields.
     ErrorResponse401:
       properties:
         status:
@@ -493,121 +748,6 @@ components:
       - message: Mink admin status could not be confirmed
         return_code: not_admin
         status: error
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-    BaseResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Base response model with common fields.
-    ErrorResponse400:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 400 error responses.
-      examples:
-      - message: No resource ID provided
-        return_code: missing_resource_id
-        status: error
-    ErrorResponse404Resource:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 404 resource not found error responses.
-      examples:
-      - message: Resource does not exist or you do not have access to it
-        return_code: resource_not_found
-        status: error
     UserInfoResponse:
       properties:
         status:
@@ -657,146 +797,6 @@ components:
           name: Anna Andersson
           sub: abc123
           ui_language: swe
-    ErrorResponse500:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 500 error responses.
-      examples:
-      - message: Internal server error
-        return_code: internal_server_error
-        status: error
-      - message: API key check failed
-        return_code: apikey_check_failed
-        status: error
-      - info: Signature verification failed
-        message: API key authentication failed
-        return_code: apikey_error
-        status: error
-    DetailedUserModel:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: User ID
-          default: ''
-        name:
-          type: string
-          title: Name
-          description: Name of the user
-          default: ''
-        email:
-          type: string
-          title: Email
-          description: Email address of the user
-          default: ''
-        idp:
-          type: string
-          title: Idp
-          description: Identity provider of the user
-          default: ''
-        sub:
-          type: string
-          title: Sub
-          description: Subject identifier from the identity provider
-          default: ''
-        ui_language:
-          type: string
-          title: Ui Language
-          description: Preferred UI language of the user
-          default: swe
-        admin_mode:
-          type: boolean
-          title: Admin Mode
-          description: Whether the user is currently in admin mode
-          default: false
-        is_admin:
-          type: boolean
-          title: Is Admin
-          description: Whether the user has admin privileges
-          default: false
-        organization_prefix:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Organization Prefix
-          description: Organization prefix associated with the user
-      type: object
-      description: Detailed model for the user object in the /user/info/get response.
-    ErrorResponse422:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the error
-          default: Validation Error
-        return_code:
-          type: string
-          title: Return Code
-          description: Short code describing the error
-          default: validation_error
-        info:
-          type: string
-          title: Info
-          description: More detailed information about the response
-          default: Could not process the request due to errors in the input (see errors for details).
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        errors:
-          items:
-            type: string
-          type: array
-          title: Errors
-      type: object
-      required:
-      - errors
-      description: Model for 422 error responses.
-      examples:
-      - errors:
-        - 'query: q (Field required)'
-        info: Could not process the request due to errors in the input (see errors for details).
-        message: Validation Error
-        return_code: validation_error
-        status: error
   securitySchemes:
     OAuth2PasswordBearer:
       type: http

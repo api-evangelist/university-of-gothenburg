@@ -206,115 +206,7 @@ paths:
       operationId: getQuerySample
       x-operation-id-source: derived
 components:
-  parameters:
-    DefaultWithin:
-      name: default_within
-      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
-      in: query
-      schema:
-        type: string
-        example: sentence
-    Show:
-      name: show
-      description: Positional attributes to show. 'word' will always be included.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - pos
-        - baseform
-        default:
-        - word
-    Incremental:
-      name: incremental
-      description: Return results incrementally when set to 'true' and more than one corpus is specified.
-      in: query
-      schema:
-        type: boolean
-        default: false
-    ShowStruct:
-      name: show_struct
-      description: Structural attributes to show.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - text_author
-        - text_title
-    Start:
-      name: start
-      description: First result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 0
-        example: 0
-    ExpandPrequeries:
-      name: expand_prequeries
-      description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
-      in: query
-      schema:
-        type: boolean
-        default: true
-    End:
-      name: end
-      description: Last result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 9
-        example: 9
-    Corpus:
-      name: corpus
-      description: Corpus name.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI
-        - SUC3
-      explode: false
-      required: true
-    Within:
-      name: within
-      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI:paragraph
-        - SUC3:text
-    CQPn:
-      name: cqp#
-      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
-      in: query
-      schema:
-        type: string
-        example: '[pos="NN"]'
-    CQP:
-      name: cqp
-      description: CQP query.
-      in: query
-      schema:
-        type: string
-      required: true
-      example: '[word="flower"]'
   schemas:
-    Time:
-      type: number
-      description: Execution time in seconds.
-      example: 0.0125
     Match:
       type: object
       properties:
@@ -330,6 +222,114 @@ components:
           type: integer
           description: Global corpus position of the match.
           example: 73648
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+  parameters:
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    CQPn:
+      name: cqp#
+      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
+      in: query
+      schema:
+        type: string
+        example: '[pos="NN"]'
+    Incremental:
+      name: incremental
+      description: Return results incrementally when set to 'true' and more than one corpus is specified.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    Show:
+      name: show
+      description: Positional attributes to show. 'word' will always be included.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - pos
+        - baseform
+        default:
+        - word
+    ExpandPrequeries:
+      name: expand_prequeries
+      description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
+      in: query
+      schema:
+        type: boolean
+        default: true
+    CQP:
+      name: cqp
+      description: CQP query.
+      in: query
+      schema:
+        type: string
+      required: true
+      example: '[word="flower"]'
+    Start:
+      name: start
+      description: First result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 0
+        example: 0
+    Within:
+      name: within
+      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI:paragraph
+        - SUC3:text
+    End:
+      name: end
+      description: Last result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 9
+        example: 9
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
+    DefaultWithin:
+      name: default_within
+      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
+      in: query
+      schema:
+        type: string
+        example: sentence
   securitySchemes:
     basicAuth:
       type: http

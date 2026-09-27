@@ -89,15 +89,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
     StatusSchema:
       type: object
       properties:
@@ -120,15 +111,6 @@ components:
               status:
                 type: string
                 example: Done
-    AuthenticationError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Authentication failed.
     PingSchema:
       type: object
       properties:
@@ -138,6 +120,24 @@ components:
         time:
           type: integer
           example: 0.0081
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

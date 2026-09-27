@@ -112,69 +112,28 @@ paths:
       operationId: getDownload
       x-operation-id-source: derived
 components:
-  schemas:
-    FileSchema:
-      type: object
-      properties:
-        build:
-          type: object
-          properties:
-            hash:
-              type: string
-              example: a1b1de8f3508c5928352dbfc538025231a336801-f
-            type:
-              type: string
-              example: files
-        result:
-          type: object
-          properties:
-            link:
-              type: string
-              example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=a1b1de8f3508c5928352dbfc538025231a336801-f
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
-    SettingsSchema:
-      type: object
-      example:
-        corpus: exempelkorpus
-        lang: sv
-        textmode: plain
-        word_segmenter: default_tokenizer
-        sentence_segmentation:
-          sentence_chunk: paragraph
-          sentence_segmenter: default_tokenizer
-        paragraph_segmentation:
-          paragraph_segmenter: blanklines
-        positional_attributes:
-          lexical_attributes:
-          - pos
-          - msd
-          - lemma
-          - lex
-          - sense
-          compound_attributes:
-          - complemgram
-          - compwf
-          dependency_attributes:
-          - ref
-          - dephead
-          - deprel
-          sentiment:
-          - sentiment
-        named_entity_recognition: []
-        text_attributes:
-          readability_metrics:
-          - lix
-          - ovix
-          - nk
   parameters:
+    SettingsParam:
+      name: settings
+      in: query
+      required: false
+      description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
+      schema:
+        $ref: '#/components/schemas/SettingsSchema'
+    IncrementalParam:
+      name: incremental
+      in: query
+      required: false
+      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
+
+        Note: Incremental information can only be displayed if your query is run for the first time.
+
+        The progress information is not available for older builds.
+
+        '
+      schema:
+        type: boolean
+        default: false
     HashParam:
       name: hash
       in: query
@@ -217,13 +176,6 @@ components:
         - en
         - sv
         - 'no'
-    SettingsParam:
-      name: settings
-      in: query
-      required: false
-      description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
-      schema:
-        $ref: '#/components/schemas/SettingsSchema'
     ModeParam:
       name: mode
       in: query
@@ -236,20 +188,68 @@ components:
         - plain
         - xml
         - file
-    IncrementalParam:
-      name: incremental
-      in: query
-      required: false
-      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
-
-        Note: Incremental information can only be displayed if your query is run for the first time.
-
-        The progress information is not available for older builds.
-
-        '
-      schema:
-        type: boolean
-        default: false
+  schemas:
+    SettingsSchema:
+      type: object
+      example:
+        corpus: exempelkorpus
+        lang: sv
+        textmode: plain
+        word_segmenter: default_tokenizer
+        sentence_segmentation:
+          sentence_chunk: paragraph
+          sentence_segmenter: default_tokenizer
+        paragraph_segmentation:
+          paragraph_segmenter: blanklines
+        positional_attributes:
+          lexical_attributes:
+          - pos
+          - msd
+          - lemma
+          - lex
+          - sense
+          compound_attributes:
+          - complemgram
+          - compwf
+          dependency_attributes:
+          - ref
+          - dephead
+          - deprel
+          sentiment:
+          - sentiment
+        named_entity_recognition: []
+        text_attributes:
+          readability_metrics:
+          - lix
+          - ovix
+          - nk
+    FileSchema:
+      type: object
+      properties:
+        build:
+          type: object
+          properties:
+            hash:
+              type: string
+              example: a1b1de8f3508c5928352dbfc538025231a336801-f
+            type:
+              type: string
+              example: files
+        result:
+          type: object
+          properties:
+            link:
+              type: string
+              example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=a1b1de8f3508c5928352dbfc538025231a336801-f
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

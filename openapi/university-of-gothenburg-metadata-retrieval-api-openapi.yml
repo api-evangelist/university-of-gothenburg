@@ -249,27 +249,28 @@ paths:
       deprecated: true
 components:
   schemas:
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BibtexResponse:
+      properties:
+        bibtex:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Bibtex
+          description: BibTeX citation as text
+          examples:
+          - "@misc{attasidor,\n  doi = {10.23695/f6ds-f045},\n  url = {https://spraakbanken.gu.se/resurser/attasidor},\n            \n  author = {Språkbanken Text},\n  keywords = {Language Technology (Computational Linguistics)},\n            \n  language = {swe},\n  title = {8 Sidor},\n  publisher = {Språkbanken Text},\n  year = {2024}\n}"
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - bibtex
+      title: BibtexResponse
+      description: Response model for BibTeX entries.
     AllResouresList:
       properties:
         corpus:
@@ -311,15 +312,86 @@ components:
       - utility
       title: AllResouresList
       description: List of all metadata resources, grouped by resource type.
-    HTTPValidationError:
+    ResourceList:
       properties:
-        detail:
+        resource_type:
+          type: string
+          title: Resource Type
+          description: Type of the resources
+          examples:
+          - corpus
+          - lexicon
+          - model
+          - analysis
+          - utility
+        hits:
+          type: integer
+          title: Hits
+          description: Number of resources in the list
+          examples:
+          - 42
+        resources:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Resource'
           type: array
-          title: Detail
+          title: Resources
       type: object
-      title: HTTPValidationError
+      required:
+      - resource_type
+      - hits
+      - resources
+      title: ResourceList
+      description: List of metadata resources.
+    ResourceTypes:
+      type: string
+      enum:
+      - corpus
+      - lexicon
+      - model
+      - analysis
+      - utility
+      - collection
+      title: ResourceTypes
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CollectionsList:
+      properties:
+        hits:
+          type: integer
+          title: Hits
+          description: Number of collections in the list
+          examples:
+          - 5
+        resources:
+          items:
+            $ref: '#/components/schemas/Resource'
+          type: array
+          title: Resources
+      type: object
+      required:
+      - hits
+      - resources
+      title: CollectionsList
+      description: List of resource collections.
     Resource:
       properties:
         id:
@@ -367,75 +439,3 @@ components:
       - type
       title: Resource
       description: Metadata resource; keep permissive.
-    ResourceList:
-      properties:
-        resource_type:
-          type: string
-          title: Resource Type
-          description: Type of the resources
-          examples:
-          - corpus
-          - lexicon
-          - model
-          - analysis
-          - utility
-        hits:
-          type: integer
-          title: Hits
-          description: Number of resources in the list
-          examples:
-          - 42
-        resources:
-          items:
-            $ref: '#/components/schemas/Resource'
-          type: array
-          title: Resources
-      type: object
-      required:
-      - resource_type
-      - hits
-      - resources
-      title: ResourceList
-      description: List of metadata resources.
-    CollectionsList:
-      properties:
-        hits:
-          type: integer
-          title: Hits
-          description: Number of collections in the list
-          examples:
-          - 5
-        resources:
-          items:
-            $ref: '#/components/schemas/Resource'
-          type: array
-          title: Resources
-      type: object
-      required:
-      - hits
-      - resources
-      title: CollectionsList
-      description: List of resource collections.
-    BibtexResponse:
-      properties:
-        bibtex:
-          type: string
-          title: Bibtex
-          description: BibTeX citation as text
-          examples:
-          - "@misc{attasidor,\n  doi = {10.23695/f6ds-f045},\n  url = {https://spraakbanken.gu.se/resurser/attasidor},\n            \n  author = {Språkbanken Text},\n  keywords = {Language Technology (Computational Linguistics)},\n            \n  language = {swe},\n  title = {8 Sidor},\n  publisher = {Språkbanken Text},\n  year = {2024}\n}"
-      type: object
-      required:
-      - bibtex
-      title: BibtexResponse
-      description: Response model for BibTeX entries.
-    ResourceTypes:
-      type: string
-      enum:
-      - corpus
-      - lexicon
-      - model
-      - analysis
-      - utility
-      - collection
-      title: ResourceTypes
