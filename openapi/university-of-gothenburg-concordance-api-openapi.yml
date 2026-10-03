@@ -206,54 +206,15 @@ paths:
       operationId: getQuerySample
       x-operation-id-source: derived
 components:
-  schemas:
-    Match:
-      type: object
-      properties:
-        start:
-          type: integer
-          description: Start position of the match within the context.
-          example: 5
-        end:
-          type: integer
-          description: End position of the match within the context.
-          example: 6
-        position:
-          type: integer
-          description: Global corpus position of the match.
-          example: 73648
-    Time:
-      type: number
-      description: Execution time in seconds.
-      example: 0.0125
   parameters:
-    Corpus:
-      name: corpus
-      description: Corpus name.
+    Start:
+      name: start
+      description: First result to return; used for pagination.
       in: query
       schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI
-        - SUC3
-      explode: false
-      required: true
-    CQPn:
-      name: cqp#
-      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
-      in: query
-      schema:
-        type: string
-        example: '[pos="NN"]'
-    Incremental:
-      name: incremental
-      description: Return results incrementally when set to 'true' and more than one corpus is specified.
-      in: query
-      schema:
-        type: boolean
-        default: false
+        type: integer
+        default: 0
+        example: 0
     Show:
       name: show
       description: Positional attributes to show. 'word' will always be included.
@@ -268,6 +229,32 @@ components:
         - baseform
         default:
         - word
+    CQPn:
+      name: cqp#
+      description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
+      in: query
+      schema:
+        type: string
+        example: '[pos="NN"]'
+    Incremental:
+      name: incremental
+      description: Return results incrementally when set to 'true' and more than one corpus is specified.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
     ExpandPrequeries:
       name: expand_prequeries
       description: When using multiple CQP queries (`cqp#`), this determines whether subsequent queries should be executed on the containing sentences (or any other structural attribute defined by `within`) from the previous query, or just the actual matched tokens. Enabled by default.
@@ -283,14 +270,26 @@ components:
         type: string
       required: true
       example: '[word="flower"]'
-    Start:
-      name: start
-      description: First result to return; used for pagination.
+    Corpus:
+      name: corpus
+      description: Corpus name.
       in: query
       schema:
-        type: integer
-        default: 0
-        example: 0
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    DefaultWithin:
+      name: default_within
+      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
+      in: query
+      schema:
+        type: string
+        example: sentence
     Within:
       name: within
       description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
@@ -311,25 +310,26 @@ components:
         type: integer
         default: 9
         example: 9
-    ShowStruct:
-      name: show_struct
-      description: Structural attributes to show.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - text_author
-        - text_title
-    DefaultWithin:
-      name: default_within
-      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
-      in: query
-      schema:
-        type: string
-        example: sentence
+  schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
+    Match:
+      type: object
+      properties:
+        start:
+          type: integer
+          description: Start position of the match within the context.
+          example: 5
+        end:
+          type: integer
+          description: End position of the match within the context.
+          example: 6
+        position:
+          type: integer
+          description: Global corpus position of the match.
+          example: 73648
   securitySchemes:
     basicAuth:
       type: http

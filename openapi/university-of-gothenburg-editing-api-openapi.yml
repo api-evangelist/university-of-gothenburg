@@ -309,16 +309,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    EntryPreviewResponse:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-      type: object
-      required:
-      - entry
-      title: EntryPreviewResponse
     EntryPreview:
       properties:
         entry:
@@ -340,6 +330,34 @@ components:
       required:
       - newID
       title: EntryAddResponse
+    EntryPreviewResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - entry
+      title: EntryPreviewResponse
+    EntryUpdate:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        message:
+          type: string
+          title: Message
+        version:
+          type: integer
+          title: Version
+      type: object
+      required:
+      - entry
+      - message
+      - version
+      title: EntryUpdate
     ValidationError:
       properties:
         loc:
@@ -361,24 +379,6 @@ components:
       - msg
       - type
       title: ValidationError
-    EntryUpdate:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-        message:
-          type: string
-          title: Message
-        version:
-          type: integer
-          title: Version
-      type: object
-      required:
-      - entry
-      - message
-      - version
-      title: EntryUpdate
     EntryAdd:
       properties:
         entry:

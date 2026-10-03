@@ -383,127 +383,54 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    ErrorResponse404Resource:
+    HTTPValidationError:
       properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 404 resource not found error responses.
-      examples:
-      - message: Resource does not exist or you do not have access to it
-        return_code: resource_not_found
-        status: error
-    StatusesResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        resources:
+        detail:
           items:
-            $ref: '#/components/schemas/JobStatusModel'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Resources
-          description: List of resource objects containing information about the corpus
-          default: []
+          title: Detail
       type: object
-      description: Model for multiple job statuses responses.
+    FileModel:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the file
+          default: ''
+        type:
+          type: string
+          title: Type
+          description: MIME type of the file
+          default: ''
+        last_modified:
+          type: string
+          title: Last Modified
+          description: Last modified date of the file
+          default: ''
+        size:
+          type: integer
+          title: Size
+          description: Size of the file in bytes
+          default: 0
+        path:
+          type: string
+          title: Path
+          description: Path to the file in the storage system
+          default: ''
+      type: object
+      description: Model for file list.
       examples:
-      - status: success
-        message: Listing contents
-        return_code: listing_content
-        info: Listing resource infos
-        resources:
-        - job_status: done
-          info: Job was completed successfully
-          resource:
-            id: mink-vajfgwcqdw
-            public_id: mink-vajfgwcqdw
-            name:
-              swe: Mitt testlexikon
-              eng: My test lexicon
-            custom_config: true
-            source_files:
-            - name: test_lexicon_data2.jsonl
-              type: unknown
-              last_modified: '2026-04-22T12:50:37+02:00'
-              size: 62
-              path: test_lexicon_data2.jsonl
-            sources_deleted: '2026-04-22T12:50:37+02:00'
-          job:
-            status:
-              karp_pipeline: waiting
-              karps: none
-            current_process: karp_pipeline
-            pid: null
-            installed_karps: false
-            priority: 1
-            warnings: ''
-            errors: ''
-            output: 'Running mink-vajfgwcqdw
-
-              Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl
-
-              Using entry schema: {"baseform":{"type":"text","name":"baseform","collection":false,"fields":{},"extra":{"length":4},"categories":[]}}
-
-              Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl'
-            queued: '2026-06-02T10:25:14+02:00'
-            started: ''
-            ended: ''
-            duration: 0
-            progress: 0%
+      - last_modified: '2022-06-10T17:05:18+02:00'
+        name: dokument1.xml
+        path: dokument1.xml
+        size: 1397
+        type: application/xml
+      - last_modified: '2022-06-10T17:05:16+02:00'
+        name: dokument2.xml
+        path: dokument2.xml
+        size: 116
+        type: application/xml
     QueueHealthResponse:
       properties:
         status:
@@ -658,66 +585,142 @@ components:
         warning_threshold_seconds: 3600
         warnings:
         - Oldest running job has been active for 7260 seconds
-    HTTPValidationError:
+    StatusesResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-    QueueHealthJobModel:
-      properties:
-        resource_id:
+        status:
           type: string
-          title: Resource Id
-          description: Mink resource ID
-          default: ''
-        resource_type:
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
           type: string
-          title: Resource Type
-          description: Resource type
+          title: Message
+          description: Short message describing the response
           default: ''
-        current_process:
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
           anyOf:
           - type: string
           - type: 'null'
-          title: Current Process
-          description: Current queue process
-        job_status:
-          type: string
-          title: Job Status
-          description: Current status for the queue process
-          default: none
-        priority:
+          title: Info
+          description: More detailed information about the response
+        warnings:
           anyOf:
-          - type: integer
-          - type: string
-          title: Priority
-          description: Queue priority
-          default: ''
-        queued:
-          type: string
-          title: Queued
-          description: Timestamp of when the job was queued
-          default: ''
-        started:
-          type: string
-          title: Started
-          description: Timestamp of when the current process started
-          default: ''
-        age_reference:
-          type: string
-          title: Age Reference
-          description: Whether age_seconds is measured from queued or started
-          default: queued
-        age_seconds:
-          type: integer
-          title: Age Seconds
-          description: Seconds since the age_reference timestamp
-          default: 0
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resources:
+          items:
+            $ref: '#/components/schemas/JobStatusModel'
+          type: array
+          title: Resources
+          description: List of resource objects containing information about the corpus
+          default: []
       type: object
-      description: Model for one active queue entry.
+      description: Model for multiple job statuses responses.
+      examples:
+      - status: success
+        message: Listing contents
+        return_code: listing_content
+        info: Listing resource infos
+        resources:
+        - job_status: done
+          info: Job was completed successfully
+          resource:
+            id: mink-vajfgwcqdw
+            public_id: mink-vajfgwcqdw
+            name:
+              swe: Mitt testlexikon
+              eng: My test lexicon
+            custom_config: true
+            source_files:
+            - name: test_lexicon_data2.jsonl
+              type: unknown
+              last_modified: '2026-04-22T12:50:37+02:00'
+              size: 62
+              path: test_lexicon_data2.jsonl
+            sources_deleted: '2026-04-22T12:50:37+02:00'
+          job:
+            status:
+              karp_pipeline: waiting
+              karps: none
+            current_process: karp_pipeline
+            pid: null
+            installed_karps: false
+            priority: 1
+            warnings: ''
+            errors: ''
+            output: 'Running mink-vajfgwcqdw
+
+              Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl
+
+              Using entry schema: {"baseform":{"type":"text","name":"baseform","collection":false,"fields":{},"extra":{"length":4},"categories":[]}}
+
+              Reading source files: /data/sbdata01/mink-dev-data/lexicon/v/mink-vajfgwcqdw/source/test_lexicon_data2.jsonl'
+            queued: '2026-06-02T10:25:14+02:00'
+            started: ''
+            ended: ''
+            duration: 0
+            progress: 0%
+    ErrorResponse401:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 401 error responses.
+      examples:
+      - message: Failed to authenticate
+        return_code: failed_authenticating
+        status: error
+      - message: The provided JWT has expired
+        return_code: jwt_expired
+        status: error
+      - message: API key not recognized
+        return_code: apikey_not_found
+        status: error
+      - message: API key expired
+        return_code: apikey_expired
+        status: error
+      - message: No login credentials provided
+        return_code: missing_login_credentials
+        status: error
+      - message: Mink admin status could not be confirmed
+        return_code: not_admin
+        status: error
     StatusResponse:
       properties:
         job_status:
@@ -818,70 +821,13 @@ components:
           ended: ''
           duration: 0
           progress: 0%
-    ResourceModel:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Mink resource ID
-          default: ''
-        public_id:
-          type: string
-          title: Public Id
-          description: Public resource ID
-          default: ''
-        name:
-          additionalProperties:
-            type: string
-          type: object
-          title: Name
-          description: Name of the resource in different languages
-          default: {}
-        type:
-          type: string
-          title: Type
-          description: Type of the resource (e.g., 'corpus', 'metadata')
-          default: ''
-        custom_config:
-          type: boolean
-          title: Custom Config
-          description: Whether the current resource config was uploaded as a custom config
-          default: false
-        source_files:
-          items:
-            $ref: '#/components/schemas/FileModel'
-          type: array
-          title: Source Files
-          description: List of source files associated with the resource
-          default: []
-      type: object
-      description: Model for the resource object.
-      examples:
-      - custom_config: false
-        id: mink-dxh6e6wtff
-        name:
-          eng: ''
-          swe: Min testkorpus
-        public_id: mink-dxh6e6wtff
-        source_files:
-        - last_modified: '2022-06-10T17:05:18+02:00'
-          name: dokument1.xml
-          path: dokument1.xml
-          size: 1397
-          type: application/xml
-        - last_modified: '2022-06-10T17:05:16+02:00'
-          name: dokument2.xml
-          path: dokument2.xml
-          size: 116
-          type: application/xml
-        type: corpus
-    ErrorResponse500:
+    mink__core__models__ListResourcesResponse:
       properties:
         status:
           type: string
           title: Status
           description: Response status, usually 'success' or 'error'
-          default: error
+          default: success
         message:
           type: string
           title: Message
@@ -897,50 +843,7 @@ components:
           - type: string
           - type: 'null'
           title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 500 error responses.
-      examples:
-      - message: Internal server error
-        return_code: internal_server_error
-        status: error
-      - message: API key check failed
-        return_code: apikey_check_failed
-        status: error
-      - info: Signature verification failed
-        message: API key authentication failed
-        return_code: apikey_error
-        status: error
-    ErrorResponse422:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the error
-          default: Validation Error
-        return_code:
-          type: string
-          title: Return Code
-          description: Short code describing the error
-          default: validation_error
-        info:
-          type: string
-          title: Info
           description: More detailed information about the response
-          default: Could not process the request due to errors in the input (see errors for details).
         warnings:
           anyOf:
           - items:
@@ -949,62 +852,24 @@ components:
           - type: 'null'
           title: Warnings
           description: List of warnings, if any
-        errors:
+        resources:
           items:
             type: string
           type: array
-          title: Errors
+          title: Resources
+          description: List of resource IDs
+          default: []
       type: object
-      required:
-      - errors
-      description: Model for 422 error responses.
+      description: Model for responses listing resource IDs.
       examples:
-      - errors:
-        - 'query: q (Field required)'
-        info: Could not process the request due to errors in the input (see errors for details).
-        message: Validation Error
-        return_code: validation_error
-        status: error
-    FileModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the file
-          default: ''
-        type:
-          type: string
-          title: Type
-          description: MIME type of the file
-          default: ''
-        last_modified:
-          type: string
-          title: Last Modified
-          description: Last modified date of the file
-          default: ''
-        size:
-          type: integer
-          title: Size
-          description: Size of the file in bytes
-          default: 0
-        path:
-          type: string
-          title: Path
-          description: Path to the file in the storage system
-          default: ''
-      type: object
-      description: Model for file list.
-      examples:
-      - last_modified: '2022-06-10T17:05:18+02:00'
-        name: dokument1.xml
-        path: dokument1.xml
-        size: 1397
-        type: application/xml
-      - last_modified: '2022-06-10T17:05:16+02:00'
-        name: dokument2.xml
-        path: dokument2.xml
-        size: 116
-        type: application/xml
+      - info: Listing available resources
+        message: Listing contents
+        resources:
+        - mink-dxh6e6wtff
+        - mink-j86tfreaf9
+        - mink-3qbh7tra6g
+        return_code: listing_content
+        status: success
     JobModel:
       properties:
         status:
@@ -1091,13 +956,13 @@ components:
         ended: ''
         duration: 0
         progress: 0%
-    ErrorResponse400:
+    BaseResponse:
       properties:
         status:
           type: string
           title: Status
           description: Response status, usually 'success' or 'error'
-          default: error
+          default: success
         message:
           type: string
           title: Message
@@ -1113,7 +978,7 @@ components:
           - type: string
           - type: 'null'
           title: Info
-          description: Additional information about the error
+          description: More detailed information about the response
         warnings:
           anyOf:
           - items:
@@ -1123,11 +988,44 @@ components:
           title: Warnings
           description: List of warnings, if any
       type: object
-      description: Model for 400 error responses.
+      description: Base response model with common fields.
+    UserModel:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: User ID
+          default: ''
+        name:
+          type: string
+          title: Name
+          description: Name of the user
+          default: ''
+        email:
+          type: string
+          title: Email
+          description: Email address of the user
+          default: ''
+        idp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idp
+          description: Identity provider of the user
+        sub:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sub
+          description: Subject identifier from the identity provider
+      type: object
+      description: Model for the user object.
       examples:
-      - message: No resource ID provided
-        return_code: missing_resource_id
-        status: error
+      - email: anna.andersson@example.com
+        id: example-idp-abc123
+        idp: example-idp
+        name: Anna Andersson
+        sub: abc123
     JobStatusModel:
       properties:
         job_status:
@@ -1206,92 +1104,63 @@ components:
           ended: ''
           duration: 0
           progress: 0%
-    UserModel:
+    ResourceModel:
       properties:
         id:
           type: string
           title: Id
-          description: User ID
+          description: Mink resource ID
+          default: ''
+        public_id:
+          type: string
+          title: Public Id
+          description: Public resource ID
           default: ''
         name:
-          type: string
-          title: Name
-          description: Name of the user
-          default: ''
-        email:
-          type: string
-          title: Email
-          description: Email address of the user
-          default: ''
-        idp:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Idp
-          description: Identity provider of the user
-        sub:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sub
-          description: Subject identifier from the identity provider
-      type: object
-      description: Model for the user object.
-      examples:
-      - email: anna.andersson@example.com
-        id: example-idp-abc123
-        idp: example-idp
-        name: Anna Andersson
-        sub: abc123
-    mink__core__models__ListResourcesResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        resources:
-          items:
+          additionalProperties:
             type: string
+          type: object
+          title: Name
+          description: Name of the resource in different languages
+          default: {}
+        type:
+          type: string
+          title: Type
+          description: Type of the resource (e.g., 'corpus', 'metadata')
+          default: ''
+        custom_config:
+          type: boolean
+          title: Custom Config
+          description: Whether the current resource config was uploaded as a custom config
+          default: false
+        source_files:
+          items:
+            $ref: '#/components/schemas/FileModel'
           type: array
-          title: Resources
-          description: List of resource IDs
+          title: Source Files
+          description: List of source files associated with the resource
           default: []
       type: object
-      description: Model for responses listing resource IDs.
+      description: Model for the resource object.
       examples:
-      - info: Listing available resources
-        message: Listing contents
-        resources:
-        - mink-dxh6e6wtff
-        - mink-j86tfreaf9
-        - mink-3qbh7tra6g
-        return_code: listing_content
-        status: success
+      - custom_config: false
+        id: mink-dxh6e6wtff
+        name:
+          eng: ''
+          swe: Min testkorpus
+        public_id: mink-dxh6e6wtff
+        source_files:
+        - last_modified: '2022-06-10T17:05:18+02:00'
+          name: dokument1.xml
+          path: dokument1.xml
+          size: 1397
+          type: application/xml
+        - last_modified: '2022-06-10T17:05:16+02:00'
+          name: dokument2.xml
+          path: dokument2.xml
+          size: 116
+          type: application/xml
+        type: corpus
     ValidationError:
       properties:
         loc:
@@ -1317,29 +1186,28 @@ components:
       - loc
       - msg
       - type
-    BaseResponse:
+    ErrorResponse422:
       properties:
         status:
           type: string
           title: Status
           description: Response status, usually 'success' or 'error'
-          default: success
+          default: error
         message:
           type: string
           title: Message
-          description: Short message describing the response
-          default: ''
+          description: Short message describing the error
+          default: Validation Error
         return_code:
           type: string
           title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
+          description: Short code describing the error
+          default: validation_error
         info:
-          anyOf:
-          - type: string
-          - type: 'null'
+          type: string
           title: Info
           description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
         warnings:
           anyOf:
           - items:
@@ -1348,9 +1216,23 @@ components:
           - type: 'null'
           title: Warnings
           description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
       type: object
-      description: Base response model with common fields.
-    ErrorResponse401:
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
+    ErrorResponse404Resource:
       properties:
         status:
           type: string
@@ -1382,25 +1264,143 @@ components:
           title: Warnings
           description: List of warnings, if any
       type: object
-      description: Model for 401 error responses.
+      description: Model for 404 resource not found error responses.
       examples:
-      - message: Failed to authenticate
-        return_code: failed_authenticating
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
         status: error
-      - message: The provided JWT has expired
-        return_code: jwt_expired
+    QueueHealthJobModel:
+      properties:
+        resource_id:
+          type: string
+          title: Resource Id
+          description: Mink resource ID
+          default: ''
+        resource_type:
+          type: string
+          title: Resource Type
+          description: Resource type
+          default: ''
+        current_process:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Process
+          description: Current queue process
+        job_status:
+          type: string
+          title: Job Status
+          description: Current status for the queue process
+          default: none
+        priority:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Priority
+          description: Queue priority
+          default: ''
+        queued:
+          type: string
+          title: Queued
+          description: Timestamp of when the job was queued
+          default: ''
+        started:
+          type: string
+          title: Started
+          description: Timestamp of when the current process started
+          default: ''
+        age_reference:
+          type: string
+          title: Age Reference
+          description: Whether age_seconds is measured from queued or started
+          default: queued
+        age_seconds:
+          type: integer
+          title: Age Seconds
+          description: Seconds since the age_reference timestamp
+          default: 0
+      type: object
+      description: Model for one active queue entry.
+    ErrorResponse400:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 400 error responses.
+      examples:
+      - message: No resource ID provided
+        return_code: missing_resource_id
         status: error
-      - message: API key not recognized
-        return_code: apikey_not_found
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
         status: error
-      - message: API key expired
-        return_code: apikey_expired
+      - message: API key check failed
+        return_code: apikey_check_failed
         status: error
-      - message: No login credentials provided
-        return_code: missing_login_credentials
-        status: error
-      - message: Mink admin status could not be confirmed
-        return_code: not_admin
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
         status: error
   securitySchemes:
     OAuth2PasswordBearer:

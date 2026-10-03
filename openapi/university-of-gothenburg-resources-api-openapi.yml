@@ -94,6 +94,20 @@ components:
       - WRITE
       - READ
       title: Scope
+    ResourcePermissionDto:
+      properties:
+        resource_id:
+          type: string
+          title: Resource Id
+        protected:
+          anyOf:
+          - $ref: '#/components/schemas/Scope'
+          - type: 'null'
+      type: object
+      required:
+      - resource_id
+      - protected
+      title: ResourcePermissionDto
     ResourceProtected:
       properties:
         id:
@@ -139,6 +153,47 @@ components:
       - lastModified
       - lastModifiedBy
       title: ResourceProtected
+    ResourcePublic:
+      properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        resourceId:
+          type: string
+          title: Resourceid
+        name:
+          type: string
+          title: Name
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        lastModified:
+          type: number
+          title: Lastmodified
+        isPublished:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ispublished
+        version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
+      type: object
+      required:
+      - id
+      - resourceId
+      - name
+      - config
+      - lastModified
+      title: ResourcePublic
     Field:
       properties:
         type:
@@ -222,82 +277,6 @@ components:
       additionalProperties: false
       type: object
       title: Field
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ResourcePermissionDto:
-      properties:
-        resource_id:
-          type: string
-          title: Resource Id
-        protected:
-          anyOf:
-          - $ref: '#/components/schemas/Scope'
-          - type: 'null'
-      type: object
-      required:
-      - resource_id
-      - protected
-      title: ResourcePermissionDto
-    ResourcePublic:
-      properties:
-        id:
-          type: string
-          title: Id
-          examples:
-          - 01BJQMF54D093DXEAWZ6JYRPAQ
-        resourceId:
-          type: string
-          title: Resourceid
-        name:
-          type: string
-          title: Name
-        config:
-          $ref: '#/components/schemas/ResourceConfig'
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        lastModified:
-          type: number
-          title: Lastmodified
-        isPublished:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Ispublished
-        version:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Version
-      type: object
-      required:
-      - id
-      - resourceId
-      - name
-      - config
-      - lastModified
-      title: ResourcePublic
     ResourceConfig:
       properties:
         resourceId:
@@ -354,6 +333,27 @@ components:
       - fields
       - configStr
       title: ResourceConfig
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     APIKeyQuery:
       type: apiKey

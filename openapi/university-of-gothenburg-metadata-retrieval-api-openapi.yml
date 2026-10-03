@@ -258,19 +258,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    BibtexResponse:
-      properties:
-        bibtex:
-          type: string
-          title: Bibtex
-          description: BibTeX citation as text
-          examples:
-          - "@misc{attasidor,\n  doi = {10.23695/f6ds-f045},\n  url = {https://spraakbanken.gu.se/resurser/attasidor},\n            \n  author = {Språkbanken Text},\n  keywords = {Language Technology (Computational Linguistics)},\n            \n  language = {swe},\n  title = {8 Sidor},\n  publisher = {Språkbanken Text},\n  year = {2024}\n}"
-      type: object
-      required:
-      - bibtex
-      title: BibtexResponse
-      description: Response model for BibTeX entries.
     AllResouresList:
       properties:
         corpus:
@@ -312,6 +299,85 @@ components:
       - utility
       title: AllResouresList
       description: List of all metadata resources, grouped by resource type.
+    CollectionsList:
+      properties:
+        hits:
+          type: integer
+          title: Hits
+          description: Number of collections in the list
+          examples:
+          - 5
+        resources:
+          items:
+            $ref: '#/components/schemas/Resource'
+          type: array
+          title: Resources
+      type: object
+      required:
+      - hits
+      - resources
+      title: CollectionsList
+      description: List of resource collections.
+    BibtexResponse:
+      properties:
+        bibtex:
+          type: string
+          title: Bibtex
+          description: BibTeX citation as text
+          examples:
+          - "@misc{attasidor,\n  doi = {10.23695/f6ds-f045},\n  url = {https://spraakbanken.gu.se/resurser/attasidor},\n            \n  author = {Språkbanken Text},\n  keywords = {Language Technology (Computational Linguistics)},\n            \n  language = {swe},\n  title = {8 Sidor},\n  publisher = {Språkbanken Text},\n  year = {2024}\n}"
+      type: object
+      required:
+      - bibtex
+      title: BibtexResponse
+      description: Response model for BibTeX entries.
+    Resource:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique identifier for the resource
+          examples:
+          - attasidor
+        type:
+          type: string
+          title: Type
+          description: Type of the resource
+          examples:
+          - corpus
+          - lexicon
+          - model
+          - analysis
+          - utility
+        name:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Name
+          description: Name of the resource in multiple languages
+          examples:
+          - en: 8 SIDOR
+            sv: 8 SIDOR
+        short_description:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Short Description
+          description: Short description of the resource in multiple languages
+          examples:
+          - en: News articles from 8 SIDOR.
+            sv: Nyhetsartiklar från 8 SIDOR.
+      additionalProperties: true
+      type: object
+      required:
+      - id
+      - type
+      title: Resource
+      description: Metadata resource; keep permissive.
     ResourceList:
       properties:
         resource_type:
@@ -373,69 +439,3 @@ components:
       - msg
       - type
       title: ValidationError
-    CollectionsList:
-      properties:
-        hits:
-          type: integer
-          title: Hits
-          description: Number of collections in the list
-          examples:
-          - 5
-        resources:
-          items:
-            $ref: '#/components/schemas/Resource'
-          type: array
-          title: Resources
-      type: object
-      required:
-      - hits
-      - resources
-      title: CollectionsList
-      description: List of resource collections.
-    Resource:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Unique identifier for the resource
-          examples:
-          - attasidor
-        type:
-          type: string
-          title: Type
-          description: Type of the resource
-          examples:
-          - corpus
-          - lexicon
-          - model
-          - analysis
-          - utility
-        name:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Name
-          description: Name of the resource in multiple languages
-          examples:
-          - en: 8 SIDOR
-            sv: 8 SIDOR
-        short_description:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Short Description
-          description: Short description of the resource in multiple languages
-          examples:
-          - en: News articles from 8 SIDOR.
-            sv: Nyhetsartiklar från 8 SIDOR.
-      additionalProperties: true
-      type: object
-      required:
-      - id
-      - type
-      title: Resource
-      description: Metadata resource; keep permissive.

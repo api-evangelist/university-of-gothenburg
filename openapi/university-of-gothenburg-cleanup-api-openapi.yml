@@ -171,21 +171,6 @@ components:
           items:
             type: array
             format: string
-    NoCleanup:
-      type: object
-      properties:
-        message:
-          type: string
-          example: No hashes to be removed.
-    AuthenticationError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Authentication failed.
     GeneralError:
       type: object
       properties:
@@ -195,6 +180,12 @@ components:
             message:
               type: string
               example: Some error message
+    NoCleanup:
+      type: object
+      properties:
+        message:
+          type: string
+          example: No hashes to be removed.
     Cleanup:
       type: object
       properties:
@@ -205,6 +196,15 @@ components:
           items:
             type: array
             format: string
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
   parameters:
     HashParam:
       name: hash

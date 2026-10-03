@@ -301,6 +301,42 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryDiffDto:
+      properties:
+        diff:
+          title: Diff
+        fromVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Fromversion
+        toVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Toversion
+      type: object
+      required:
+      - diff
+      - fromVersion
+      - toVersion
+      title: EntryDiffDto
+    EntryOp:
+      type: string
+      enum:
+      - ADDED
+      - DELETED
+      - UPDATED
+      title: EntryOp
     HistoryDto:
       properties:
         id:
@@ -343,37 +379,6 @@ components:
       - diff
       - entry
       title: HistoryDto
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EntryOp:
-      type: string
-      enum:
-      - ADDED
-      - DELETED
-      - UPDATED
-      title: EntryOp
-    GetHistoryDto:
-      properties:
-        history:
-          items:
-            $ref: '#/components/schemas/HistoryDto'
-          type: array
-          title: History
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - history
-      - total
-      title: GetHistoryDto
     EntryDto:
       properties:
         id:
@@ -415,6 +420,21 @@ components:
       - resource
       - entry
       title: EntryDto
+    GetHistoryDto:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/HistoryDto'
+          type: array
+          title: History
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - history
+      - total
+      title: GetHistoryDto
     ValidationError:
       properties:
         loc:
@@ -436,26 +456,6 @@ components:
       - msg
       - type
       title: ValidationError
-    EntryDiffDto:
-      properties:
-        diff:
-          title: Diff
-        fromVersion:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Fromversion
-        toVersion:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Toversion
-      type: object
-      required:
-      - diff
-      - fromVersion
-      - toVersion
-      title: EntryDiffDto
   securitySchemes:
     APIKeyQuery:
       type: apiKey

@@ -340,130 +340,6 @@ paths:
       description: Development server
 components:
   schemas:
-    LanguagesResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        languages:
-          items:
-            type: string
-          type: array
-          title: Languages
-          description: List of supported languages (language names and ISO codes)
-          default: []
-      type: object
-      description: Model for the /corpus/sparv/list-languages response.
-      examples:
-      - info: Listing languages available in Sparv
-        languages:
-        - code: eng
-          name: English
-        - code: fin
-          name: Finnish
-        - code: swe
-          name: Swedish
-        message: Listing contents
-        return_code: listing_content
-        status: success
-    ExportsResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        exports:
-          items:
-            type: string
-          type: array
-          title: Exports
-          description: List of available export formats
-          default: []
-        language:
-          type: string
-          title: Language
-          description: ISO code of the language chosen for the export listing
-          default: swe
-      type: object
-      description: Model for the /corpus/sparv/list-exports response.
-      examples:
-      - exports:
-        - description: CoNLL-U (SBX version) export
-          export: conll_export:conllu
-          export_files:
-          - conll_export/{file}.conllu
-        - description: CSV export
-          export: csv_export:csv
-          export_files:
-          - csv_export/{file}.csv
-        - description: Corpus word frequency list
-          export: stats_export:freq_list
-          export_files:
-          - stats_export.frequency_list/stats_standard-swe.csv
-        - description: XML export with one token element per line
-          export: xml_export:pretty
-          export_files:
-          - xml_export.pretty/{file}_export.xml
-        - description: Scrambled XML export
-          export: xml_export:scrambled
-          export_files:
-          - xml_export.scrambled/{file}_export.xml
-        info: Listing exports available in Sparv
-        language: swe
-        message: Listing contents
-        return_code: listing_content
-        status: success
     HTTPValidationError:
       properties:
         detail:
@@ -472,124 +348,6 @@ components:
           type: array
           title: Detail
       type: object
-    InfoDataModel_NameDescriptionValue_:
-      properties:
-        info:
-          type: string
-          title: Info
-          description: Description of the data
-          default: ''
-        data:
-          items:
-            $ref: '#/components/schemas/NameDescriptionValue'
-          type: array
-          title: Data
-          description: List of data items
-      type: object
-    StatusCodeModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the status code
-          default: ''
-        description:
-          type: string
-          title: Description
-          description: Description of the status code
-          default: ''
-      type: object
-      description: Status codes for job processes.
-    ErrorResponse422:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the error
-          default: Validation Error
-        return_code:
-          type: string
-          title: Return Code
-          description: Short code describing the error
-          default: validation_error
-        info:
-          type: string
-          title: Info
-          description: More detailed information about the response
-          default: Could not process the request due to errors in the input (see errors for details).
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        errors:
-          items:
-            type: string
-          type: array
-          title: Errors
-      type: object
-      required:
-      - errors
-      description: Model for 422 error responses.
-      examples:
-      - errors:
-        - 'query: q (Field required)'
-        info: Could not process the request due to errors in the input (see errors for details).
-        message: Validation Error
-        return_code: validation_error
-        status: error
-    ErrorResponse500:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 500 error responses.
-      examples:
-      - message: Internal server error
-        return_code: internal_server_error
-        status: error
-      - message: API key check failed
-        return_code: apikey_check_failed
-        status: error
-      - info: Signature verification failed
-        message: API key authentication failed
-        return_code: apikey_error
-        status: error
     ReturnCodesResponse:
       properties:
         status:
@@ -653,25 +411,48 @@ components:
         message: Listing contents
         return_code: listing_content
         status: success
-    NameDescriptionValue:
+    InfoDataModel_StatusCodeModel_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
+        data:
+          items:
+            $ref: '#/components/schemas/StatusCodeModel'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
+    StatusCodeModel:
       properties:
         name:
           type: string
           title: Name
-          description: Name of the value
+          description: Name of the status code
           default: ''
         description:
           type: string
           title: Description
-          description: Description of the value
+          description: Description of the status code
           default: ''
-        value:
-          type: integer
-          title: Value
       type: object
-      required:
-      - value
-      description: Model containing name, description, and value.
+      description: Status codes for job processes.
+    InfoDataModel_NameDescriptionValue_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
+        data:
+          items:
+            $ref: '#/components/schemas/NameDescriptionValue'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
     InfoResponse:
       properties:
         status:
@@ -757,6 +538,220 @@ components:
           - description: Process was aborted by the user
             name: aborted
           info: job status codes
+    ExportsResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        exports:
+          items:
+            type: string
+          type: array
+          title: Exports
+          description: List of available export formats
+          default: []
+        language:
+          type: string
+          title: Language
+          description: ISO code of the language chosen for the export listing
+          default: swe
+      type: object
+      description: Model for the /corpus/sparv/list-exports response.
+      examples:
+      - exports:
+        - description: CoNLL-U (SBX version) export
+          export: conll_export:conllu
+          export_files:
+          - conll_export/{file}.conllu
+        - description: CSV export
+          export: csv_export:csv
+          export_files:
+          - csv_export/{file}.csv
+        - description: Corpus word frequency list
+          export: stats_export:freq_list
+          export_files:
+          - stats_export.frequency_list/stats_standard-swe.csv
+        - description: XML export with one token element per line
+          export: xml_export:pretty
+          export_files:
+          - xml_export.pretty/{file}_export.xml
+        - description: Scrambled XML export
+          export: xml_export:scrambled
+          export_files:
+          - xml_export.scrambled/{file}_export.xml
+        info: Listing exports available in Sparv
+        language: swe
+        message: Listing contents
+        return_code: listing_content
+        status: success
+    LanguagesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        languages:
+          items:
+            type: string
+          type: array
+          title: Languages
+          description: List of supported languages (language names and ISO codes)
+          default: []
+      type: object
+      description: Model for the /corpus/sparv/list-languages response.
+      examples:
+      - info: Listing languages available in Sparv
+        languages:
+        - code: eng
+          name: English
+        - code: fin
+          name: Finnish
+        - code: swe
+          name: Swedish
+        message: Listing contents
+        return_code: listing_content
+        status: success
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+    NameDescriptionValue:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the value
+          default: ''
+        description:
+          type: string
+          title: Description
+          description: Description of the value
+          default: ''
+        value:
+          type: integer
+          title: Value
+      type: object
+      required:
+      - value
+      description: Model containing name, description, and value.
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
+        status: error
     SchemaResponse:
       properties:
         status:
@@ -803,45 +798,50 @@ components:
         schema:
           type: object
         status: success
-    ValidationError:
+    ErrorResponse500:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
           type: string
           title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-    InfoDataModel_StatusCodeModel_:
-      properties:
-        info:
-          type: string
-          title: Info
-          description: Description of the data
+          description: Short message describing the response
           default: ''
-        data:
-          items:
-            $ref: '#/components/schemas/StatusCodeModel'
-          type: array
-          title: Data
-          description: List of data items
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
       type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
   securitySchemes:
     OAuth2PasswordBearer:
       type: http

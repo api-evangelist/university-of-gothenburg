@@ -121,20 +121,33 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    HitResponse:
+    SearchResult:
       properties:
-        entry:
-          additionalProperties: true
+        hits:
+          items:
+            $ref: '#/components/schemas/HitResponse'
+          type: array
+          title: Hits
+        resourceHits:
+          additionalProperties:
+            type: integer
           type: object
-          title: Entry
-        resourceId:
-          type: string
-          title: Resourceid
+          title: Resourcehits
+        resourceOrder:
+          items:
+            type: string
+          type: array
+          title: Resourceorder
+        total:
+          type: integer
+          title: Total
       type: object
       required:
-      - entry
-      - resourceId
-      title: HitResponse
+      - hits
+      - resourceHits
+      - resourceOrder
+      - total
+      title: SearchResult
     UserErrorSchema:
       properties:
         message:
@@ -190,33 +203,20 @@ components:
       - msg
       - type
       title: ValidationError
-    SearchResult:
+    HitResponse:
       properties:
-        hits:
-          items:
-            $ref: '#/components/schemas/HitResponse'
-          type: array
-          title: Hits
-        resourceHits:
-          additionalProperties:
-            type: integer
+        entry:
+          additionalProperties: true
           type: object
-          title: Resourcehits
-        resourceOrder:
-          items:
-            type: string
-          type: array
-          title: Resourceorder
-        total:
-          type: integer
-          title: Total
+          title: Entry
+        resourceId:
+          type: string
+          title: Resourceid
       type: object
       required:
-      - hits
-      - resourceHits
-      - resourceOrder
-      - total
-      title: SearchResult
+      - entry
+      - resourceId
+      title: HitResponse
   securitySchemes:
     HTTPBearer:
       type: http

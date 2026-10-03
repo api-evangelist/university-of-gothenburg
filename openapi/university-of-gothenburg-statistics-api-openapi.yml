@@ -556,21 +556,6 @@ paths:
     - url: https://ws.spraakbanken.gu.se/ws/korp/v8
 components:
   schemas:
-    StatisticsDto:
-      properties:
-        value:
-          anyOf:
-          - type: string
-          - {}
-          title: Value
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - value
-      - count
-      title: StatisticsDto
     HTTPValidationError:
       properties:
         detail:
@@ -601,24 +586,39 @@ components:
       - msg
       - type
       title: ValidationError
+    StatisticsDto:
+      properties:
+        value:
+          anyOf:
+          - type: string
+          - {}
+          title: Value
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - value
+      - count
+      title: StatisticsDto
     Time:
       type: number
       description: Execution time in seconds.
       example: 0.0125
   parameters:
-    Corpus:
-      name: corpus
-      description: Corpus name.
+    DefaultWithin:
+      name: default_within
+      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
       in: query
       schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI
-        - SUC3
-      explode: false
-      required: true
+        type: string
+        example: sentence
+    SubCQPn:
+      name: subcqp#
+      description: 'Where # is a number. Sub-queries to the main query (or last **cqp#** query). Any number of numbered subcqp-parameters can be used. These will always be executed on just the actual matched tokens from the main query (i.e. no expansion), and the result for each subquery will be included as a separate object in the final JSON, in addition to the main query result.'
+      in: query
+      schema:
+        type: string
     CQPn:
       name: cqp#
       description: 'Where # is a number, e.g. `cqp1`, `cqp2`. In addition to the `cqp` parameter, you can add additional CQP queries that will be executed on the result of the previous query (i.e. searching within search results). The final result returned to the user will be that of the last numbered query.'
@@ -626,36 +626,18 @@ components:
       schema:
         type: string
         example: '[pos="NN"]'
-    GroupByStruct:
-      name: group_by_struct
-      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
+    Within:
+      name: within
+      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
       in: query
+      explode: false
       schema:
         type: array
         items:
           type: string
-      explode: false
-      example:
-      - text_author
-      - text_title
-    TimeTo:
-      name: to
-      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `from`. On the format `YYYYMMDDhhmmss`.
-      in: query
-      schema:
-        type: string
-    IgnoreCase:
-      name: ignore_case
-      description: Change all values of the given attribute(s) to lowercase.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      example:
-      - word
-      - pos
-      explode: false
+        example:
+        - ROMI:paragraph
+        - SUC3:text
     IncrementalProgress:
       name: incremental
       description: Incrementally return progress updates when the calculation for each corpus is finished.
@@ -670,13 +652,6 @@ components:
       schema:
         type: boolean
         default: true
-    DefaultWithin:
-      name: default_within
-      description: Prevent search from crossing boundaries of the given structural attribute, e.g. 'sentence'.
-      in: query
-      schema:
-        type: string
-        example: sentence
     CQP:
       name: cqp
       description: CQP query.
@@ -685,21 +660,52 @@ components:
         type: string
       required: true
       example: '[word="flower"]'
-    Within:
-      name: within
-      description: Like default_within, but for specific corpora, overriding the default. Specified using the format 'corpus:attribute'.
+    Corpus:
+      name: corpus
+      description: Corpus name.
       in: query
-      explode: false
       schema:
         type: array
         items:
           type: string
         example:
-        - ROMI:paragraph
-        - SUC3:text
-    SubCQPn:
-      name: subcqp#
-      description: 'Where # is a number. Sub-queries to the main query (or last **cqp#** query). Any number of numbered subcqp-parameters can be used. These will always be executed on just the actual matched tokens from the main query (i.e. no expansion), and the result for each subquery will be included as a separate object in the final JSON, in addition to the main query result.'
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    IgnoreCase:
+      name: ignore_case
+      description: Change all values of the given attribute(s) to lowercase.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      example:
+      - word
+      - pos
+      explode: false
+    GroupByStruct:
+      name: group_by_struct
+      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - text_author
+      - text_title
+    TimeFrom:
+      name: from
+      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `to`. On the format `YYYYMMDDhhmmss`.
+      in: query
+      schema:
+        type: string
+    TimeTo:
+      name: to
+      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `from`. On the format `YYYYMMDDhhmmss`.
       in: query
       schema:
         type: string
@@ -715,12 +721,6 @@ components:
       example:
       - pos
       - baseform
-    TimeFrom:
-      name: from
-      description: Only include results contained by date range specified by `from` and `to`. Must be used together with `to`. On the format `YYYYMMDDhhmmss`.
-      in: query
-      schema:
-        type: string
     Granularity:
       name: granularity
       description: 'Time resolution. Available options are:

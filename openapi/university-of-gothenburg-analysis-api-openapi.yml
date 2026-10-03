@@ -216,35 +216,18 @@ components:
       description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
       schema:
         $ref: '#/components/schemas/SettingsSchema'
-    IncrementalParam:
-      name: incremental
+    ModeParam:
+      name: mode
       in: query
       required: false
-      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
-
-        Note: Incremental information can only be displayed if your query is run for the first time.
-
-        The progress information is not available for older builds.
-
-        '
-      schema:
-        type: boolean
-        default: false
-    HashParam:
-      name: hash
-      in: query
-      required: true
-      description: Hash of the analysis
+      description: The input mode
       schema:
         type: string
-    MinifyParam:
-      name: minify
-      in: query
-      required: false
-      description: If set to true, some attributes needed for the frontend will be excluded from the response.
-      schema:
-        type: boolean
-        default: false
+        default: plain
+        enum:
+        - plain
+        - xml
+        - file
     LanguageParam:
       name: language
       in: query
@@ -280,19 +263,54 @@ components:
         - en
         - sv
         - 'no'
-    ModeParam:
-      name: mode
+    HashParam:
+      name: hash
       in: query
-      required: false
-      description: The input mode
+      required: true
+      description: Hash of the analysis
       schema:
         type: string
-        default: plain
-        enum:
-        - plain
-        - xml
-        - file
+    IncrementalParam:
+      name: incremental
+      in: query
+      required: false
+      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
+
+        Note: Incremental information can only be displayed if your query is run for the first time.
+
+        The progress information is not available for older builds.
+
+        '
+      schema:
+        type: boolean
+        default: false
+    MinifyParam:
+      name: minify
+      in: query
+      required: false
+      description: If set to true, some attributes needed for the frontend will be excluded from the response.
+      schema:
+        type: boolean
+        default: false
   schemas:
+    AnalysisSchema:
+      type: object
+      properties:
+        build:
+          type: object
+          properties:
+            hash:
+              type: string
+              example: ece7233cc6fface3adeef4bfc5dc1e9fdfd94488
+        result:
+          type: object
+          properties:
+            link:
+              type: string
+              example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=ece7233cc6fface3adeef4bfc5dc1e9fdfd94488
+            analysis:
+              type: string
+              example: "<corpus>\n  <text lix=\"54.00\" ovix=\"inf\" nk=\"inf\">\n    <paragraph>\n        <sentence id=\"8f7-84d\">\n            <w pos=\"DT\" msd=\"DT.UTR.SIN.IND\" lemma=\"|en|\" lex=\"|en..al.1|\" sense=\"|den..1:-1.000|en..2:-1.000|\" complemgram=\"|\" compwf=\"|\" sentiment=\"\" sentimentclass=\"\" ref=\"1\" dephead=\"2\" deprel=\"DT\">En</w>\n            <w pos=\"NN\" msd=\"NN.UTR.SIN.IND.NOM\" lemma=\"|exempelmening|\" lex=\"|\" sense=\"|\" complemgram=\"|exempel..nn.1+mening..nn.1:1.090e-08|\" compwf=\"|exempel+mening|\" sentiment=\"\" sentimentclass=\"\" ref=\"2\" dephead=\"\" deprel=\"ROOT\">exempelmening</w>\n            <w pos=\"PP\" msd=\"PP\" lemma=\"|till|\" lex=\"|till..pp.1|\" sense=\"|till..1:-1.000|\" complemgram=\"|\" compwf=\"|\" sentiment=\"\" sentimentclass=\"\" ref=\"3\" dephead=\"2\" deprel=\"ET\">till</w>\n            <w pos=\"NN\" msd=\"NN.UTR.SIN.DEF.NOM\" lemma=\"|nättjänst|nättjänsten|\" lex=\"|\" sense=\"|\" complemgram=\"|nät..nn.1+tjänst..nn.2:5.711e-11|nät..nn.1+tjänst..nn.1:5.711e-11|nätt..av.1+tjänst..nn.1:1.004e-12|nätt..av.1+tjänst..nn.2:1.004e-12|nät..nn.1+tjäna..vb.1+sten..nn.2:2.049e-27|nät..nn.1+tjäna..vb.1+sten..nn.1:2.049e-27|nätt..av.1+tjäna..vb.1+sten..nn.2:4.784e-28|nätt..av.1+tjäna..vb.1+sten..nn.1:4.784e-28|\" compwf=\"|nät+tjänsten|nätt+tjänsten|nät+tjän+sten|nätt+tjän+sten|\" sentiment=\"\" sentimentclass=\"\" ref=\"4\" dephead=\"3\" deprel=\"PA\">nättjänsten</w>\n        </sentence>\n    </paragraph>\n  </text>\n</corpus>\n"
     SettingsSchema:
       type: object
       example:
@@ -372,6 +390,15 @@ components:
             include $(SPARV_MAKEFILES)/Makefile.rules
 
             '
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
     JoinSchema:
       type: object
       properties:
@@ -382,33 +409,6 @@ components:
           example: '&lt;text&gt;En exempelmening till nättjänsten&lt;/text&gt;'
         analysis:
           $ref: '#/components/schemas/AnalysisSchema'
-    AnalysisSchema:
-      type: object
-      properties:
-        build:
-          type: object
-          properties:
-            hash:
-              type: string
-              example: ece7233cc6fface3adeef4bfc5dc1e9fdfd94488
-        result:
-          type: object
-          properties:
-            link:
-              type: string
-              example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=ece7233cc6fface3adeef4bfc5dc1e9fdfd94488
-            analysis:
-              type: string
-              example: "<corpus>\n  <text lix=\"54.00\" ovix=\"inf\" nk=\"inf\">\n    <paragraph>\n        <sentence id=\"8f7-84d\">\n            <w pos=\"DT\" msd=\"DT.UTR.SIN.IND\" lemma=\"|en|\" lex=\"|en..al.1|\" sense=\"|den..1:-1.000|en..2:-1.000|\" complemgram=\"|\" compwf=\"|\" sentiment=\"\" sentimentclass=\"\" ref=\"1\" dephead=\"2\" deprel=\"DT\">En</w>\n            <w pos=\"NN\" msd=\"NN.UTR.SIN.IND.NOM\" lemma=\"|exempelmening|\" lex=\"|\" sense=\"|\" complemgram=\"|exempel..nn.1+mening..nn.1:1.090e-08|\" compwf=\"|exempel+mening|\" sentiment=\"\" sentimentclass=\"\" ref=\"2\" dephead=\"\" deprel=\"ROOT\">exempelmening</w>\n            <w pos=\"PP\" msd=\"PP\" lemma=\"|till|\" lex=\"|till..pp.1|\" sense=\"|till..1:-1.000|\" complemgram=\"|\" compwf=\"|\" sentiment=\"\" sentimentclass=\"\" ref=\"3\" dephead=\"2\" deprel=\"ET\">till</w>\n            <w pos=\"NN\" msd=\"NN.UTR.SIN.DEF.NOM\" lemma=\"|nättjänst|nättjänsten|\" lex=\"|\" sense=\"|\" complemgram=\"|nät..nn.1+tjänst..nn.2:5.711e-11|nät..nn.1+tjänst..nn.1:5.711e-11|nätt..av.1+tjänst..nn.1:1.004e-12|nätt..av.1+tjänst..nn.2:1.004e-12|nät..nn.1+tjäna..vb.1+sten..nn.2:2.049e-27|nät..nn.1+tjäna..vb.1+sten..nn.1:2.049e-27|nätt..av.1+tjäna..vb.1+sten..nn.2:4.784e-28|nätt..av.1+tjäna..vb.1+sten..nn.1:4.784e-28|\" compwf=\"|nät+tjänsten|nätt+tjänsten|nät+tjän+sten|nätt+tjän+sten|\" sentiment=\"\" sentimentclass=\"\" ref=\"4\" dephead=\"3\" deprel=\"PA\">nättjänsten</w>\n        </sentence>\n    </paragraph>\n  </text>\n</corpus>\n"
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -334,18 +334,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SpellcheckResult:
-      properties:
-        notFound:
-          items:
-            type: string
-          type: array
-          title: Notfound
-          description: Those of the given words that were not found in Salex.
-      type: object
-      required:
-      - notFound
-      title: SpellcheckResult
     ValidationError:
       properties:
         loc:
@@ -367,6 +355,18 @@ components:
       - msg
       - type
       title: ValidationError
+    SpellcheckResult:
+      properties:
+        notFound:
+          items:
+            type: string
+          type: array
+          title: Notfound
+          description: Those of the given words that were not found in Salex.
+      type: object
+      required:
+      - notFound
+      title: SpellcheckResult
   securitySchemes:
     APIKeyQuery:
       type: apiKey

@@ -163,7 +163,74 @@ paths:
       operationId: getRelationsSentences
       x-operation-id-source: derived
 components:
+  parameters:
+    Start:
+      name: start
+      description: First result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 0
+        example: 0
+    Show:
+      name: show
+      description: Positional attributes to show. 'word' will always be included.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - pos
+        - baseform
+        default:
+        - word
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    Corpus:
+      name: corpus
+      description: Corpus name.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - ROMI
+        - SUC3
+      explode: false
+      required: true
+    End:
+      name: end
+      description: Last result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 9
+        example: 9
   schemas:
+    Time:
+      type: number
+      description: Execution time in seconds.
+      example: 0.0125
     Match:
       type: object
       properties:
@@ -179,73 +246,6 @@ components:
           type: integer
           description: Global corpus position of the match.
           example: 73648
-    Time:
-      type: number
-      description: Execution time in seconds.
-      example: 0.0125
-  parameters:
-    Corpus:
-      name: corpus
-      description: Corpus name.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - ROMI
-        - SUC3
-      explode: false
-      required: true
-    Show:
-      name: show
-      description: Positional attributes to show. 'word' will always be included.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - pos
-        - baseform
-        default:
-        - word
-    IncrementalProgress:
-      name: incremental
-      description: Incrementally return progress updates when the calculation for each corpus is finished.
-      in: query
-      schema:
-        type: boolean
-        default: false
-    Start:
-      name: start
-      description: First result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 0
-        example: 0
-    End:
-      name: end
-      description: Last result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 9
-        example: 9
-    ShowStruct:
-      name: show_struct
-      description: Structural attributes to show.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - text_author
-        - text_title
   securitySchemes:
     basicAuth:
       type: http

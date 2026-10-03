@@ -120,27 +120,18 @@ components:
       description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
       schema:
         $ref: '#/components/schemas/SettingsSchema'
-    IncrementalParam:
-      name: incremental
+    ModeParam:
+      name: mode
       in: query
       required: false
-      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
-
-        Note: Incremental information can only be displayed if your query is run for the first time.
-
-        The progress information is not available for older builds.
-
-        '
-      schema:
-        type: boolean
-        default: false
-    HashParam:
-      name: hash
-      in: query
-      required: true
-      description: Hash of the analysis
+      description: The input mode
       schema:
         type: string
+        default: plain
+        enum:
+        - plain
+        - xml
+        - file
     LanguageParam:
       name: language
       in: query
@@ -176,18 +167,27 @@ components:
         - en
         - sv
         - 'no'
-    ModeParam:
-      name: mode
+    HashParam:
+      name: hash
       in: query
-      required: false
-      description: The input mode
+      required: true
+      description: Hash of the analysis
       schema:
         type: string
-        default: plain
-        enum:
-        - plain
-        - xml
-        - file
+    IncrementalParam:
+      name: incremental
+      in: query
+      required: false
+      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
+
+        Note: Incremental information can only be displayed if your query is run for the first time.
+
+        The progress information is not available for older builds.
+
+        '
+      schema:
+        type: boolean
+        default: false
   schemas:
     SettingsSchema:
       type: object
