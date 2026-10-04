@@ -78,15 +78,47 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    ResourcePublic:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+        resourceId:
+          type: string
+          title: Resourceid
+        name:
+          type: string
+          title: Name
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        lastModified:
+          type: number
+          title: Lastmodified
+        isPublished:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ispublished
+        version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
       type: object
-      title: HTTPValidationError
+      required:
+      - id
+      - resourceId
+      - name
+      - config
+      - lastModified
+      title: ResourcePublic
     Scope:
       type: string
       enum:
@@ -94,20 +126,6 @@ components:
       - WRITE
       - READ
       title: Scope
-    ResourcePermissionDto:
-      properties:
-        resource_id:
-          type: string
-          title: Resource Id
-        protected:
-          anyOf:
-          - $ref: '#/components/schemas/Scope'
-          - type: 'null'
-      type: object
-      required:
-      - resource_id
-      - protected
-      title: ResourcePermissionDto
     ResourceProtected:
       properties:
         id:
@@ -153,47 +171,29 @@ components:
       - lastModified
       - lastModifiedBy
       title: ResourceProtected
-    ResourcePublic:
+    ResourcePermissionDto:
       properties:
-        id:
+        resource_id:
           type: string
-          title: Id
-          examples:
-          - 01BJQMF54D093DXEAWZ6JYRPAQ
-        resourceId:
-          type: string
-          title: Resourceid
-        name:
-          type: string
-          title: Name
-        config:
-          $ref: '#/components/schemas/ResourceConfig'
-        message:
+          title: Resource Id
+        protected:
           anyOf:
-          - type: string
+          - $ref: '#/components/schemas/Scope'
           - type: 'null'
-          title: Message
-        lastModified:
-          type: number
-          title: Lastmodified
-        isPublished:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Ispublished
-        version:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Version
       type: object
       required:
-      - id
-      - resourceId
-      - name
-      - config
-      - lastModified
-      title: ResourcePublic
+      - resource_id
+      - protected
+      title: ResourcePermissionDto
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     Field:
       properties:
         type:

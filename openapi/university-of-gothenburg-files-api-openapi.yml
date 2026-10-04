@@ -113,13 +113,27 @@ paths:
       x-operation-id-source: derived
 components:
   parameters:
-    SettingsParam:
-      name: settings
+    IncrementalParam:
+      name: incremental
       in: query
       required: false
-      description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
+      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
+
+        Note: Incremental information can only be displayed if your query is run for the first time.
+
+        The progress information is not available for older builds.
+
+        '
       schema:
-        $ref: '#/components/schemas/SettingsSchema'
+        type: boolean
+        default: false
+    HashParam:
+      name: hash
+      in: query
+      required: true
+      description: Hash of the analysis
+      schema:
+        type: string
     ModeParam:
       name: mode
       in: query
@@ -132,6 +146,13 @@ components:
         - plain
         - xml
         - file
+    SettingsParam:
+      name: settings
+      in: query
+      required: false
+      description: The settings to be used for the analysis. Must satisfy a shema retrieved from [Schema](#tag/Analysis/paths/~1schema/get).
+      schema:
+        $ref: '#/components/schemas/SettingsSchema'
     LanguageParam:
       name: language
       in: query
@@ -167,28 +188,16 @@ components:
         - en
         - sv
         - 'no'
-    HashParam:
-      name: hash
-      in: query
-      required: true
-      description: Hash of the analysis
-      schema:
-        type: string
-    IncrementalParam:
-      name: incremental
-      in: query
-      required: false
-      description: 'Set to `true` if you want to receive more information on how the analysis is being processed.
-
-        Note: Incremental information can only be displayed if your query is run for the first time.
-
-        The progress information is not available for older builds.
-
-        '
-      schema:
-        type: boolean
-        default: false
   schemas:
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
     SettingsSchema:
       type: object
       example:
@@ -241,15 +250,6 @@ components:
             link:
               type: string
               example: https://ws.spraakbanken.gu.se/ws/sparv/v3/download?hash=a1b1de8f3508c5928352dbfc538025231a336801-f
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

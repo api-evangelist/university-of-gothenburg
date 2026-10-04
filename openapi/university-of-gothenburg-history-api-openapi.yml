@@ -301,42 +301,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EntryDiffDto:
-      properties:
-        diff:
-          title: Diff
-        fromVersion:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Fromversion
-        toVersion:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Toversion
-      type: object
-      required:
-      - diff
-      - fromVersion
-      - toVersion
-      title: EntryDiffDto
-    EntryOp:
-      type: string
-      enum:
-      - ADDED
-      - DELETED
-      - UPDATED
-      title: EntryOp
     HistoryDto:
       properties:
         id:
@@ -379,6 +343,21 @@ components:
       - diff
       - entry
       title: HistoryDto
+    GetHistoryDto:
+      properties:
+        history:
+          items:
+            $ref: '#/components/schemas/HistoryDto'
+          type: array
+          title: History
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - history
+      - total
+      title: GetHistoryDto
     EntryDto:
       properties:
         id:
@@ -420,21 +399,42 @@ components:
       - resource
       - entry
       title: EntryDto
-    GetHistoryDto:
+    EntryDiffDto:
       properties:
-        history:
-          items:
-            $ref: '#/components/schemas/HistoryDto'
-          type: array
-          title: History
-        total:
-          type: integer
-          title: Total
+        diff:
+          title: Diff
+        fromVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Fromversion
+        toVersion:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Toversion
       type: object
       required:
-      - history
-      - total
-      title: GetHistoryDto
+      - diff
+      - fromVersion
+      - toVersion
+      title: EntryDiffDto
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryOp:
+      type: string
+      enum:
+      - ADDED
+      - DELETED
+      - UPDATED
+      title: EntryOp
     ValidationError:
       properties:
         loc:

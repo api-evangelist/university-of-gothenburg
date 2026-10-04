@@ -300,36 +300,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EntryPreview:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-      type: object
-      required:
-      - entry
-      title: EntryPreview
-    EntryAddResponse:
-      properties:
-        newID:
-          type: string
-          title: Newid
-          examples:
-          - 01BJQMF54D093DXEAWZ6JYRPAQ
-      type: object
-      required:
-      - newID
-      title: EntryAddResponse
     EntryPreviewResponse:
       properties:
         entry:
@@ -340,6 +310,30 @@ components:
       required:
       - entry
       title: EntryPreviewResponse
+    EntryAdd:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        message:
+          type: string
+          title: Message
+          default: ''
+      type: object
+      required:
+      - entry
+      title: EntryAdd
+    EntryPreview:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - entry
+      title: EntryPreview
     EntryUpdate:
       properties:
         entry:
@@ -358,6 +352,26 @@ components:
       - message
       - version
       title: EntryUpdate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EntryAddResponse:
+      properties:
+        newID:
+          type: string
+          title: Newid
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
+      type: object
+      required:
+      - newID
+      title: EntryAddResponse
     ValidationError:
       properties:
         loc:
@@ -379,20 +393,6 @@ components:
       - msg
       - type
       title: ValidationError
-    EntryAdd:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-        message:
-          type: string
-          title: Message
-          default: ''
-      type: object
-      required:
-      - entry
-      title: EntryAdd
   securitySchemes:
     APIKeyQuery:
       type: apiKey

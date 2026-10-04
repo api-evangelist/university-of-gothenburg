@@ -121,33 +121,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SearchResult:
-      properties:
-        hits:
-          items:
-            $ref: '#/components/schemas/HitResponse'
-          type: array
-          title: Hits
-        resourceHits:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Resourcehits
-        resourceOrder:
-          items:
-            type: string
-          type: array
-          title: Resourceorder
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - hits
-      - resourceHits
-      - resourceOrder
-      - total
-      title: SearchResult
     UserErrorSchema:
       properties:
         message:
@@ -182,6 +155,47 @@ components:
       required:
       - message
       title: UserErrorSchema
+    SearchResult:
+      properties:
+        hits:
+          items:
+            $ref: '#/components/schemas/HitResponse'
+          type: array
+          title: Hits
+        resourceHits:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Resourcehits
+        resourceOrder:
+          items:
+            type: string
+          type: array
+          title: Resourceorder
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - hits
+      - resourceHits
+      - resourceOrder
+      - total
+      title: SearchResult
+    HitResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        resourceId:
+          type: string
+          title: Resourceid
+      type: object
+      required:
+      - entry
+      - resourceId
+      title: HitResponse
     ValidationError:
       properties:
         loc:
@@ -203,20 +217,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HitResponse:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-        resourceId:
-          type: string
-          title: Resourceid
-      type: object
-      required:
-      - entry
-      - resourceId
-      title: HitResponse
   securitySchemes:
     HTTPBearer:
       type: http

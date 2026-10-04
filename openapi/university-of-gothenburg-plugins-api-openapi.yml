@@ -325,6 +325,18 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    SpellcheckResult:
+      properties:
+        notFound:
+          items:
+            type: string
+          type: array
+          title: Notfound
+          description: Those of the given words that were not found in Salex.
+      type: object
+      required:
+      - notFound
+      title: SpellcheckResult
     HTTPValidationError:
       properties:
         detail:
@@ -355,18 +367,6 @@ components:
       - msg
       - type
       title: ValidationError
-    SpellcheckResult:
-      properties:
-        notFound:
-          items:
-            type: string
-          type: array
-          title: Notfound
-          description: Those of the given words that were not found in Salex.
-      type: object
-      required:
-      - notFound
-      title: SpellcheckResult
   securitySchemes:
     APIKeyQuery:
       type: apiKey

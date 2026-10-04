@@ -260,13 +260,18 @@ paths:
       description: Development server
 components:
   parameters:
-    IncrementalProgress:
-      name: incremental
-      description: Incrementally return progress updates when the calculation for each corpus is finished.
+    IgnoreCase:
+      name: ignore_case
+      description: Change all values of the given attribute(s) to lowercase.
       in: query
       schema:
-        type: boolean
-        default: false
+        type: array
+        items:
+          type: string
+      example:
+      - word
+      - pos
+      explode: false
     Corpus:
       name: corpus
       description: Corpus name.
@@ -280,30 +285,6 @@ components:
         - SUC3
       explode: false
       required: true
-    IgnoreCase:
-      name: ignore_case
-      description: Change all values of the given attribute(s) to lowercase.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      example:
-      - word
-      - pos
-      explode: false
-    GroupByStruct:
-      name: group_by_struct
-      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: false
-      example:
-      - text_author
-      - text_title
     GroupBy:
       name: group_by
       description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
@@ -316,11 +297,51 @@ components:
       example:
       - pos
       - baseform
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    GroupByStruct:
+      name: group_by_struct
+      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - text_author
+      - text_title
   schemas:
     Time:
       type: number
       description: Execution time in seconds.
       example: 0.0125
+    IdAvailabilityResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The resource ID that was checked
+          examples:
+          - my-new-resource
+        available:
+          type: boolean
+          title: Available
+          description: Indicates whether the resource ID is available
+          examples:
+          - true
+          - false
+      type: object
+      required:
+      - id
+      - available
+      title: IdAvailabilityResponse
+      description: Response model for resource ID availability check.
     HTTPValidationError:
       properties:
         detail:
@@ -351,27 +372,6 @@ components:
       - msg
       - type
       title: ValidationError
-    IdAvailabilityResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: The resource ID that was checked
-          examples:
-          - my-new-resource
-        available:
-          type: boolean
-          title: Available
-          description: Indicates whether the resource ID is available
-          examples:
-          - true
-          - false
-      type: object
-      required:
-      - id
-      - available
-      title: IdAvailabilityResponse
-      description: Response model for resource ID availability check.
   securitySchemes:
     basicAuth:
       type: http

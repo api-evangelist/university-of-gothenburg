@@ -218,39 +218,6 @@ paths:
       x-openapi-router-order: 1
 components:
   schemas:
-    HighlightParam:
-      type: string
-      enum:
-      - 'true'
-      - 'false'
-      - new
-      title: HighlightParam
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EntriesByIdResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        hits:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/EntryDto'
-            - {}
-          type: array
-          title: Hits
-      type: object
-      required:
-      - total
-      - hits
-      title: EntriesByIdResponse
     QueryStatsResponse:
       properties:
         total:
@@ -266,31 +233,6 @@ components:
       - total
       - distribution
       title: QueryStatsResponse
-    QueryResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        hits:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/EntryDto'
-            - {}
-          type: array
-          title: Hits
-        distribution:
-          anyOf:
-          - additionalProperties:
-              type: integer
-            type: object
-          - type: 'null'
-          title: Distribution
-      type: object
-      required:
-      - total
-      - hits
-      - distribution
-      title: QueryResponse
     EntryDto:
       properties:
         id:
@@ -332,6 +274,64 @@ components:
       - resource
       - entry
       title: EntryDto
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    QueryResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+        distribution:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Distribution
+      type: object
+      required:
+      - total
+      - hits
+      - distribution
+      title: QueryResponse
+    HighlightParam:
+      type: string
+      enum:
+      - 'true'
+      - 'false'
+      - new
+      title: HighlightParam
+    EntriesByIdResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+      type: object
+      required:
+      - total
+      - hits
+      title: EntriesByIdResponse
     ValidationError:
       properties:
         loc:
