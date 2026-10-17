@@ -262,6 +262,36 @@ components:
       - bibtex
       title: BibtexResponse
       description: Response model for BibTeX entries.
+    ResourceList:
+      properties:
+        resource_type:
+          type: string
+          title: Resource Type
+          description: Type of the resources
+          examples:
+          - corpus
+          - lexicon
+          - model
+          - analysis
+          - utility
+        hits:
+          type: integer
+          title: Hits
+          description: Number of resources in the list
+          examples:
+          - 42
+        resources:
+          items:
+            $ref: '#/components/schemas/Resource'
+          type: array
+          title: Resources
+      type: object
+      required:
+      - resource_type
+      - hits
+      - resources
+      title: ResourceList
+      description: List of metadata resources.
     Resource:
       properties:
         id:
@@ -309,24 +339,14 @@ components:
       - type
       title: Resource
       description: Metadata resource; keep permissive.
-    ResourceList:
+    CollectionsList:
       properties:
-        resource_type:
-          type: string
-          title: Resource Type
-          description: Type of the resources
-          examples:
-          - corpus
-          - lexicon
-          - model
-          - analysis
-          - utility
         hits:
           type: integer
           title: Hits
-          description: Number of resources in the list
+          description: Number of collections in the list
           examples:
-          - 42
+          - 5
         resources:
           items:
             $ref: '#/components/schemas/Resource'
@@ -334,11 +354,10 @@ components:
           title: Resources
       type: object
       required:
-      - resource_type
       - hits
       - resources
-      title: ResourceList
-      description: List of metadata resources.
+      title: CollectionsList
+      description: List of resource collections.
     HTTPValidationError:
       properties:
         detail:
@@ -399,25 +418,6 @@ components:
       - utility
       - collection
       title: ResourceTypes
-    CollectionsList:
-      properties:
-        hits:
-          type: integer
-          title: Hits
-          description: Number of collections in the list
-          examples:
-          - 5
-        resources:
-          items:
-            $ref: '#/components/schemas/Resource'
-          type: array
-          title: Resources
-      type: object
-      required:
-      - hits
-      - resources
-      title: CollectionsList
-      description: List of resource collections.
     ValidationError:
       properties:
         loc:

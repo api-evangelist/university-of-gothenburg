@@ -456,7 +456,7 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    ErrorResponse500:
+    ErrorResponse404File:
       properties:
         status:
           type: string
@@ -488,140 +488,10 @@ components:
           title: Warnings
           description: List of warnings, if any
       type: object
-      description: Model for 500 error responses.
+      description: Model for 404 file not found error responses.
       examples:
-      - message: Internal server error
-        return_code: internal_server_error
-        status: error
-      - message: API key check failed
-        return_code: apikey_check_failed
-        status: error
-      - info: Signature verification failed
-        message: API key authentication failed
-        return_code: apikey_error
-        status: error
-    ErrorResponse400:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 400 error responses.
-      examples:
-      - message: No resource ID provided
-        return_code: missing_resource_id
-        status: error
-    mink__core__models__ListResourcesResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        resources:
-          items:
-            type: string
-          type: array
-          title: Resources
-          description: List of resource IDs
-          default: []
-      type: object
-      description: Model for responses listing resource IDs.
-      examples:
-      - info: Listing available resources
-        message: Listing contents
-        resources:
-        - mink-dxh6e6wtff
-        - mink-j86tfreaf9
-        - mink-3qbh7tra6g
-        return_code: listing_content
-        status: success
-    ErrorResponse404Resource:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: Additional information about the error
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Model for 404 resource not found error responses.
-      examples:
-      - message: Resource does not exist or you do not have access to it
-        return_code: resource_not_found
+      - message: File(s) not found
+        return_code: file_not_found
         status: error
     CreateResourceResponse:
       properties:
@@ -666,6 +536,112 @@ components:
         resource_id: mink-dxh6e6wtff
         return_code: created_resource
         status: success
+    ErrorResponse404Resource:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 404 resource not found error responses.
+      examples:
+      - message: Resource does not exist or you do not have access to it
+        return_code: resource_not_found
+        status: error
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+    ErrorResponse500:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: Additional information about the error
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Model for 500 error responses.
+      examples:
+      - message: Internal server error
+        return_code: internal_server_error
+        status: error
+      - message: API key check failed
+        return_code: apikey_check_failed
+        status: error
+      - info: Signature verification failed
+        message: API key authentication failed
+        return_code: apikey_error
+        status: error
     Body_upload_metadata_yaml_metadata_config_upload__resource_id__put:
       properties:
         file:
@@ -754,6 +730,47 @@ components:
         message: Validation Error
         return_code: validation_error
         status: error
+    BaseResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+      type: object
+      description: Base response model with common fields.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
     ErrorResponse401:
       properties:
         status:
@@ -806,7 +823,56 @@ components:
       - message: Mink admin status could not be confirmed
         return_code: not_admin
         status: error
-    ErrorResponse404File:
+    mink__core__models__ListResourcesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        resources:
+          items:
+            type: string
+          type: array
+          title: Resources
+          description: List of resource IDs
+          default: []
+      type: object
+      description: Model for responses listing resource IDs.
+      examples:
+      - info: Listing available resources
+        message: Listing contents
+        resources:
+        - mink-dxh6e6wtff
+        - mink-j86tfreaf9
+        - mink-3qbh7tra6g
+        return_code: listing_content
+        status: success
+    ErrorResponse400:
       properties:
         status:
           type: string
@@ -838,77 +904,11 @@ components:
           title: Warnings
           description: List of warnings, if any
       type: object
-      description: Model for 404 file not found error responses.
+      description: Model for 400 error responses.
       examples:
-      - message: File(s) not found
-        return_code: file_not_found
+      - message: No resource ID provided
+        return_code: missing_resource_id
         status: error
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-    BaseResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
-          default: ''
-        return_code:
-          type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
-          default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-      type: object
-      description: Base response model with common fields.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
   securitySchemes:
     OAuth2PasswordBearer:
       type: http

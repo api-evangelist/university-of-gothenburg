@@ -164,6 +164,41 @@ paths:
       x-operation-id-source: derived
 components:
   parameters:
+    Start:
+      name: start
+      description: First result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 0
+        example: 0
+    End:
+      name: end
+      description: Last result to return; used for pagination.
+      in: query
+      schema:
+        type: integer
+        default: 9
+        example: 9
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
+    ShowStruct:
+      name: show_struct
+      description: Structural attributes to show.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - text_author
+        - text_title
     Show:
       name: show
       description: Positional attributes to show. 'word' will always be included.
@@ -178,26 +213,6 @@ components:
         - baseform
         default:
         - word
-    ShowStruct:
-      name: show_struct
-      description: Structural attributes to show.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - text_author
-        - text_title
-    Start:
-      name: start
-      description: First result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 0
-        example: 0
     Corpus:
       name: corpus
       description: Corpus name.
@@ -211,21 +226,6 @@ components:
         - SUC3
       explode: false
       required: true
-    IncrementalProgress:
-      name: incremental
-      description: Incrementally return progress updates when the calculation for each corpus is finished.
-      in: query
-      schema:
-        type: boolean
-        default: false
-    End:
-      name: end
-      description: Last result to return; used for pagination.
-      in: query
-      schema:
-        type: integer
-        default: 9
-        example: 9
   schemas:
     Match:
       type: object

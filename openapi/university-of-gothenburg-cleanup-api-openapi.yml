@@ -161,24 +161,7 @@ paths:
       operationId: getCleanupForceall
       x-operation-id-source: derived
 components:
-  parameters:
-    HashParam:
-      name: hash
-      in: query
-      required: true
-      description: Hash of the analysis
-      schema:
-        type: string
   schemas:
-    GeneralError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Some error message
     CleanupOne:
       type: object
       properties:
@@ -188,21 +171,6 @@ components:
           items:
             type: array
             format: string
-    AuthenticationError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Authentication failed.
-    NoCleanup:
-      type: object
-      properties:
-        message:
-          type: string
-          example: No hashes to be removed.
     Cleanup:
       type: object
       properties:
@@ -213,6 +181,38 @@ components:
           items:
             type: array
             format: string
+    NoCleanup:
+      type: object
+      properties:
+        message:
+          type: string
+          example: No hashes to be removed.
+    GeneralError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Some error message
+    AuthenticationError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Authentication failed.
+  parameters:
+    HashParam:
+      name: hash
+      in: query
+      required: true
+      description: Hash of the analysis
+      schema:
+        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -274,6 +274,30 @@ components:
       - resource
       - entry
       title: EntryDto
+    HighlightParam:
+      type: string
+      enum:
+      - 'true'
+      - 'false'
+      - new
+      title: HighlightParam
+    EntriesByIdResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        hits:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/EntryDto'
+            - {}
+          type: array
+          title: Hits
+      type: object
+      required:
+      - total
+      - hits
+      title: EntriesByIdResponse
     HTTPValidationError:
       properties:
         detail:
@@ -308,30 +332,6 @@ components:
       - hits
       - distribution
       title: QueryResponse
-    HighlightParam:
-      type: string
-      enum:
-      - 'true'
-      - 'false'
-      - new
-      title: HighlightParam
-    EntriesByIdResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        hits:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/EntryDto'
-            - {}
-          type: array
-          title: Hits
-      type: object
-      required:
-      - total
-      - hits
-      title: EntriesByIdResponse
     ValidationError:
       properties:
         loc:

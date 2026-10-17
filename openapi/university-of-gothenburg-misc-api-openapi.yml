@@ -260,6 +260,30 @@ paths:
       description: Development server
 components:
   parameters:
+    GroupBy:
+      name: group_by
+      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - pos
+      - baseform
+    GroupByStruct:
+      name: group_by_struct
+      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example:
+      - text_author
+      - text_title
     IgnoreCase:
       name: ignore_case
       description: Change all values of the given attribute(s) to lowercase.
@@ -272,6 +296,13 @@ components:
       - word
       - pos
       explode: false
+    IncrementalProgress:
+      name: incremental
+      description: Incrementally return progress updates when the calculation for each corpus is finished.
+      in: query
+      schema:
+        type: boolean
+        default: false
     Corpus:
       name: corpus
       description: Corpus name.
@@ -285,37 +316,6 @@ components:
         - SUC3
       explode: false
       required: true
-    GroupBy:
-      name: group_by
-      description: Positional attribute by which the hits should be grouped. Defaults to `word` if neither `group_by` nor `group_by_struct` is defined.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: false
-      example:
-      - pos
-      - baseform
-    IncrementalProgress:
-      name: incremental
-      description: Incrementally return progress updates when the calculation for each corpus is finished.
-      in: query
-      schema:
-        type: boolean
-        default: false
-    GroupByStruct:
-      name: group_by_struct
-      description: Structural attribute by which the hits should be grouped. The value for the *first* token of the hit will be used.
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      explode: false
-      example:
-      - text_author
-      - text_title
   schemas:
     Time:
       type: number

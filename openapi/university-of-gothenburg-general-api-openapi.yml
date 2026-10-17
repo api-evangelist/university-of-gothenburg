@@ -89,15 +89,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PingSchema:
-      type: object
-      properties:
-        message:
-          type: string
-          example: PONG
-        time:
-          type: integer
-          example: 0.0081
     GeneralError:
       type: object
       properties:
@@ -129,6 +120,15 @@ components:
               status:
                 type: string
                 example: Done
+    PingSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: PONG
+        time:
+          type: integer
+          example: 0.0081
     AuthenticationError:
       type: object
       properties:

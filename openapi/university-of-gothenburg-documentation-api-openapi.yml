@@ -340,7 +340,7 @@ paths:
       description: Development server
 components:
   schemas:
-    LanguagesResponse:
+    ReturnCodesResponse:
       properties:
         status:
           type: string
@@ -371,24 +371,35 @@ components:
           - type: 'null'
           title: Warnings
           description: List of warnings, if any
-        languages:
-          items:
-            type: string
-          type: array
-          title: Languages
-          description: List of supported languages (language names and ISO codes)
-          default: []
+        data:
+          additionalProperties:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+          type: object
+          title: Data
+          description: Dictionary containing lists of return codes keyed by tag
       type: object
-      description: Model for the /corpus/sparv/list-languages response.
-      examples:
-      - info: Listing languages available in Sparv
-        languages:
-        - code: eng
-          name: English
-        - code: fin
-          name: Finnish
-        - code: swe
-          name: Swedish
+      description: Model for the /return-codes response.
+      example:
+        data:
+          Authentication and authorization:
+          - code: failed_authenticating
+            message: Failed to authenticate
+            status_code: 200
+          - code: missing_login_credentials
+            message: No login credentials provided
+            status_code: 200
+          Common errors:
+          - code: unexpected_error
+            message: An unexpected error occurred
+            status_code: 500
+          - code: page_not_found
+            message: Page not found
+            status_code: 404
+        info: Listing all return codes
         message: Listing contents
         return_code: listing_content
         status: success
@@ -477,6 +488,58 @@ components:
           - description: Process was aborted by the user
             name: aborted
           info: job status codes
+    LanguagesResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: success
+        message:
+          type: string
+          title: Message
+          description: Short message describing the response
+          default: ''
+        return_code:
+          type: string
+          title: Return Code
+          description: Return code indicating the status of the request, mostly used for frontend error handling
+          default: ''
+        info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Info
+          description: More detailed information about the response
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        languages:
+          items:
+            type: string
+          type: array
+          title: Languages
+          description: List of supported languages (language names and ISO codes)
+          default: []
+      type: object
+      description: Model for the /corpus/sparv/list-languages response.
+      examples:
+      - info: Listing languages available in Sparv
+        languages:
+        - code: eng
+          name: English
+        - code: fin
+          name: Finnish
+        - code: swe
+          name: Swedish
+        message: Listing contents
+        return_code: listing_content
+        status: success
     SchemaResponse:
       properties:
         status:
@@ -523,69 +586,48 @@ components:
         schema:
           type: object
         status: success
-    ReturnCodesResponse:
+    StatusCodeModel:
       properties:
-        status:
+        name:
           type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: success
-        message:
-          type: string
-          title: Message
-          description: Short message describing the response
+          title: Name
+          description: Name of the status code
           default: ''
-        return_code:
+        description:
           type: string
-          title: Return Code
-          description: Return code indicating the status of the request, mostly used for frontend error handling
+          title: Description
+          description: Description of the status code
           default: ''
-        info:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Info
-          description: More detailed information about the response
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        data:
-          additionalProperties:
-            items:
-              additionalProperties:
-                type: string
-              type: object
-            type: array
-          type: object
-          title: Data
-          description: Dictionary containing lists of return codes keyed by tag
       type: object
-      description: Model for the /return-codes response.
-      example:
+      description: Status codes for job processes.
+    InfoDataModel_StatusCodeModel_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
         data:
-          Authentication and authorization:
-          - code: failed_authenticating
-            message: Failed to authenticate
-            status_code: 200
-          - code: missing_login_credentials
-            message: No login credentials provided
-            status_code: 200
-          Common errors:
-          - code: unexpected_error
-            message: An unexpected error occurred
-            status_code: 500
-          - code: page_not_found
-            message: Page not found
-            status_code: 404
-        info: Listing all return codes
-        message: Listing contents
-        return_code: listing_content
-        status: success
+          items:
+            $ref: '#/components/schemas/StatusCodeModel'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
+    InfoDataModel_NameDescriptionValue_:
+      properties:
+        info:
+          type: string
+          title: Info
+          description: Description of the data
+          default: ''
+        data:
+          items:
+            $ref: '#/components/schemas/NameDescriptionValue'
+          type: array
+          title: Data
+          description: List of data items
+      type: object
     ErrorResponse500:
       properties:
         status:
@@ -629,6 +671,60 @@ components:
       - info: Signature verification failed
         message: API key authentication failed
         return_code: apikey_error
+        status: error
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+    ErrorResponse422:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Response status, usually 'success' or 'error'
+          default: error
+        message:
+          type: string
+          title: Message
+          description: Short message describing the error
+          default: Validation Error
+        return_code:
+          type: string
+          title: Return Code
+          description: Short code describing the error
+          default: validation_error
+        info:
+          type: string
+          title: Info
+          description: More detailed information about the response
+          default: Could not process the request due to errors in the input (see errors for details).
+        warnings:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Warnings
+          description: List of warnings, if any
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+      type: object
+      required:
+      - errors
+      description: Model for 422 error responses.
+      examples:
+      - errors:
+        - 'query: q (Field required)'
+        info: Could not process the request due to errors in the input (see errors for details).
+        message: Validation Error
+        return_code: validation_error
         status: error
     NameDescriptionValue:
       properties:
@@ -721,102 +817,6 @@ components:
         message: Listing contents
         return_code: listing_content
         status: success
-    ErrorResponse422:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: Response status, usually 'success' or 'error'
-          default: error
-        message:
-          type: string
-          title: Message
-          description: Short message describing the error
-          default: Validation Error
-        return_code:
-          type: string
-          title: Return Code
-          description: Short code describing the error
-          default: validation_error
-        info:
-          type: string
-          title: Info
-          description: More detailed information about the response
-          default: Could not process the request due to errors in the input (see errors for details).
-        warnings:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Warnings
-          description: List of warnings, if any
-        errors:
-          items:
-            type: string
-          type: array
-          title: Errors
-      type: object
-      required:
-      - errors
-      description: Model for 422 error responses.
-      examples:
-      - errors:
-        - 'query: q (Field required)'
-        info: Could not process the request due to errors in the input (see errors for details).
-        message: Validation Error
-        return_code: validation_error
-        status: error
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-    InfoDataModel_StatusCodeModel_:
-      properties:
-        info:
-          type: string
-          title: Info
-          description: Description of the data
-          default: ''
-        data:
-          items:
-            $ref: '#/components/schemas/StatusCodeModel'
-          type: array
-          title: Data
-          description: List of data items
-      type: object
-    StatusCodeModel:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Name of the status code
-          default: ''
-        description:
-          type: string
-          title: Description
-          description: Description of the status code
-          default: ''
-      type: object
-      description: Status codes for job processes.
-    InfoDataModel_NameDescriptionValue_:
-      properties:
-        info:
-          type: string
-          title: Info
-          description: Description of the data
-          default: ''
-        data:
-          items:
-            $ref: '#/components/schemas/NameDescriptionValue'
-          type: array
-          title: Data
-          description: List of data items
-      type: object
     ValidationError:
       properties:
         loc:

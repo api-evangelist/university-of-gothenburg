@@ -300,30 +300,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    EntryPreviewResponse:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-      type: object
-      required:
-      - entry
-      title: EntryPreviewResponse
-    EntryAdd:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-        message:
-          type: string
-          title: Message
-          default: ''
-      type: object
-      required:
-      - entry
-      title: EntryAdd
     EntryPreview:
       properties:
         entry:
@@ -334,6 +310,16 @@ components:
       required:
       - entry
       title: EntryPreview
+    EntryPreviewResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+      type: object
+      required:
+      - entry
+      title: EntryPreviewResponse
     EntryUpdate:
       properties:
         entry:
@@ -361,6 +347,20 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    EntryAdd:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        message:
+          type: string
+          title: Message
+          default: ''
+      type: object
+      required:
+      - entry
+      title: EntryAdd
     EntryAddResponse:
       properties:
         newID:

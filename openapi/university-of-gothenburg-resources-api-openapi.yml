@@ -78,54 +78,62 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ResourcePublic:
+    ResourceConfig:
       properties:
-        id:
-          type: string
-          title: Id
-          examples:
-          - 01BJQMF54D093DXEAWZ6JYRPAQ
         resourceId:
           type: string
           title: Resourceid
-        name:
-          type: string
-          title: Name
-        config:
-          $ref: '#/components/schemas/ResourceConfig'
-        message:
+        resourceName:
           anyOf:
           - type: string
           - type: 'null'
-          title: Message
-        lastModified:
-          type: number
-          title: Lastmodified
-        isPublished:
+          title: Resourcename
+        fields:
+          additionalProperties:
+            $ref: '#/components/schemas/Field'
+          type: object
+          title: Fields
+        plugins:
+          additionalProperties:
+            additionalProperties:
+              type: string
+            type: object
+          type: object
+          title: Plugins
+          default: {}
+        sort:
           anyOf:
-          - type: boolean
+          - type: string
+          - items:
+              type: string
+            type: array
           - type: 'null'
-          title: Ispublished
-        version:
+          title: Sort
+        protected:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Protected
+          default: {}
+        id:
           anyOf:
-          - type: integer
+          - type: string
           - type: 'null'
-          title: Version
+          title: Id
+        additionalProperties:
+          type: boolean
+          title: Additionalproperties
+          default: true
+        configStr:
+          type: string
+          title: Configstr
+      additionalProperties: false
       type: object
       required:
-      - id
       - resourceId
-      - name
-      - config
-      - lastModified
-      title: ResourcePublic
-    Scope:
-      type: string
-      enum:
-      - ADMIN
-      - WRITE
-      - READ
-      title: Scope
+      - fields
+      - configStr
+      title: ResourceConfig
     ResourceProtected:
       properties:
         id:
@@ -171,6 +179,15 @@ components:
       - lastModified
       - lastModifiedBy
       title: ResourceProtected
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ResourcePermissionDto:
       properties:
         resource_id:
@@ -185,15 +202,13 @@ components:
       - resource_id
       - protected
       title: ResourcePermissionDto
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+    Scope:
+      type: string
+      enum:
+      - ADMIN
+      - WRITE
+      - READ
+      title: Scope
     Field:
       properties:
         type:
@@ -277,62 +292,47 @@ components:
       additionalProperties: false
       type: object
       title: Field
-    ResourceConfig:
+    ResourcePublic:
       properties:
+        id:
+          type: string
+          title: Id
+          examples:
+          - 01BJQMF54D093DXEAWZ6JYRPAQ
         resourceId:
           type: string
           title: Resourceid
-        resourceName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Resourcename
-        fields:
-          additionalProperties:
-            $ref: '#/components/schemas/Field'
-          type: object
-          title: Fields
-        plugins:
-          additionalProperties:
-            additionalProperties:
-              type: string
-            type: object
-          type: object
-          title: Plugins
-          default: {}
-        sort:
-          anyOf:
-          - type: string
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Sort
-        protected:
-          additionalProperties:
-            type: boolean
-          type: object
-          title: Protected
-          default: {}
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-        additionalProperties:
-          type: boolean
-          title: Additionalproperties
-          default: true
-        configStr:
+        name:
           type: string
-          title: Configstr
-      additionalProperties: false
+          title: Name
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        lastModified:
+          type: number
+          title: Lastmodified
+        isPublished:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ispublished
+        version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Version
       type: object
       required:
+      - id
       - resourceId
-      - fields
-      - configStr
-      title: ResourceConfig
+      - name
+      - config
+      - lastModified
+      title: ResourcePublic
     ValidationError:
       properties:
         loc:

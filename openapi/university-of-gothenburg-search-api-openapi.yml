@@ -112,6 +112,47 @@ paths:
       - Search
 components:
   schemas:
+    HitResponse:
+      properties:
+        entry:
+          additionalProperties: true
+          type: object
+          title: Entry
+        resourceId:
+          type: string
+          title: Resourceid
+      type: object
+      required:
+      - entry
+      - resourceId
+      title: HitResponse
+    SearchResult:
+      properties:
+        hits:
+          items:
+            $ref: '#/components/schemas/HitResponse'
+          type: array
+          title: Hits
+        resourceHits:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Resourcehits
+        resourceOrder:
+          items:
+            type: string
+          type: array
+          title: Resourceorder
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - hits
+      - resourceHits
+      - resourceOrder
+      - total
+      title: SearchResult
     HTTPValidationError:
       properties:
         detail:
@@ -155,47 +196,6 @@ components:
       required:
       - message
       title: UserErrorSchema
-    SearchResult:
-      properties:
-        hits:
-          items:
-            $ref: '#/components/schemas/HitResponse'
-          type: array
-          title: Hits
-        resourceHits:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Resourcehits
-        resourceOrder:
-          items:
-            type: string
-          type: array
-          title: Resourceorder
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - hits
-      - resourceHits
-      - resourceOrder
-      - total
-      title: SearchResult
-    HitResponse:
-      properties:
-        entry:
-          additionalProperties: true
-          type: object
-          title: Entry
-        resourceId:
-          type: string
-          title: Resourceid
-      type: object
-      required:
-      - entry
-      - resourceId
-      title: HitResponse
     ValidationError:
       properties:
         loc:
